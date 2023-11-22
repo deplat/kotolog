@@ -1,3 +1,7 @@
+require('dotenv').config();
+const PORT = process.env.PORT || 3000;
+const multer = require('multer');
+const upload = multer({dest: 'uploads/'});
 const kotoService = require('../services/kotoService');
 
 const getAllCats = async (req, res) => {
@@ -75,11 +79,19 @@ const getOneCat = async (req, res) => {
 
 const createNewCat = async (req, res) => {
   const { body } = req;
+  const { files } = req;
   if (
     !body.name ||
     !body.color ||
     !body.sex ||
     !body.age
+    /*
+    ||
+    !files ||
+    !files.length === 0 ||
+    !files[0].fieldname ||
+    files[0].fieldname !== 'photos'
+    */
   ) {
     res
       .status(400)
@@ -87,17 +99,26 @@ const createNewCat = async (req, res) => {
         status: 'FAILED',
         data: {
           error:
-            "One of the following keys is missing or is empty in request body: 'name', 'color', 'sex', 'age'."
+            "One of the following keys is missing or is empty in request body: 'name', 'color', 'sex', 'age', 'photos."
         }
       });
     return;
   }
   const newCat = {
     name: body.name,
-    color: body.color,
+    age: body.age,
     sex: body.sex,
-    age: body.age
+    color: body.color,
+    images: []
   };
+  /*
+  for (let i = 0; i < files.length; i++ ) {
+    newCat.images.push({
+      url: `http://localhost:${PORT}/uploads/${files[i].filename}`,
+      altText: files[i].originalname
+    });
+  }
+  */
   try {
     const createdCat = await kotoService.createNewCat(newCat);
     res.status(201).send({ status: 'OK', data: createdCat });
