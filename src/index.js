@@ -18,7 +18,7 @@ const connectKotoDB = () => {
 };
 
 app.use(express.json());
-app.use(cache('1 hour'));
+// reapp.use(cache('1 hour'));
 app.use('/api/v1/cats', v1KotoRouter);
 
 connectKotoDB();

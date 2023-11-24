@@ -78,6 +78,7 @@ const getOneCat = async (req, res) => {
 };
 
 const createNewCat = async (req, res) => {
+  console.log(req.body);
   const { body } = req;
   const { files } = req;
   if (
@@ -106,11 +107,12 @@ const createNewCat = async (req, res) => {
   }
   const newCat = {
     name: body.name,
-    age: body.age,
+    age: Number(body.age),
     sex: body.sex,
     color: body.color,
     images: []
   };
+  console.log(newCat);
   /*
   for (let i = 0; i < files.length; i++ ) {
     newCat.images.push({
