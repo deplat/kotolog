@@ -8,7 +8,7 @@ const catSchema = new mongoose.Schema({
   },
   // age in month
   age: {
-    required: true,
+    required: false,
     type: Number
   },
   sex: {
@@ -17,7 +17,7 @@ const catSchema = new mongoose.Schema({
     enum: ['m', 'f']
   },
   color: {
-    required: true,
+    required: false,
     type: String
   },
   shortInfo: {

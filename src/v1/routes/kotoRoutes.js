@@ -4,15 +4,19 @@ const multer = require('multer');
 const  upload = multer({ dest: 'uploads/'});
 const kotoController = require('../../controllers/kotoController');
 
-
+// Get All Cats (with filters)
 router.get('/', kotoController.getAllCats);
 
+// Get One Cat by ID
 router.get('/:catId', kotoController.getOneCat);
 
-router.post('/', upload.single('photos'), kotoController.createNewCat);
+// Add New Cat
+router.post('/', kotoController.createNewCat);
 
+// Update an Existing Cat by ID
 router.patch('/:catId', kotoController.updateOneCat);
 
+// Delete Cat by ID
 router.delete('/:catId', kotoController.deleteOneCat);
 
 module.exports = router;
