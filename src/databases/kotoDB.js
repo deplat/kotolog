@@ -1,6 +1,5 @@
 const Cat = require('../models/cat');
 
-
 /**
  * QUESTION:
  * Do I REALLY NEED TRY/CATCH THERE?
@@ -30,6 +29,11 @@ const getOneCat = (catId) => {
 const createNewCat = (newCat) => {
   try {
     const createdCat = new Cat(newCat);
+    /*
+    for (let i = 0; i < newCat.images.length; i++ ) {
+      Cat.images.push(newCat.images[i].url);
+    }
+    */
     return createdCat.save();
   } catch (error) {
     throw { status: error?.status || 500, message: error?.message || error };

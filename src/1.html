@@ -1,0 +1,22 @@
+<form action="http://localhost:4000/api/v1/cats" method="POST" enctype="multipart/form-data">
+  <label for="name">Name:</label>
+  <input type="text" name="name">
+  <br><br>
+  <label for="color">Color:</label>
+  <input type="text" name="color">
+  <br><br>
+  <label for="age">Age (month):</label>
+  <input type="number" name="age">
+  <br><br>
+  <label for="sex">Sex:</label>
+  <br>
+  <label for="sex">Female</label>
+  <input type="radio" name="sex" value="f">
+  <input type="radio" name="sex" value="m">
+  <label for="sex">Male</label>
+  <h3>Images:</h3>
+  <input type="file" name="images[]" multiple>
+  <label for="altText">Alt Text:</label>
+  <input type="text" name="altText[]" multiple>
+  <button type="submit">Create Product</button>
+</form>
