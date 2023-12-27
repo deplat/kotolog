@@ -9,7 +9,7 @@ const v1KotoRouter = require('./v1/routes/kotoRoutes');
 
 const app = express();
 const cache = apicache.middleware;
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 const connectKotoDB = () => {
   mongoose.connect(uri, { dbName: "kotolog" })
