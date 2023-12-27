@@ -5,20 +5,21 @@ const mongoose = require('mongoose');
 const apicache = require('apicache');
 
 const uri = process.env.DATABASE_URL;
+const dbName = process.env.DATABASE_NAME;
 const v1KotoRouter = require('./v1/routes/kotoRoutes');
 
 const app = express();
 const cache = apicache.middleware;
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 const connectKotoDB = () => {
-  mongoose.connect(uri, { dbName: "kotolog" })
-    .then(() => console.log('Connected to KotoDB'))
+  mongoose.connect(uri, { dbName })
+    .then(() => console.log(`Connected to database: ${dbName}`))
     .catch(err => console.error('Could not connect to KotoDB.', err));
 };
 
 app.use(express.json());
-// reapp.use(cache('1 hour'));
+// app.use(cache('1 hour'));
 app.use('/api/v1/cats', v1KotoRouter);
 
 connectKotoDB();
@@ -26,4 +27,3 @@ connectKotoDB();
 app.listen(PORT, () => {
   console.log(`API is listening on port ${PORT}`);
 });
-

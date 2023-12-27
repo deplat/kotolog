@@ -1,5 +1,4 @@
 require('dotenv').config();
-const PORT = process.env.PORT || 3000;
 const multer = require('multer');
 const upload = multer({dest: 'uploads/'});
 const kotoService = require('../services/kotoService');
@@ -80,6 +79,7 @@ const getOneCat = async (req, res) => {
 const createNewCat = async (req, res) => {
   console.log(req.body);
   const { body } = req;
+  console.log(body);
   const { files } = req;
   if (
     !body.name ||
