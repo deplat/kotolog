@@ -1,0 +1,188 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  isAdmin       Boolean         @default(false)
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  // Optional for WebAuthn support
+  Authenticator Authenticator[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+// Optional for WebAuthn support
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
+}
+
+model Cat {
+  id        Int       @id @default(autoincrement())
+  name      String
+  birth     DateTime?
+  sex       Sex
+  fur       Fur
+  colors    Color[]
+  avatar    Avatar?
+  show      Boolean
+  adopted   Boolean
+  profile   Profile?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+enum Sex {
+  MALE
+  FEMALE
+}
+
+enum Fur {
+  SHORT
+  LONG
+  HAIRLESS
+}
+
+model Color {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  cats      Cat[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Avatar {
+  id        Int      @id @default(autoincrement())
+  url       String
+  catId     Int      @unique
+  cat       Cat      @relation(fields: [catId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Profile {
+  id             Int             @id @default(autoincrement())
+  socialized     Boolean
+  catFriendly    Boolean
+  dogFriendly    Boolean
+  animalFriendly Boolean
+  litterBox      Boolean
+  scratchingPost Boolean
+  sterilized     Boolean
+  vaccinated     Boolean
+  paraTreated    Boolean
+  healthStatus   HealthStatus
+  healthFeatures HealthFeature[]
+  specialties    Specialty[]
+  bio            String?
+  album          Album?
+  catId          Int             @unique
+  cat            Cat             @relation(fields: [catId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+enum HealthStatus {
+  HEALTHY
+  UNDER_TREATMENT
+  RECOVERING
+  CHRONIC_CONDITION
+  UNKNOWN
+}
+
+model HealthFeature {
+  id        Int      @id @default(autoincrement())
+  text      String
+  profileId Int
+  Profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Specialty {
+  id        Int      @id @default(autoincrement())
+  text      String
+  profileId Int
+  Profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Album {
+  id        Int      @id @default(autoincrement())
+  photos    Photo[]
+  profileId Int      @unique
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Photo {
+  id        Int      @id @default(autoincrement())
+  url       String
+  album     Album    @relation(fields: [albumId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  albumId   Int
+  createdAt DateTime @default(now())
+}

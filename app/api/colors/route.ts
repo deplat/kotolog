@@ -1,0 +1,23 @@
+import prisma from '@/lib/db/prisma';
+import {NextRequest, NextResponse} from 'next/server';
+
+export async function GET() {
+    try {
+        const colors = await prisma.color.findMany();
+        return NextResponse.json(colors);
+    } catch (error) {
+        return NextResponse.json({error: (error as Error).message});
+    }
+}
+
+export async function POST(req: NextRequest) {
+    const {name} = await req.json();
+    try {
+        const newColor = await prisma.color.create({
+            data: {name},
+        });
+        return NextResponse.json(newColor);
+    } catch (error) {
+        return NextResponse.json({error: (error as Error).message});
+    }
+}
