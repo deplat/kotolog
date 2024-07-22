@@ -1,7 +1,7 @@
 import prisma from '@/lib/db/prisma';
-import {NextResponse} from 'next/server';
+import {NextRequest, NextResponse} from 'next/server';
 
-export async function DELETE({ params }: { params: { id: number } }) {
+export async function DELETE(req: NextRequest,{ params }: { params: { id: number } }) {
     try {
         const id = Number(params.id);
         await prisma.color.delete({
