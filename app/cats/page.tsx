@@ -3,7 +3,7 @@ import Image from "next/image";
 import {getAge} from "@/lib/helpers";
 
 const getCats = async () => {
-    const res = await fetch(`/api/cats`, {next: {revalidate: 10}})
+    const res = await fetch(`${process.env.API_HOST_PROD}/api/cats`, {next: {revalidate: 10}})
     if (!res.ok) {
         throw new Error(`Failed to fetch cats from 'Cats' page`)
     }
