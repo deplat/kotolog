@@ -1,10 +1,9 @@
 import {CatWithAvatarAndProfileId} from "@/types";
 import Image from "next/image";
 import {getAge} from "@/lib/helpers";
-import {getBaseUrl} from "@/lib/api";
 
 const getCats = async () => {
-    const baseUrl = getBaseUrl();
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
     const res = await fetch(`${baseUrl}/api/cats`, {next: {revalidate: 10}})
     if (!res.ok) {
         throw new Error(`Failed to fetch cats from 'Cats' page`)
@@ -24,7 +23,7 @@ export default async function Cats () {
                         <div key={cat.id} className="group relative">
                             <div
                                 className="relative aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
-                                <Image src={cat.avatar?.url || ""} alt={cat.name} className="object-cover" fill/>
+                                <Image src={cat.avatar?.url || ""} alt={cat.name} fill className="object-cover"/>
                             </div>
                                 <div className="text-center mt-4">
                                     <h3 className="text-2xl font-semibold text-gray-900">
