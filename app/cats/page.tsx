@@ -1,18 +1,23 @@
-import {CatWithAvatarAndProfileId} from "@/types";
 import Image from "next/image";
 import {getAge} from "@/lib/helpers";
+import prisma from "@/lib/db/prisma";
 
-const getCats = async () => {
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
-    const res = await fetch(`${baseUrl}/api/cats`, {next: {revalidate: 10}})
-    if (!res.ok) {
-        throw new Error(`Failed to fetch cats from 'Cats' page`)
-    }
-    return res.json()
-}
 
 export default async function Cats () {
-    const cats : CatWithAvatarAndProfileId[] = await getCats();
+    const cats  = await prisma.cat.findMany({
+        include: {
+            avatar: {
+                select: {
+                    url: true
+                }
+            },
+            profile: {
+                select: {
+                    id: true
+                }
+            }
+        }
+    });
 
     return (
         <div className="bg-gray-50">
