@@ -1,9 +1,11 @@
 import {CatWithAvatarAndProfileId} from "@/types";
 import Image from "next/image";
 import {getAge} from "@/lib/helpers";
+import {getBaseUrl} from "@/lib/api";
 
 const getCats = async () => {
-    const res = await fetch(`${process.env.API_HOST_PROD}/api/cats`, {next: {revalidate: 10}})
+    const baseUrl = getBaseUrl();
+    const res = await fetch(`${baseUrl}/api/cats`, {next: {revalidate: 10}})
     if (!res.ok) {
         throw new Error(`Failed to fetch cats from 'Cats' page`)
     }
