@@ -87,6 +87,7 @@ model Cat {
   fur       Fur
   colors    Color[]
   avatar    Avatar?
+  unclaimed Boolean
   show      Boolean
   adopted   Boolean
   profile   Profile?

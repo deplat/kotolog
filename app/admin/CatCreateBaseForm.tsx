@@ -11,6 +11,7 @@ export const CatCreateBaseForm = () => {
             sex: "MALE",
             fur: "SHORT",
             birth: undefined,
+            unclaimed: false,
             show: true,
             adopted: false,
         },
@@ -157,6 +158,15 @@ export const CatCreateBaseForm = () => {
                         className="form-input w-3/4 rounded border-gray-300"
                         ref={inputFileRef}
                         type="file"
+                    />
+                </div>
+
+                <div className="form-group mb-4 flex items-center">
+                    <label className="w-1/4">Невостребованный</label>
+                    <input
+                        type="checkbox"
+                        className="form-checkbox rounded border-gray-300"
+                        {...register("unclaimed")}
                     />
                 </div>
 

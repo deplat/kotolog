@@ -12,15 +12,15 @@ export const CatCreateProfileForm = ({ catId }: CatCreateProfileFormProps) => {
     const { register, handleSubmit, control, formState: { errors } } = useForm<CatCreateProfileInput>({
         defaultValues: {
             catId,
-            socialized: false,
-            catFriendly: false,
+            socialized: true,
+            catFriendly: true,
             dogFriendly: false,
             animalFriendly: false,
-            litterBox: false,
-            scratchingPost: false,
-            sterilized: false,
-            vaccinated: false,
-            paraTreated: false,
+            litterBox: true,
+            scratchingPost: true,
+            sterilized: true,
+            vaccinated: true,
+            paraTreated: true,
             healthStatus: 'UNKNOWN',
         },
     });

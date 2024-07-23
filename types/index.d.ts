@@ -7,6 +7,7 @@ export type CatCreateBaseInput = {
     fur: 'SHORT' | 'LONG' | 'HAIRLESS';
     colors: number[];
     avatarUrl?: string;
+    unclaimed: boolean;
     show: boolean;
     adopted: boolean;
 };

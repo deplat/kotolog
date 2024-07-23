@@ -21,6 +21,7 @@ export const catCreateBase = async (data: CatCreateBaseInput) => {
                         },
                     },
                 }),
+                unclaimed: data.unclaimed,
                 show: data.show,
                 adopted: data.adopted,
             });
