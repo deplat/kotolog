@@ -31,10 +31,7 @@ export default async function CatPage({params}: { params: { id: string } }) {
                         </div>
                         <div className="text-center mt-2.5">
                             <h3 className="text-xl lg:text-2xl font-semibold text-gray-900">
-                                <a href={`/cats/${cat.id}`}>
-                                    <span aria-hidden="true" className="absolute inset-0"></span>
                                     {cat.name}
-                                </a>
                             </h3>
                             <p className="mt-1 text-lg lg:text-xl text-gray-500">{cat.birth ? getAge(cat.birth) : '\u00A0'}</p>
                         </div>
