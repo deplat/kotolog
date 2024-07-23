@@ -18,6 +18,7 @@ export default async function Cats() {
             }
         }
     });
+    console.log(cats);
 
     return (
         <div className="bg-gray-50">

@@ -3,10 +3,9 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {CatCreateBaseInput} from "@/types";
 import {useEffect, useRef, useState} from "react";
 import {upload} from "@vercel/blob/client";
-import {PutBlobResult} from "@vercel/blob";
 
 export const CatCreateBaseForm = () => {
-    const {register, handleSubmit, control, formState: {errors}} = useForm<CatCreateBaseInput>({
+    const {register, handleSubmit, formState: {errors}} = useForm<CatCreateBaseInput>({
         defaultValues: {
             sex: "MALE",
             fur: "SHORT",
@@ -74,7 +73,7 @@ export const CatCreateBaseForm = () => {
             const response = await fetch('/api/cats', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(cleanedData),
             });
