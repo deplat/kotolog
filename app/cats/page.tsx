@@ -2,7 +2,7 @@ import Image from "next/image";
 import {getAge} from "@/lib/helpers";
 import prisma from "@/lib/db/prisma";
 
-export async function getCats() {
+async function getCats() {
     return  prisma.cat.findMany({
         include: {
             avatar: {
