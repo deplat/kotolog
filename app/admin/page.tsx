@@ -1,5 +1,5 @@
-import { CatCreateBaseForm } from "@/app/admin/CatCreateBaseForm";
-import { ColorCreateForm } from "@/app/admin/ColorCreateForm";
+import {CatCreateBaseForm} from "@/app/admin/CatCreateBaseForm";
+import {ColorCreateForm} from "@/app/admin/ColorCreateForm";
 import {CatList} from "@/app/admin/CatList";
 import {ColorList} from "@/app/admin/ColorList";
 import {auth} from "@/auth";
@@ -8,7 +8,7 @@ import NotFound from "next/dist/client/components/not-found-error";
 export default function Admin() {
 
     return (
-        <AdminPage />
+        <AdminPage/>
     );
 }
 
@@ -18,13 +18,13 @@ const AdminPage = async () => {
         return <NotFound/>
     }
     return (
-        <main>
+        <div>
             <div className="flex">
                 <div className="w-1/2">
-                    <CatCreateBaseForm />
+                    <CatCreateBaseForm/>
                 </div>
                 <div className="w-1/2">
-                    <ColorCreateForm />
+                    <ColorCreateForm/>
                     <ColorList/>
                 </div>
             </div>
@@ -33,6 +33,7 @@ const AdminPage = async () => {
                     <CatList/>
                 </div>
             </div>
-        </main>
-    );
+        </div>
+
+    )
 };
