@@ -1,17 +1,8 @@
-import {User} from "next-auth"
-import type { AdapterUser as BaseAdapterUser } from "next-auth/adapters";
+import { AdapterUser as CoreAdapterUser } from "@auth/core/adapters";
 
-
-declare module "next-auth" {
-    interface Session {
-        user: User & {
-            isAdmin: boolean;
-        }
-    }}
-
-
-declare module "@auth/core/adapters" {
-    interface AdapterUser extends BaseAdapterUser {
+declare module "next-auth/adapters" {
+    interface AdapterUser extends CoreAdapterUser {
         isAdmin: boolean;
     }
 }
+
