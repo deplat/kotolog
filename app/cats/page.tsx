@@ -2,6 +2,8 @@ import Image from "next/image";
 import {getAge} from "@/lib/helpers";
 import prisma from "@/lib/db/prisma";
 
+export const revalidate = 30
+
 async function getCats() {
     return  prisma.cat.findMany({
         include: {
@@ -19,7 +21,7 @@ async function getCats() {
     }) // will be passed to the page component as props
 }
 
-export default async function Cats() {
+export default async function CatsPage() {
     const cats = await getCats()
     return (
         <div className="bg-gray-50">
