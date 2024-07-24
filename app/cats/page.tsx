@@ -24,7 +24,6 @@ async function getCats() {
 export default async function CatsPage() {
     const cats = await getCats()
     return (
-        <div className="bg-gray-50">
             <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
                 <h2 className="text-4xl font-bold tracking-tight text-gray-900">кошки</h2>
                 <div className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 md:gap-x-6 lg:grid-cols-3 lg:gap-x-8 xl:grid-cols-4">
@@ -33,7 +32,7 @@ export default async function CatsPage() {
                             <div
                                 className="relative aspect-h-1 aspect-w-1 w-full rounded overflow-hidden">
                                 <Image
-                                    src={cat.avatar?.url || "https://7srwfaunr1krwltq.public.blob.vercel-storage.com/static/paw-pink-orange"}
+                                    src={cat.avatar?.url || "https://7srwfaunr1krwltq.public.blob.vercel-storage.com/static/paw-main"}
                                     alt={cat.name}
                                     fill
                                 />
@@ -51,6 +50,5 @@ export default async function CatsPage() {
                     ))}
                 </div>
             </div>
-        </div>
     )
 }

@@ -1,8 +1,6 @@
 import type {Metadata} from "next";
 import {Inter} from "next/font/google";
 import "./globals.css";
-import {auth} from "@/auth";
-
 const inter = Inter({subsets: ["cyrillic"]});
 
 export const metadata: Metadata = {
@@ -20,7 +18,11 @@ export default async function RootLayout({
 }>) {
     return (
         <html lang="ru">
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+        <main className="bg-gray-50">
+            {children}
+        </main>
+        </body>
         </html>
     );
 }
