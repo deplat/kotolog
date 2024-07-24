@@ -1,10 +1,9 @@
 import Image from "next/image";
 import {getAge} from "@/lib/helpers";
 import prisma from "@/lib/db/prisma";
-import {CatWithAvatarAndProfileId} from "@/types";
 
-export async function getServerSideProps() {
-    const cats = await prisma.cat.findMany({
+export async function getCats() {
+    return  prisma.cat.findMany({
         include: {
             avatar: {
                 select: {
@@ -17,14 +16,11 @@ export async function getServerSideProps() {
                 }
             }
         }
-    });
-
-    return {
-        props: { cats }, // will be passed to the page component as props
-    };
+    }) // will be passed to the page component as props
 }
 
-export default async function Cats(cats: CatWithAvatarAndProfileId[]) {
+export default async function Cats() {
+    const cats = await getCats()
     return (
         <div className="bg-gray-50">
             <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
