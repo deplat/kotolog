@@ -33,7 +33,7 @@ export default async function CatsPage() {
                             <div
                                 className="relative aspect-h-1 aspect-w-1 w-full rounded overflow-hidden">
                                 <Image
-                                    src={cat.avatar?.url || "https://7srwfaunr1krwltq.public.blob.vercel-storage.com/avatar/michelle-brittain-A62zcEohwFk-D1Ln4qiNlnCNKz3DkBGhgEaFxc9i63.jpg"}
+                                    src={cat.avatar?.url || "https://7srwfaunr1krwltq.public.blob.vercel-storage.com/static/paw-pink-orange"}
                                     alt={cat.name}
                                     fill
                                 />
