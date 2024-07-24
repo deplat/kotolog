@@ -1,7 +1,7 @@
 import NextAuth, {type DefaultSession} from "next-auth"
+import GitHub from "next-auth/providers/github"
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { PrismaClient } from "@prisma/client"
-import Nodemailer from "@auth/core/providers/nodemailer";
 const prisma = new PrismaClient()
 
 declare module "next-auth" {
@@ -12,24 +12,12 @@ declare module "next-auth" {
     }
 }
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
-    providers: [
-        Nodemailer({
-            server: {
-                host: process.env.EMAIL_SERVER_HOST,
-                port: 587,
-                auth: {
-                    user: process.env.EMAIL_SERVER_USER,
-                    pass: process.env.EMAIL_SERVER_PASSWORD,
-                },
-            },
-            from: process.env.EMAIL_FROM,
-        }),
-    ],
+export const { handlers, auth } = NextAuth({
+    providers: [GitHub],
     adapter: PrismaAdapter(prisma),
     secret: process.env.AUTH_SECRET,
     callbacks: {
-        session({ session, token, user }) {
+        session({ session, user }) {
             // `session.user.address` is now a valid property, and will be type-checked
             // in places like `useSession().data.user` or `auth().user`
             return {
@@ -42,3 +30,5 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         },
     }
 })
+
+
