@@ -117,7 +117,7 @@ export default async function CatPage({params}: { params: { id: string } }) {
                 </div>
             </div>
             {cat.profile?.album && (
-                <div className="gallery-hor ">
+                <div className="gallery-hor">
                     <div className="flex overflow-x-auto overflow-y-hidden gap-x-4">
                         {cat.profile.album.photos.map((photo) => (
                             <div key={photo.id} className="relative">
