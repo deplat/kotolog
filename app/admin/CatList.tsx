@@ -32,7 +32,7 @@ export const CatList = () => {
     };
 
     const handleViewProfile = async (catId: number) => {
-        router.push(`/cat/${catId}`);
+        router.push(`/cats/${catId}`);
     };
 
     return (

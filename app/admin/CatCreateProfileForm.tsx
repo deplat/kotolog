@@ -9,7 +9,7 @@ interface CatCreateProfileFormProps {
 }
 
 export const CatCreateProfileForm = ({ catId }: CatCreateProfileFormProps) => {
-    const { register, handleSubmit, control, formState: { errors } } = useForm<CatCreateProfileInput>({
+    const { register, handleSubmit, formState: { errors } } = useForm<CatCreateProfileInput>({
         defaultValues: {
             catId,
             socialized: true,
@@ -28,8 +28,6 @@ export const CatCreateProfileForm = ({ catId }: CatCreateProfileFormProps) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [healthFeatures, setHealthFeatures] = useState<string[]>([]);
     const [specialties, setSpecialties] = useState<string[]>([]);
-    const [album, setAlbum] = useState<string[]>([]);
-
     const onSubmit: SubmitHandler<CatCreateProfileInput> = async (data) => {
         const albumUrls: string[] = []
         if (fileInputRef.current?.files?.length) {
@@ -45,6 +43,7 @@ export const CatCreateProfileForm = ({ catId }: CatCreateProfileFormProps) => {
                     console.error('Error uploading album photo:', error);
                 }
             }
+            console.log('Album uploaded:', albumUrls);
         }
         const cleanedData: CatCreateProfileInput = {
             ...data,
@@ -77,16 +76,6 @@ export const CatCreateProfileForm = ({ catId }: CatCreateProfileFormProps) => {
             console.error('Error creating cat profile:', error);
         }
     };
-
-    const handleListChange = (setList: React.Dispatch<React.SetStateAction<string[]>>, value: string) => {
-        setList((prevList) => {
-            if (prevList.includes(value)) {
-                return prevList.filter(item => item !== value);
-            }
-            return [...prevList, value];
-        });
-    };
-
     return (
         <div className="container mx-auto p-4">
             <h3 className="text-xl font-semibold mb-4">Cat Profile</h3>
