@@ -1,7 +1,9 @@
-import { PrismaClient, Prisma } from '@prisma/client';
-import { CatCreateBaseInput, CatCreateProfileInput } from '@/types';
+import {PrismaClient, Prisma} from '@prisma/client';
+import {CatCreateBaseInput, CatCreateProfileInput} from '@/types';
+import sharp from "sharp";
 
 const prisma = new PrismaClient();
+
 
 export const catCreateBase = async (data: CatCreateBaseInput) => {
     try {
@@ -12,7 +14,7 @@ export const catCreateBase = async (data: CatCreateBaseInput) => {
                 sex: data.sex,
                 fur: data.fur,
                 colors: {
-                    connect: data.colors.map((id) => ({ id })),
+                    connect: data.colors.map((id) => ({id})),
                 },
                 ...(data.avatarUrl && {
                     avatar: {
@@ -47,8 +49,39 @@ export const catCreateBase = async (data: CatCreateBaseInput) => {
     }
 };
 
+interface AlbumPhotoWithDimensions {
+    url: string;
+    width: number;
+    height: number;
+}
+
 export const catCreateProfile = async (data: CatCreateProfileInput) => {
     try {
+        let albumWithDimensions: Awaited<AlbumPhotoWithDimensions | null>[] = [];
+        if (data.album) {
+            albumWithDimensions = await Promise.all(
+                data.album.map(async (url): Promise<AlbumPhotoWithDimensions | null> => {
+                    try {
+                        const response = await fetch(url);
+                        const buffer = await response.arrayBuffer();
+                        const { width, height } = await sharp(Buffer.from(buffer)).metadata();
+                        if (width && height) {
+                            return { url, width, height };
+                        } else {
+                            console.error('Failed to get dimensions');
+                            return null
+                        }
+                    } catch (error) {
+                        console.error('Error fetching image dimensions:', error);
+                        return null;
+                    }
+                })
+            );
+        }
+
+       const cleanedAlbumWithDimensions = albumWithDimensions.filter((item): item is AlbumPhotoWithDimensions => item !== null);
+
+
         const catProfile = (data: CatCreateProfileInput) => {
             return Prisma.validator<Prisma.CatUpdateInput>()({
                 profile: {
@@ -67,23 +100,27 @@ export const catCreateProfile = async (data: CatCreateProfileInput) => {
                         ...(data.healthFeatures && {
                             healthFeatures: {
                                 createMany: {
-                                    data: data.healthFeatures.map((text) => ({ text })),
+                                    data: data.healthFeatures.map((text) => ({text})),
                                 },
                             },
                         }),
                         ...(data.specialties && {
                             specialties: {
                                 createMany: {
-                                    data: data.specialties.map((text) => ({ text })),
+                                    data: data.specialties.map((text) => ({text})),
                                 },
                             },
                         }),
-                        ...(data.album && {
+                        ...(cleanedAlbumWithDimensions.length && {
                             album: {
                                 create: {
                                     photos: {
                                         createMany: {
-                                            data: data.album.map((url) => ({ url })),
+                                            data: cleanedAlbumWithDimensions.map((photo) => ({
+                                                url: photo.url,
+                                                width: photo.width,
+                                                height: photo.height,
+                                            })),
                                         },
                                     },
                                 },

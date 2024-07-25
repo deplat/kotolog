@@ -183,6 +183,8 @@ model Album {
 model Photo {
   id        Int      @id @default(autoincrement())
   url       String
+  width     Int
+  height    Int
   album     Album    @relation(fields: [albumId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   albumId   Int
   createdAt DateTime @default(now())

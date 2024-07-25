@@ -28,6 +28,7 @@ export const CatCreateProfileForm = ({ catId }: CatCreateProfileFormProps) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [healthFeatures, setHealthFeatures] = useState<string[]>([]);
     const [specialties, setSpecialties] = useState<string[]>([]);
+    
     const onSubmit: SubmitHandler<CatCreateProfileInput> = async (data) => {
         const albumUrls: string[] = []
         if (fileInputRef.current?.files?.length) {

@@ -17,7 +17,8 @@
     "nodemailer": "^6.9.14",
     "react": "^18",
     "react-dom": "^18",
-    "react-hook-form": "^7.52.1"
+    "react-hook-form": "^7.52.1",
+    "sharp": "^0.33.4"
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",
