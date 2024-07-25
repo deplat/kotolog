@@ -35,7 +35,7 @@ export default async function CatPage({params}: { params: { id: string } }) {
         <div className="xl:container lg:mx-auto p-4 md:p-8">
             <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-7 gap-y-4 md:gap-4">
                 <div
-                    className="group md:col-span-2 p-4 pb-0 border-2 rounded-md bg-white"
+                    className="group md:col-span-2 p-3 pb-0 border-2 rounded-md bg-white"
                     style={{borderColor: "#CBD2D9"}}
                 >
                     <div
@@ -62,7 +62,7 @@ export default async function CatPage({params}: { params: { id: string } }) {
                     </div>
                 </div>
                 <div
-                    className="col-span-2 md:col-span-4 p-2 pe-0 lg:p-5 border-2 rounded-md bg-white"
+                    className="col-span-2 md:col-span-4 p-3 pe-0 lg:p-5 border-2 rounded-md bg-white"
                     style={{borderColor: "#CBD2D9"}}
                 >
                     <ul className="columns-2
@@ -117,10 +117,10 @@ export default async function CatPage({params}: { params: { id: string } }) {
                 </div>
             </div>
             {cat.profile?.album && (
-                <div className="flex justify-center p-4 h-96 border-2 border-gray-200 rounded-md bg-white">
-                    <div className="overflow-x-auto overflow-y-hidden flex gap-x-4">
+                <div className="flex justify-center h-48 p-3 mt-4 border-2 rounded-md bg-white" style={{borderColor: "#CBD2D9"}}>
+                    <div className="overflow-x-auto overflow-y-hidden flex justify-center gap-x-3">
                         {cat.profile.album.photos.map((photo) => (
-                            <Image key={photo.id} src={photo.url} alt={cat.name} width={photo.width} height={photo.height}/>
+                            <Image key={photo.id} src={photo.url} alt={cat.name} width={photo.width} height={photo.height} className="h-full w-auto" />
                         ))}
                     </div>
                 </div>
