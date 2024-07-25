@@ -117,16 +117,15 @@ export default async function CatPage({params}: { params: { id: string } }) {
                 </div>
             </div>
             {cat.profile?.album && (
-                <div className="gallery-hor">
-                    <div className="flex overflow-x-auto overflow-y-hidden gap-x-4">
+                <div className="flex justify-center p-4 h-96 border-2 border-gray-200 rounded-md bg-white">
+                    <div className="overflow-x-auto overflow-y-hidden flex gap-x-4">
                         {cat.profile.album.photos.map((photo) => (
-                            <div key={photo.id} className="relative">
-                                <Image src={photo.url} alt={cat.name} width={photo.width} height={photo.height} className="h-full w-auto"/>
-                            </div>
-                            ))}
+                            <Image key={photo.id} src={photo.url} alt={cat.name} width={photo.width} height={photo.height}/>
+                        ))}
                     </div>
                 </div>
             )}
         </div>
     )
-};
+}
+;
