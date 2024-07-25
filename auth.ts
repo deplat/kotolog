@@ -1,6 +1,6 @@
 import NextAuth, {type DefaultSession} from "next-auth"
 import GitHub from "next-auth/providers/github"
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
+import {PrismaAdapter}  from "@auth/prisma-adapter"
 import { PrismaClient } from "@prisma/client"
 const prisma = new PrismaClient()
 
@@ -14,7 +14,7 @@ declare module "next-auth" {
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
     providers: [GitHub],
-    adapter: PrismaAdapter(prisma),
+    adapter: PrismaAdapter(prisma) as any,
     secret: process.env.AUTH_SECRET,
     callbacks: {
         session({ session, user }) {
