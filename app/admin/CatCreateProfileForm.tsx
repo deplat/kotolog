@@ -43,7 +43,6 @@ export const CatCreateProfileForm = ({ catId }: CatCreateProfileFormProps) => {
                     console.error('Error uploading album photo:', error);
                 }
             }
-            console.log('Album uploaded:', albumUrls);
         }
         const cleanedData: CatCreateProfileInput = {
             ...data,
