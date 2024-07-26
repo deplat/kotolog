@@ -34,7 +34,7 @@ export default async function CatPage({params}: { params: { id: string } }) {
 
 
     return (
-        <div className="pb-10" style={{backgroundColor: "#F5F7FA"}}>
+        <div style={{backgroundColor: "#F5F7FA"}}>
             <div className="flex flex-col absolute top-32 w-screen gap-y-6 justify-center">
                 <div
                     className="w-fit h-fit p-3 mx-auto border-2 rounded-md bg-white"
@@ -155,7 +155,7 @@ export default async function CatPage({params}: { params: { id: string } }) {
 
             <div className="container max-w-7xl mx-auto px-4 ">
                 {cat.profile?.bio && (
-                    <div className="flex justify-center max-h-fit p-3 border-2 rounded-md bg-white"
+                    <div className="flex justify-center max-h-fit mb-10 p-3 border-2 rounded-md bg-white"
                          style={{borderColor: "#CBD2D9"}}>
                         {cat.profile.bio}
                     </div>
