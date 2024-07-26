@@ -52,75 +52,77 @@ export default async function CatPage({params}: { params: { id: string } }) {
                     </div>
                 </div>
             </div>
-            <div className="container relative top-36 max-w-7xl mx-auto p-4">
-
-                <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-7 gap-y-4 md:gap-4">
-                    <div
-                        className="col-span-2 md:col-span-4 p-3 pe-0 border-2 rounded-md bg-white"
-                        style={{borderColor: "#CBD2D9"}}
-                    >
-                        <ul className="columns-2
+            <div className="container mt-48 max-w-7xl mx-auto">
+                <div
+                    className="col-span-2 md:col-span-4 p-3 pe-0 border-2 rounded-md bg-white"
+                    style={{borderColor: "#CBD2D9"}}
+                >
+                    <ul className="columns-2
                      font-medium text-gray-900">
-                            {cat.profile?.socialized && (
-                                <li className="mb-2">
-                                    Социализирован{wordEnd()}
-                                </li>
-                            )}
-                            {cat.profile?.catFriendly && (
-                                <li className="mb-2">
-                                    Ладит с другими кошками
-                                </li>
-                            )}
-                            {cat.profile?.dogFriendly && (
-                                <li className="mb-2">
-                                    Ладит с собаками
-                                </li>
-                            )}
-                            {cat.profile?.animalFriendly && (
-                                <li className="mb-2">
-                                    Не против других животных
-                                </li>
-                            )}
-                            {cat.profile?.litterBox && (
-                                <li className="mb-2">
-                                    Приучен{wordEnd()} к лотку
-                                </li>
-                            )}
-                            {cat.profile?.scratchingPost && (
-                                <li className="mb-2">
-                                    Пользуется&nbsp;когтеточкой
-                                </li>
-                            )}
-                            {cat.profile?.sterilized && (
-                                <li className="mb-2">
+                        {cat.profile?.socialized && (
+                            <li className="mb-2">
+                                Социализирован{wordEnd()}
+                            </li>
+                        )}
+                        {cat.profile?.catFriendly && (
+                            <li className="mb-2">
+                                Ладит с другими кошками
+                            </li>
+                        )}
+                        {cat.profile?.dogFriendly && (
+                            <li className="mb-2">
+                                Ладит с собаками
+                            </li>
+                        )}
+                        {cat.profile?.animalFriendly && (
+                            <li className="mb-2">
+                                Не против других животных
+                            </li>
+                        )}
+                        {cat.profile?.litterBox && (
+                            <li className="mb-2">
+                                Приучен{wordEnd()} к лотку
+                            </li>
+                        )}
+                        {cat.profile?.scratchingPost && (
+                            <li className="mb-2">
+                                Пользуется&nbsp;когтеточкой
+                            </li>
+                        )}
+                        {cat.profile?.sterilized && (
+                            <li className="mb-2">
 
-                                    Стерилизован{wordEnd()}
-                                </li>
-                            )}
-                            {cat.profile?.vaccinated && (
-                                <li className="mb-2">
-                                    Вакцинирован{wordEnd()}
-                                </li>
-                            )}
-                            {cat.profile?.paraTreated && (
-                                <li>
-                                    Обработан{wordEnd()} от паразитов
-                                </li>
-                            )}
-                        </ul>
+                                Стерилизован{wordEnd()}
+                            </li>
+                        )}
+                        {cat.profile?.vaccinated && (
+                            <li className="mb-2">
+                                Вакцинирован{wordEnd()}
+                            </li>
+                        )}
+                        {cat.profile?.paraTreated && (
+                            <li>
+                                Обработан{wordEnd()} от паразитов
+                            </li>
+                        )}
+                    </ul>
+                </div>
+
+            </div>
+
+            {cat.profile?.album && (
+                <div className="flex w-screen justify-center h-64 mt-6">
+                    <div className="flex overflow-x-auto overflow-y-hidden justify-center gap-x-2">
+                        {cat.profile.album.photos.map((photo) => (
+                            <Image key={photo.id} src={photo.url} alt={cat.name} width={photo.width}
+                                   height={photo.height} className="h-full w-auto"/>
+                        ))}
                     </div>
                 </div>
-                {cat.profile?.album && (
-                    <div className="flex max-w-fit justify-center h-56 mt-4"
-                         style={{borderColor: "#CBD2D9"}}>
-                        <div className="flex overflow-x-auto overflow-y-hidden justify-center gap-x-2">
-                            {cat.profile.album.photos.map((photo) => (
-                                <Image key={photo.id} src={photo.url} alt={cat.name} width={photo.width}
-                                       height={photo.height} className="h-full w-auto"/>
-                            ))}
-                        </div>
-                    </div>
-                )}
+            )}
+
+            <div className="container mt-6 max-w-7xl mx-auto">
+
                 {cat.profile?.bio && (
                     <div className="flex justify-center max-h-fit p-3 mt-4 border-2 rounded-md bg-white"
                          style={{borderColor: "#CBD2D9"}}>
@@ -128,6 +130,7 @@ export default async function CatPage({params}: { params: { id: string } }) {
                     </div>
                 )}
             </div>
+
         </div>
     )
 }
