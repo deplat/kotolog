@@ -1,3 +1,5 @@
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -17,7 +19,6 @@
 }
 
 .btn.primary {
-
   background-color: #F9703E;
   border: 2px solid #F9703E;
   color: #F5F7FA;

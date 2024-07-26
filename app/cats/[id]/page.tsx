@@ -30,9 +30,10 @@ export default async function CatPage({params}: { params: { id: string } }) {
         return cat.sex === "FEMALE" && 'a'
     }
 
+
     return (
-        <div>
-            <div className="grid columns-1 absolute top-32 w-screen gap-y-6 justify-center">
+        <div style={{ backgroundColor: "#F5F7FA" }}>
+            <div className="flex flex-col absolute top-32 w-screen gap-y-6 justify-center">
                 <div
                     className="w-fit h-fit p-3 mx-auto border-2 rounded-md bg-white"
                     style={{borderColor: "#CBD2D9"}}
@@ -47,64 +48,71 @@ export default async function CatPage({params}: { params: { id: string } }) {
                     </div>
                 </div>
                 <div className="text-center text-2xl font-medium">{cat.name}</div>
-                <div className="grid grid-cols-2 gap-x-4">
-                    <button className="btn secondary py-2 rounded-md">Придти в гости</button>
-                    <button className="btn primary py-2 rounded-md">Забрать домой</button>
+                <div className="grid grid-cols-2 gap-x-6 w-fit mx-auto">
+                    <button className="btn secondary px-5 py-2 rounded-md">Придти в гости</button>
+                    <button className="btn primary  px-5-2 rounded-md">Забрать домой</button>
                 </div>
             </div>
             <div className="container max-w-7xl mx-auto mt-80 mb-6 px-4">
-                <div
-                    className="w-fit max-w-full p-6 mx-auto border-2 rounded-md bg-white"
-                    style={{borderColor: "#CBD2D9"}}
-                >
-                    <ul className="columns-2 gap-x-10 font-medium text-gray-900">
-                        {cat.profile?.socialized && (
-                            <li className="mb-2">
-                                Социализирован{wordEnd()}
-                            </li>
-                        )}
-                        {cat.profile?.catFriendly && (
-                            <li className="mb-2">
-                                Ладит с другими кошками
-                            </li>
-                        )}
-                        {cat.profile?.dogFriendly && (
-                            <li className="mb-2">
-                                Ладит с собаками
-                            </li>
-                        )}
-                        {cat.profile?.animalFriendly && (
-                            <li className="mb-2">
-                                Не против других животных
-                            </li>
-                        )}
-                        {cat.profile?.litterBox && (
-                            <li className="mb-2">
-                                Приучен{wordEnd()} к лотку
-                            </li>
-                        )}
-                        {cat.profile?.scratchingPost && (
-                            <li className="mb-2">
-                                Пользуется&nbsp;когтеточкой
-                            </li>
-                        )}
-                        {cat.profile?.sterilized && (
-                            <li className="mb-2">
+                <div className="grid lg:grid-cols-2 gap-x-6">
+                    <div
+                        className="p-6 border-2 rounded-md bg-white"
+                        style={{borderColor: "#CBD2D9"}}
+                    >
+                        <ul className="columns-2 gap-x-10 font-medium text-gray-900">
+                            {cat.profile?.socialized && (
+                                <li className="mb-2">
+                                    Социализирован{wordEnd()}
+                                </li>
+                            )}
+                            {cat.profile?.catFriendly && (
+                                <li className="mb-2">
+                                    Ладит с другими кошками
+                                </li>
+                            )}
+                            {cat.profile?.dogFriendly && (
+                                <li className="mb-2">
+                                    Ладит с собаками
+                                </li>
+                            )}
+                            {cat.profile?.animalFriendly && (
+                                <li className="mb-2">
+                                    Не против других животных
+                                </li>
+                            )}
+                            {cat.profile?.litterBox && (
+                                <li className="mb-2">
+                                    Приучен{wordEnd()} к лотку
+                                </li>
+                            )}
+                            {cat.profile?.scratchingPost && (
+                                <li className="mb-2">
+                                    Пользуется&nbsp;когтеточкой
+                                </li>
+                            )}
+                            {cat.profile?.sterilized && (
+                                <li className="mb-2">
 
-                                Стерилизован{wordEnd()}
-                            </li>
-                        )}
-                        {cat.profile?.vaccinated && (
-                            <li className="mb-2">
-                                Вакцинирован{wordEnd()}
-                            </li>
-                        )}
-                        {cat.profile?.paraTreated && (
-                            <li>
-                                Обработан{wordEnd()} от паразитов
-                            </li>
-                        )}
-                    </ul>
+                                    Стерилизован{wordEnd()}
+                                </li>
+                            )}
+                            {cat.profile?.vaccinated && (
+                                <li className="mb-2">
+                                    Вакцинирован{wordEnd()}
+                                </li>
+                            )}
+                            {cat.profile?.paraTreated && (
+                                <li>
+                                    Обработан{wordEnd()} от паразитов
+                                </li>
+                            )}
+                        </ul>
+                    </div>
+                    <div
+                        className="p-6 border-2 rounded-md bg-white"
+                        style={{borderColor: "#CBD2D9"}}
+                    >
+                    </div>
                 </div>
 
             </div>
