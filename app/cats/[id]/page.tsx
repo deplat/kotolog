@@ -33,11 +33,13 @@ export default async function CatPage({params}: { params: { id: string } }) {
     return (
         <div>
             <div
-                className="flex justify-center w-screen h-72 border-t-4 border-b-2 bg-white"
+                className="static w-screen h-72 border-t-4 border-b-2 bg-white"
                 style={{borderColor: "#CBD2D9", borderTopColor: "#F35627"}}
             >
+            </div>
+            <div className="flex absolute top-36 h-72 w-screen justify-center">
                 <div
-                    className="group relative top-28 w-72 h-fit p-3 border-2 rounded-md bg-white"
+                    className="w-72 p-3 border-2 rounded-md bg-white"
                     style={{borderColor: "#CBD2D9"}}
                 >
                     <div
@@ -48,17 +50,9 @@ export default async function CatPage({params}: { params: { id: string } }) {
                             fill
                         />
                     </div>
-                    <div className="text-center mt-4 mb-1">
-                        <h3
-                            className="text-lg font-semibold"
-                            style={{color: "#1F2933"}}
-                        >
-                            {cat.name}
-                        </h3>
-                    </div>
                 </div>
             </div>
-            <div className="container relative top-60 max-w-7xl mx-auto p-3 md:p-8">
+            <div className="container relative top-36 max-w-7xl mx-auto p-4">
 
                 <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-7 gap-y-4 md:gap-4">
                     <div
