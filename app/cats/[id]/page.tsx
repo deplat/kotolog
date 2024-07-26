@@ -32,18 +32,13 @@ export default async function CatPage({params}: { params: { id: string } }) {
 
     return (
         <div>
-            <div
-                className="w-screen h-72 border-t-4 border-b-2 bg-white"
-                style={{borderColor: "#CBD2D9", borderTopColor: "#F35627"}}
-            >
-            </div>
-            <div className="flex absolute top-36 h-72 w-screen justify-center">
+            <div className="grid columns-1 absolute top-36 w-screen justify-center">
                 <div
-                    className="w-72 p-3 border-2 rounded-md bg-white"
+                    className="w-fit h-fit p-3 border-2 rounded-md bg-white"
                     style={{borderColor: "#CBD2D9"}}
                 >
                     <div
-                        className="relative aspect-h-1 aspect-w-1 w-full rounded-md overflow-hidden">
+                        className="relative w-72 aspect-h-1 aspect-w-1 rounded-md overflow-hidden">
                         <Image
                             src={cat.avatar?.url || "https://7srwfaunr1krwltq.public.blob.vercel-storage.com/static/paw-main"}
                             alt={cat.name}
@@ -51,8 +46,13 @@ export default async function CatPage({params}: { params: { id: string } }) {
                         />
                     </div>
                 </div>
+                <div className="text-center text-xl py-4">{cat.name}</div>
+                <div className="grid grid-cols-2 gap-x-4">
+                    <button className="py-2 px-4 rounded-md" style={{backgroundColor:"#F9703E", color:"#FFFFFF"}}>Придти в гости</button>
+                    <button className="py-2 px-4 rounded-md" style={{backgroundColor:"#F9703E", color:"#F5F7FA"}}>Забрать домой</button>
+                </div>
             </div>
-            <div className="container max-w-7xl mx-auto mt-48 px-4">
+            <div className="container max-w-7xl mx-auto mt-80 mb-6 px-4">
                 <div
                     className="col-span-2 md:col-span-4 p-3 pe-0 border-2 rounded-md bg-white"
                     style={{borderColor: "#CBD2D9"}}
@@ -111,7 +111,7 @@ export default async function CatPage({params}: { params: { id: string } }) {
             </div>
 
             {cat.profile?.album && (
-                <div className="flex w-fit h-72 py-8">
+                <div className="flex w-fit h-64 mx-auto mb-6">
                     <div className="flex overflow-x-auto overflow-y-hidden justify-start gap-x-2">
                         {cat.profile.album.photos.map((photo) => (
                             <Image key={photo.id} src={photo.url} alt={cat.name} width={photo.width}

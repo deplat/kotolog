@@ -19,8 +19,15 @@ export default async function RootLayout({
     return (
         <html lang="ru">
         <body className={inter.className}>
-        <main className="h-screen" style={{zIndex: -100,
-            backgroundColor: "#F5F7FA"}}>
+        <main className="h-screen" style={{
+            zIndex: -100,
+            backgroundColor: "#F5F7FA"
+        }}>
+            <div
+                className="w-screen h-72 border-t-4 border-b-2 bg-white"
+                style={{borderColor: "#CBD2D9", borderTopColor: "#F35627"}}
+            >
+            </div>
             {children}
         </main>
         </body>
