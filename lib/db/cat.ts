@@ -1,8 +1,8 @@
-import {PrismaClient, Prisma} from '@prisma/client';
+import {Prisma} from '@prisma/client';
 import {CatCreateBaseInput, CatCreateProfileInput} from '@/types';
+import prisma from "@/lib/db/prisma";
 import sharp from "sharp";
 
-const prisma = new PrismaClient();
 
 
 export const catCreateBase = async (data: CatCreateBaseInput) => {

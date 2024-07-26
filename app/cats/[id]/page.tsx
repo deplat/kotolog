@@ -9,6 +9,8 @@ async function getCatWithProfile(id: number) {
         where: {id}, include: {
             avatar: true, profile: {
                 include: {
+                    healthFeatures: true,
+                    specialties: true,
                     album: {
                         include: {
                             photos: true
@@ -32,7 +34,7 @@ export default async function CatPage({params}: { params: { id: string } }) {
 
 
     return (
-        <div style={{ backgroundColor: "#F5F7FA" }}>
+        <div style={{backgroundColor: "#F5F7FA"}}>
             <div className="flex flex-col absolute top-32 w-screen gap-y-6 justify-center">
                 <div
                     className="w-fit h-fit p-3 mx-auto border-2 rounded-md bg-white"
@@ -54,12 +56,12 @@ export default async function CatPage({params}: { params: { id: string } }) {
                 </div>
             </div>
             <div className="container max-w-7xl mx-auto mt-80 mb-6 px-4">
-                <div className="grid lg:grid-cols-2 gap-x-6">
+                <div className="grid lg:grid-cols-4 gap-6">
                     <div
-                        className="p-6 border-2 rounded-md bg-white"
+                        className="col-span-2 p-4 overflow-x-auto border-2 rounded-md bg-white"
                         style={{borderColor: "#CBD2D9"}}
                     >
-                        <ul className="columns-2 gap-x-10 font-medium text-gray-900">
+                        <ul className="columns-2 gap-x-8 font-medium text-gray-900">
                             {cat.profile?.socialized && (
                                 <li className="mb-2">
                                     Социализирован{wordEnd()}
@@ -109,9 +111,32 @@ export default async function CatPage({params}: { params: { id: string } }) {
                         </ul>
                     </div>
                     <div
-                        className="p-6 border-2 rounded-md bg-white"
+                        className="p-4 border-2 rounded-md bg-white"
                         style={{borderColor: "#CBD2D9"}}
                     >
+                        О здоровье:
+                        <hr style={{border: "1px solid #CBD2D9"}}/>
+                        {cat.profile?.healthFeatures.length && (
+                            <ul className="mt-3.5">
+                                {cat.profile.healthFeatures.map((item, index) => (
+                                    <li key={index}>{item.text}</li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                    <div
+                        className="p-4 border-2 rounded-md bg-white"
+                        style={{borderColor: "#CBD2D9"}}
+                    >
+                        Что любит:
+                        <hr style={{border: "1px solid #CBD2D9"}}/>
+                        {cat.profile?.specialties.length && (
+                            <ul className="mt-3.5">
+                                {cat.profile.specialties.map((item, index) => (
+                                    <li key={index}>{item.text}</li>
+                                ))}
+                            </ul>
+                        )}
                     </div>
                 </div>
 
@@ -120,8 +145,8 @@ export default async function CatPage({params}: { params: { id: string } }) {
             {cat.profile?.album && (
                 <div className="flex justify-center h-64 my-6">
                     <div className="flex overflow-x-auto overflow-y-hidden gap-x-2">
-                        {cat.profile.album.photos.map((photo) => (
-                            <Image key={photo.id} src={photo.url} alt={cat.name} width={photo.width}
+                        {cat.profile.album.photos.map((photo, index) => (
+                            <Image key={index} src={photo.url} alt={cat.name} width={photo.width}
                                    height={photo.height} className="h-full w-auto"/>
                         ))}
                     </div>

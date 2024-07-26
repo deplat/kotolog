@@ -1,8 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
 import {del} from "@vercel/blob";
-import {PrismaClient} from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "@/lib/db/prisma";
 
 export async function DELETE(req: NextRequest, {params}: { params: { id: number } }) {
     const id = Number(params.id);
