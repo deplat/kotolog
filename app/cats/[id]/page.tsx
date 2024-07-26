@@ -52,7 +52,7 @@ export default async function CatPage({params}: { params: { id: string } }) {
                     </div>
                 </div>
             </div>
-            <div className="container mt-48 max-w-7xl mx-auto">
+            <div className="container max-w-7xl mx-auto mt-48 px-4">
                 <div
                     className="col-span-2 md:col-span-4 p-3 pe-0 border-2 rounded-md bg-white"
                     style={{borderColor: "#CBD2D9"}}
@@ -111,8 +111,8 @@ export default async function CatPage({params}: { params: { id: string } }) {
             </div>
 
             {cat.profile?.album && (
-                <div className="flex w-screen justify-center h-64 mt-6">
-                    <div className="flex overflow-x-auto overflow-y-hidden justify-center gap-x-2">
+                <div className="flex w-fit h-72 py-8">
+                    <div className="flex overflow-x-auto overflow-y-hidden justify-start gap-x-2">
                         {cat.profile.album.photos.map((photo) => (
                             <Image key={photo.id} src={photo.url} alt={cat.name} width={photo.width}
                                    height={photo.height} className="h-full w-auto"/>
@@ -121,10 +121,10 @@ export default async function CatPage({params}: { params: { id: string } }) {
                 </div>
             )}
 
-            <div className="container mt-6 max-w-7xl mx-auto">
+            <div className="container max-w-7xl mx-auto px-4 ">
 
                 {cat.profile?.bio && (
-                    <div className="flex justify-center max-h-fit p-3 mt-4 border-2 rounded-md bg-white"
+                    <div className="flex justify-center max-h-fit p-3 border-2 rounded-md bg-white"
                          style={{borderColor: "#CBD2D9"}}>
                         {cat.profile.bio}
                     </div>
