@@ -34,7 +34,7 @@ export default async function CatPage({params}: { params: { id: string } }) {
 
 
     return (
-        <div style={{backgroundColor: "#F5F7FA"}}>
+        <div className="pb-10" style={{backgroundColor: "#F5F7FA"}}>
             <div className="flex flex-col absolute top-32 w-screen gap-y-6 justify-center">
                 <div
                     className="w-fit h-fit p-3 mx-auto border-2 rounded-md bg-white"
@@ -143,8 +143,8 @@ export default async function CatPage({params}: { params: { id: string } }) {
             </div>
 
             {cat.profile?.album && (
-                <div className="flex justify-center my-6" style={{height: "700px"}}>
-                    <div className="flex overflow-x-auto overflow-y-hidden gap-x-2">
+                <div className="flex justify-center my-10" style={{height: "700px"}}>
+                    <div className="flex overflow-x-auto overflow-y-hidden gap-x-4">
                         {cat.profile.album.photos.map((photo, index) => (
                             <Image key={index} src={photo.url} alt={cat.name} width={photo.width}
                                    height={photo.height} className="h-full w-auto"/>
