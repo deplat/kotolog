@@ -32,9 +32,9 @@ export default async function CatPage({params}: { params: { id: string } }) {
 
     return (
         <div>
-            <div className="grid columns-1 absolute top-36 w-screen justify-center">
+            <div className="grid columns-1 absolute top-32 w-screen gap-y-6 justify-center">
                 <div
-                    className="w-fit h-fit p-3 border-2 rounded-md bg-white"
+                    className="w-fit h-fit p-3 mx-auto border-2 rounded-md bg-white"
                     style={{borderColor: "#CBD2D9"}}
                 >
                     <div
@@ -46,19 +46,18 @@ export default async function CatPage({params}: { params: { id: string } }) {
                         />
                     </div>
                 </div>
-                <div className="text-center text-xl py-4">{cat.name}</div>
+                <div className="text-center text-2xl font-medium">{cat.name}</div>
                 <div className="grid grid-cols-2 gap-x-4">
-                    <button className="py-2 px-4 rounded-md" style={{backgroundColor:"#F9703E", color:"#FFFFFF"}}>Придти в гости</button>
-                    <button className="py-2 px-4 rounded-md" style={{backgroundColor:"#F9703E", color:"#F5F7FA"}}>Забрать домой</button>
+                    <button className="btn secondary py-2 rounded-md">Придти в гости</button>
+                    <button className="btn primary py-2 rounded-md">Забрать домой</button>
                 </div>
             </div>
             <div className="container max-w-7xl mx-auto mt-80 mb-6 px-4">
                 <div
-                    className="col-span-2 md:col-span-4 p-3 pe-0 border-2 rounded-md bg-white"
+                    className="w-fit p-6 mx-auto border-2 rounded-md bg-white"
                     style={{borderColor: "#CBD2D9"}}
                 >
-                    <ul className="columns-2
-                     font-medium text-gray-900">
+                    <ul className="columns-2 gap-x-16 font-medium text-gray-900">
                         {cat.profile?.socialized && (
                             <li className="mb-2">
                                 Социализирован{wordEnd()}

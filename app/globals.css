@@ -16,14 +16,28 @@
   }
 }
 
-.gallery-hor {
-  display: flex;
-  justify-content: center;
-  height: 15rem;
-  padding: 1rem 0;
-  margin-top: 1rem;
-  border-width: 2px;
-  border-radius: 0.375rem;
-  border-color: #CBD2D9;
-  background: white;
+.btn.primary {
+
+  background-color: #F9703E;
+  border: 2px solid #F9703E;
+  color: #F5F7FA;
+  transition: all 0.3s;
+}
+.btn.primary:hover {
+  background-color: #DE3A11;
+  border: 2px solid #DE3A11;
+  color: #F5F7FA;
+}
+
+.btn.secondary {
+
+  background-color: #F5F7FA;
+  border: 2px solid #F9703E;
+  color: #F9703E;
+  transition: all 0.3s;
+}
+.btn.secondary:hover {
+  background-color: #F9703E;
+  border: 2px solid #F9703E;
+  color: #F5F7FA;
 }
