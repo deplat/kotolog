@@ -54,10 +54,10 @@ export default async function CatPage({params}: { params: { id: string } }) {
             </div>
             <div className="container max-w-7xl mx-auto mt-80 mb-6 px-4">
                 <div
-                    className="w-fit p-6 mx-auto border-2 rounded-md bg-white"
+                    className="w-fit max-w-full p-6 mx-auto border-2 rounded-md bg-white"
                     style={{borderColor: "#CBD2D9"}}
                 >
-                    <ul className="columns-2 gap-x-16 font-medium text-gray-900">
+                    <ul className="columns-2 gap-x-10 font-medium text-gray-900">
                         {cat.profile?.socialized && (
                             <li className="mb-2">
                                 Социализирован{wordEnd()}
