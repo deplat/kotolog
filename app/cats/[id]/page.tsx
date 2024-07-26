@@ -50,7 +50,7 @@ export default async function CatPage({params}: { params: { id: string } }) {
                     </div>
                 </div>
                 <div className="text-center text-2xl font-medium">{cat.name}</div>
-                <div className="grid grid-cols-2 gap-x-6 w-fit mx-auto">
+                <div className="grid grid-cols-2 gap-x-3 md:gap-x-6 w-fit mx-auto">
                     <button className="btn secondary px-5 py-2 rounded-md">Придти в гости</button>
                     <button className="btn primary  px-5-2 rounded-md">Забрать домой</button>
                 </div>
