@@ -32,6 +32,9 @@ export default async function RootLayout({
             className="w-screen h-72 border-t-2 border-b-4 bg-white"
             style={{borderColor: "#CBD2D9", borderBottomColor: "#F35627"}}
         >
+            <div className="flex justify-center h-full">
+                <p className="my-auto">Footer, лол</p>
+            </div>
         </footer>
         </body>
         </html>
