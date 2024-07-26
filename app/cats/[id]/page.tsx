@@ -110,8 +110,8 @@ export default async function CatPage({params}: { params: { id: string } }) {
             </div>
 
             {cat.profile?.album && (
-                <div className="flex w-fit h-64 mx-auto mb-6">
-                    <div className="flex overflow-x-auto overflow-y-hidden justify-start gap-x-2">
+                <div className="flex justify-center h-64 my-6">
+                    <div className="flex overflow-x-auto overflow-y-hidden gap-x-2">
                         {cat.profile.album.photos.map((photo) => (
                             <Image key={photo.id} src={photo.url} alt={cat.name} width={photo.width}
                                    height={photo.height} className="h-full w-auto"/>
@@ -121,7 +121,6 @@ export default async function CatPage({params}: { params: { id: string } }) {
             )}
 
             <div className="container max-w-7xl mx-auto px-4 ">
-
                 {cat.profile?.bio && (
                     <div className="flex justify-center max-h-fit p-3 border-2 rounded-md bg-white"
                          style={{borderColor: "#CBD2D9"}}>
