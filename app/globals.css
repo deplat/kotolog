@@ -42,3 +42,10 @@
   border: 2px solid #F9703E;
   color: #F5F7FA;
 }
+
+.bg-main {
+  background-image: url("../public/cats-kittens.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}

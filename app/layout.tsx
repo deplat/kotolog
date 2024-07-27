@@ -25,7 +25,7 @@ export default async function RootLayout({
             style={{borderColor: "#CBD2D9", borderTopColor: "#F35627"}}
         >
         </header>
-        <main>
+        <main className="min-h-screen bg-main">
             {children}
         </main>
         <footer
