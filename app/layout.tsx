@@ -20,7 +20,6 @@ export default async function RootLayout({
     return (
         <html lang="ru">
         <body className={inter.className} style={{backgroundColor: "#F5F7FA"}}>
-
         <main className="min-h-screen bg-main">
             {children}
         </main>
