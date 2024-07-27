@@ -115,7 +115,7 @@ export default async function CatPage({params}: { params: { id: string } }) {
                         style={{borderColor: "#CBD2D9"}}
                     >
                         О здоровье:
-                        <hr style={{border: "1px solid #CBD2D9"}}/>
+                        <hr style={{border: "1px solid #F35627"}}/>
                         {cat.profile?.healthFeatures.length && (
                             <ul className="mt-3.5">
                                 {cat.profile.healthFeatures.map((item, index) => (
@@ -129,7 +129,7 @@ export default async function CatPage({params}: { params: { id: string } }) {
                         style={{borderColor: "#CBD2D9"}}
                     >
                         Что любит:
-                        <hr style={{border: "1px solid #CBD2D9"}}/>
+                        <hr style={{border: "1px solid #F35627"}}/>
                         {cat.profile?.specialties.length && (
                             <ul className="mt-3.5">
                                 {cat.profile.specialties.map((item, index) => (
