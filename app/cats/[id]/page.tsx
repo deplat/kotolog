@@ -1,16 +1,14 @@
 import prisma from "@/lib/db/prisma";
 import NotFound from "next/dist/client/components/not-found-error";
 import Image from "next/image";
-import {Lightbox} from "yet-another-react-lightbox";
-import {Inline} from "yet-another-react-lightbox/plugins";
-import NextJsImage from "./NextJsImage";
-
+import LightBox from "./LightBox";
 export const revalidate = 5
 
 async function getCatWithProfile(id: number) {
     return prisma.cat.findUnique({
         where: {id}, include: {
-            avatar: true, profile: {
+            avatar: true,
+            profile: {
                 include: {
                     healthFeatures: true,
                     specialties: true,
@@ -157,15 +155,7 @@ export default async function CatPage({params}: { params: { id: string } }) {
                 </div>
             )}
 
-            {cat.profile?.album && (
-                <div style={{width: "100%", aspectRatio: "3 / 2"}}>
-                    <Lightbox
-                        plugins={[Inline]}
-                        slides={cat.profile.album.photos}
-                        render={{slide: NextJsImage}}
-                    />
-                </div>
-            )}
+            {cat.profile?.album && <LightBox photos={cat.profile.album.photos} />}
 
             <div className="container max-w-7xl mx-auto px-4 ">
                 {cat.profile?.bio && (
