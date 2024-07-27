@@ -29,7 +29,7 @@ export async function DELETE(req: NextRequest, {params}: { params: { id: number 
         }
 
         if (cat.avatar) {
-            await del(cat.avatar.url);
+            await del(cat.avatar.src);
             await prisma.avatar.delete({
                 where: {
                     id: cat.avatar.id
@@ -58,7 +58,7 @@ export async function DELETE(req: NextRequest, {params}: { params: { id: number 
 
             if (cat.profile.album) {
                 const photos = cat.profile.album.photos
-                await del(photos.map((photo) => photo.url));
+                await del(photos.map((photo) => photo.src));
                 await prisma.photo.deleteMany({
                     where: {albumId: cat.profile.album.id}
                 });
