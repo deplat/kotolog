@@ -47,5 +47,5 @@
   background-image: url("../public/cats-kittens.png");
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: top;
 }
