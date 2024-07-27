@@ -8,7 +8,7 @@ export async function GET() {
             include: {
                 avatar: {
                     select: {
-                        url: true
+                        src: true
                     }
                 },
                 profile: {
