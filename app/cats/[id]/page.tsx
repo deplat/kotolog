@@ -1,6 +1,9 @@
 import prisma from "@/lib/db/prisma";
 import NotFound from "next/dist/client/components/not-found-error";
 import Image from "next/image";
+import {Lightbox} from "yet-another-react-lightbox";
+import {Inline} from "yet-another-react-lightbox/plugins";
+import NextJsImage from "./NextJsImage";
 
 export const revalidate = 5
 
@@ -35,33 +38,34 @@ export default async function CatPage({params}: { params: { id: string } }) {
 
     return (
         <div style={{backgroundColor: "#F5F7FA"}}>
-            <div className="flex flex-col absolute top-32 w-screen gap-y-6 justify-center">
-                <div
-                    className="w-fit h-fit p-3 mx-auto border-2 rounded-md bg-white"
-                    style={{borderColor: "#CBD2D9"}}
-                >
+
+            <div className="flex max-w-7xl mx-auto justify-center mt-80 mb-6 px-4">
+                <div className="flex flex-col absolute top-32 w-screen gap-y-6 justify-center">
                     <div
-                        className="relative w-72 aspect-h-1 aspect-w-1 rounded-md overflow-hidden">
-                        <Image
-                            src={cat.avatar?.url || "https://7srwfaunr1krwltq.public.blob.vercel-storage.com/static/paw-main"}
-                            alt={cat.name}
-                            fill
-                        />
+                        className="w-fit h-fit p-3 mx-auto border-2 rounded-md bg-white"
+                        style={{borderColor: "#CBD2D9"}}
+                    >
+                        <div
+                            className="relative w-72 aspect-h-1 aspect-w-1 rounded-md overflow-hidden">
+                            <Image
+                                src={cat.avatar?.src || "https://7srwfaunr1krwltq.public.blob.vercel-storage.com/static/paw-main"}
+                                alt={cat.name}
+                                fill
+                            />
+                        </div>
+                    </div>
+                    <div className="text-center text-2xl font-medium">{cat.name}</div>
+                    <div className="grid grid-cols-2 gap-x-3 md:gap-x-6 w-fit mx-auto">
+                        <button className="btn secondary px-5 py-2 rounded-md">Придти в гости</button>
+                        <button className="btn primary  px-5-2 rounded-md">Забрать домой</button>
                     </div>
                 </div>
-                <div className="text-center text-2xl font-medium">{cat.name}</div>
-                <div className="grid grid-cols-2 gap-x-3 md:gap-x-6 w-fit mx-auto">
-                    <button className="btn secondary px-5 py-2 rounded-md">Придти в гости</button>
-                    <button className="btn primary  px-5-2 rounded-md">Забрать домой</button>
-                </div>
-            </div>
-            <div className="container max-w-7xl mx-auto mt-80 mb-6 px-4">
                 <div className="grid lg:grid-cols-4 gap-3  md:gap-6">
                     <div
                         className="col-span-2 p-4 overflow-x-auto border-2 rounded-md bg-white"
                         style={{borderColor: "#CBD2D9"}}
                     >
-                        <ul className="columns-2 gap-x-8 font-medium text-gray-900">
+                        <ul className="columns-2 gap-x-6 font-medium text-gray-900">
                             {cat.profile?.socialized && (
                                 <li className="mb-2">
                                     Социализирован{wordEnd()}
@@ -146,10 +150,20 @@ export default async function CatPage({params}: { params: { id: string } }) {
                 <div className="flex justify-center my-10" style={{height: "700px"}}>
                     <div className="flex overflow-x-auto overflow-y-hidden gap-x-4">
                         {cat.profile.album.photos.map((photo, index) => (
-                            <Image key={index} src={photo.url} alt={cat.name} width={photo.width} height={photo.height}
-                            className="h-full min-w-fit"/>
+                            <Image key={index} src={photo.src} alt={cat.name} width={photo.width} height={photo.height}
+                                   className="h-full min-w-fit"/>
                         ))}
                     </div>
+                </div>
+            )}
+
+            {cat.profile?.album && (
+                <div style={{width: "100%", aspectRatio: "3 / 2"}}>
+                    <Lightbox
+                        plugins={[Inline]}
+                        slides={cat.profile.album.photos}
+                        render={{slide: NextJsImage}}
+                    />
                 </div>
             )}
 

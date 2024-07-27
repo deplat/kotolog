@@ -3,10 +3,29 @@ import {CatCreateBaseInput, CatCreateProfileInput} from '@/types';
 import prisma from "@/lib/db/prisma";
 import sharp from "sharp";
 
-
+interface PhotoWithDimensions {
+    src: string;
+    width: number;
+    height: number;
+}
 
 export const catCreateBase = async (data: CatCreateBaseInput) => {
     try {
+        let avatarWithDimensions : PhotoWithDimensions | null;
+        if (data.avatarUrl) {
+            const src = data.avatarUrl;
+            const response = await fetch(src);
+            const buffer = await response.arrayBuffer();
+            const {width, height} = await sharp(Buffer.from(buffer)).metadata();
+            if (width && height) {
+                avatarWithDimensions = {src, width, height};
+            } else {
+                console.error('Failed to get dimensions');
+                return null
+            }
+        }
+
+
         const catBase = (data: CatCreateBaseInput) => {
             return Prisma.validator<Prisma.CatCreateInput>()({
                 name: data.name,
@@ -16,11 +35,9 @@ export const catCreateBase = async (data: CatCreateBaseInput) => {
                 colors: {
                     connect: data.colors.map((id) => ({id})),
                 },
-                ...(data.avatarUrl && {
+                ...(avatarWithDimensions && {
                     avatar: {
-                        create: {
-                            url: data.avatarUrl,
-                        },
+                        create: avatarWithDimensions
                     },
                 }),
                 unclaimed: data.unclaimed,
@@ -33,7 +50,9 @@ export const catCreateBase = async (data: CatCreateBaseInput) => {
             include: {
                 avatar: {
                     select: {
-                        url: true,
+                        src: true,
+                        width: true,
+                        height: true,
                     }
                 },
                 colors: {
@@ -49,24 +68,18 @@ export const catCreateBase = async (data: CatCreateBaseInput) => {
     }
 };
 
-interface AlbumPhotoWithDimensions {
-    url: string;
-    width: number;
-    height: number;
-}
-
 export const catCreateProfile = async (data: CatCreateProfileInput) => {
     try {
-        let albumWithDimensions: Awaited<AlbumPhotoWithDimensions | null>[] = [];
+        let albumWithDimensions: Awaited<PhotoWithDimensions | null>[] = [];
         if (data.album) {
             albumWithDimensions = await Promise.all(
-                data.album.map(async (url): Promise<AlbumPhotoWithDimensions | null> => {
+                data.album.map(async (src): Promise<PhotoWithDimensions | null> => {
                     try {
-                        const response = await fetch(url);
+                        const response = await fetch(src);
                         const buffer = await response.arrayBuffer();
-                        const { width, height } = await sharp(Buffer.from(buffer)).metadata();
+                        const {width, height} = await sharp(Buffer.from(buffer)).metadata();
                         if (width && height) {
-                            return { url, width, height };
+                            return {src, width, height};
                         } else {
                             console.error('Failed to get dimensions');
                             return null
@@ -79,7 +92,7 @@ export const catCreateProfile = async (data: CatCreateProfileInput) => {
             );
         }
 
-       const cleanedAlbumWithDimensions = albumWithDimensions.filter((item): item is AlbumPhotoWithDimensions => item !== null);
+        const cleanedAlbumWithDimensions = albumWithDimensions.filter((item): item is PhotoWithDimensions => item !== null);
 
 
         const catProfile = (data: CatCreateProfileInput) => {
@@ -116,11 +129,7 @@ export const catCreateProfile = async (data: CatCreateProfileInput) => {
                                 create: {
                                     photos: {
                                         createMany: {
-                                            data: cleanedAlbumWithDimensions.map((photo) => ({
-                                                url: photo.url,
-                                                width: photo.width,
-                                                height: photo.height,
-                                            })),
+                                            data: cleanedAlbumWithDimensions.map((photo) => (photo)),
                                         },
                                     },
                                 },

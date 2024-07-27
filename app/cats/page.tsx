@@ -9,7 +9,7 @@ async function getCats() {
         include: {
             avatar: {
                 select: {
-                    url: true
+                    src: true
                 }
             },
             profile: {
@@ -32,7 +32,7 @@ export default async function CatsPage() {
                             <div
                                 className="relative aspect-h-1 aspect-w-1 w-full rounded overflow-hidden">
                                 <Image
-                                    src={cat.avatar?.url || "https://7srwfaunr1krwltq.public.blob.vercel-storage.com/static/paw-main"}
+                                    src={cat.avatar?.src || "https://7srwfaunr1krwltq.public.blob.vercel-storage.com/static/paw-main"}
                                     alt={cat.name}
                                     fill
                                 />
