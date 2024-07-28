@@ -8,6 +8,7 @@ import  Inline  from "yet-another-react-lightbox/plugins/inline";
 import {useState} from "react";
 import NextJsImage from "@/app/cats/[id]/NextJsImage";
 import {Thumbnails} from "yet-another-react-lightbox/plugins";
+import ThumbnailImage from "@/app/cats/[id]/ThumbnailImage";
 
 interface Photo {
     src: string;
@@ -34,7 +35,6 @@ export default function LightboxClient({ photos }: LightboxClientProps) {
         alt: photo.src,
     }));
 
-    // @ts-ignore
     return (
         <>
             <Lightbox
@@ -70,7 +70,11 @@ export default function LightboxClient({ photos }: LightboxClientProps) {
                 on={{ view: updateIndex }}
                 animation={{ fade: 0 }}
                 controller={{ closeOnPullDown: true, closeOnBackdropClick: true }}
-                render={{ slide: NextJsImage, thumbnail: NextJsImage }}
+                render={{ slide: NextJsImage, thumbnail: ThumbnailImage }}
+                thumbnails={{
+                    imageFit: "cover",
+                }
+                }
             />
         </>
     );
