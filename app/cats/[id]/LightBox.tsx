@@ -1,10 +1,13 @@
 // LightboxClient.tsx
 'use client';
 import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
+
 import { Lightbox } from "yet-another-react-lightbox";
 import  Inline  from "yet-another-react-lightbox/plugins/inline";
 import {useState} from "react";
 import NextJsImage from "@/app/cats/[id]/NextJsImage";
+import {Thumbnails} from "yet-another-react-lightbox/plugins";
 
 interface Photo {
     src: string;
@@ -31,14 +34,11 @@ export default function LightboxClient({ photos }: LightboxClientProps) {
         alt: photo.src,
     }));
 
+    // @ts-ignore
     return (
         <>
-            <button type="button" onClick={() => setOpen(true)}>
-                Open Lightbox
-            </button>
-
             <Lightbox
-                render={{ slide: NextJsImage }}
+                render={{ slide: NextJsImage}}
                 index={index}
                 slides={slides}
                 plugins={[Inline]}
@@ -49,27 +49,28 @@ export default function LightboxClient({ photos }: LightboxClientProps) {
                 carousel={{
                     padding: 0,
                     spacing: 0,
-                    imageFit: "cover",
+                    preload: 5,
+                  //  imageFit: "cover",
                 }}
                 inline={{
                     style: {
-                        width: "100%",
-                        maxWidth: "900px",
-                        aspectRatio: "3 / 2",
-                        margin: "0 auto",
+                        maxWidth:"80rem",
+                        aspectRatio: "3/2",
+                        margin: "1.5rem auto",
                     },
                 }}
             />
 
             <Lightbox
                 open={open}
+                plugins={[Thumbnails]}
                 close={toggleOpen(false)}
                 index={index}
                 slides={slides}
                 on={{ view: updateIndex }}
                 animation={{ fade: 0 }}
                 controller={{ closeOnPullDown: true, closeOnBackdropClick: true }}
-                render={{ slide: NextJsImage }}
+                render={{ slide: NextJsImage, thumbnail: NextJsImage }}
             />
         </>
     );
