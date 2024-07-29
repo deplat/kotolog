@@ -112,41 +112,40 @@ export default async function CatPage({params}: { params: { id: string } }) {
                             )}
                         </ul>
                     </div>
-                    <div
-                        className="p-4 border-2 rounded-md bg-white"
-                        style={{borderColor: "#CBD2D9"}}
-                    >
-                        О здоровье:
-                        <hr style={{border: "1px solid #F35627"}}/>
-                        {cat.profile?.healthFeatures.length && (
-                            <ul className="mt-3.5">
-                                {cat.profile.healthFeatures.map((item, index) => (
-                                    <li key={index}>{item.text}</li>
-                                ))}
-                            </ul>
-                        )}
-                    </div>
-                    <div
-                        className="p-4 border-2 rounded-md bg-white"
-                        style={{borderColor: "#CBD2D9"}}
-                    >
-                        Что любит:
-                        <hr style={{border: "1px solid #F35627"}}/>
-                        {cat.profile?.specialties.length && (
-                            <ul className="mt-3.5">
-                                {cat.profile.specialties.map((item, index) => (
-                                    <li key={index}>{item.text}</li>
-                                ))}
-                            </ul>
-                        )}
-                    </div>
+                    {(cat.profile?.healthFeatures?.length && (
+                        <div
+                            className="p-4 border-2 rounded-md bg-white"
+                            style={{borderColor: "#CBD2D9"}}
+                        >
+                            О здоровье:
+                            <hr style={{border: "1px solid #F35627"}}/>
+                                <ul className="mt-3.5">
+                                    {cat.profile.healthFeatures.map((item, index) => (
+                                        <li key={index}>{item.text}</li>
+                                    ))}
+                                </ul>
+                        </div>
+                    ) || <></>)}
+                    {cat.profile?.specialties.length && (
+                        <div
+                            className="p-4 border-2 rounded-md bg-white"
+                            style={{borderColor: "#CBD2D9"}}
+                        >
+                            Что любит:
+                            <hr style={{border: "1px solid #F35627"}}/>
+                                <ul className="mt-3.5">
+                                    {cat.profile.specialties.map((item, index) => (
+                                        <li key={index}>{item.text}</li>
+                                    ))}
+                                </ul>
+                        </div>
+                    ) || <></>}
                 </div>
 
             </div>
 
-            {cat.profile?.album && <LightBox photos={cat.profile.album.photos}/>}
-
             <div className="container max-w-7xl mx-auto px-4 ">
+                {cat.profile?.album && <LightBox photos={cat.profile.album.photos}/>}
                 {cat.profile?.bio && (
                     <div className="flex justify-center max-h-fit mb-10 p-3 border-2 rounded-md bg-white"
                          style={{borderColor: "#CBD2D9"}}>
