@@ -81,7 +81,5 @@ export async function DELETE(req: NextRequest, {params}: { params: { id: number 
     } catch (error) {
         console.error('Error deleting cat:', error);
         return NextResponse.json({ error:"Internal Server Error"},{status: 500});
-    } finally {
-        await prisma.$disconnect()
     }
 }

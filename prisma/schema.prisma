@@ -72,108 +72,188 @@ model Authenticator {
   @@id([userId, credentialID])
 }
 
-model Cat {
-  id        Int       @id @default(autoincrement())
-  name      String
-  birth     DateTime?
-  sex       Sex
-  fur       Fur
-  unclaimed Boolean
-  show      Boolean
-  adopted   Boolean
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  avatar    Avatar?
-  profile   Profile?
-  colors    Color[]   @relation("CatToColor")
-}
-
 model Color {
   id        Int      @id @default(autoincrement())
   name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  cats      Cat[]    @relation("CatToColor")
+  pets      Pet[]    @relation("PetColors")
 }
 
-model Avatar {
-  id        Int      @id @default(autoincrement())
-  src       String
-  width     Int
-  height    Int
-  catId     Int      @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  cat       Cat      @relation(fields: [catId], references: [id])
+model Pet {
+  id                   Int                   @id @default(autoincrement())
+  name                 String
+  slug                 String                @unique
+  birthDate            DateTime?
+  gender               Gender
+  furType              FurType?
+  isUnclaimed          Boolean
+  isFeatured           Boolean
+  isAvailable          Boolean
+  isAdopted            Boolean
+  isVisible            Boolean               @default(true)
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  avatarId             Int?                  @unique
+  avatar               Image?                @relation("PetAvatar", fields: [avatarId], references: [id])
+  photos               Image[]               @relation("PetPhotos")
+  profile              PetProfile?
+  colors               Color[]               @relation("PetColors")
+  petType              PetType
+  adoptionApplications AdoptionApplication[]
+  fosterings           Fostering[]
+  healthRecords        HealthRecord[]
 }
 
-model Profile {
-  id             Int             @id @default(autoincrement())
-  socialized     Boolean
-  catFriendly    Boolean
-  dogFriendly    Boolean
-  animalFriendly Boolean
-  litterBox      Boolean
-  scratchingPost Boolean
-  sterilized     Boolean
-  vaccinated     Boolean
-  paraTreated    Boolean
-  healthStatus   HealthStatus
-  bio            String?
-  catId          Int             @unique
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  album          Album?
-  healthFeatures HealthFeature[]
-  cat            Cat             @relation(fields: [catId], references: [id])
-  specialties    Specialty[]
+model PetProfile {
+  id                  Int          @id @default(autoincrement())
+  petId               Int          @unique
+  socialized          Boolean
+  friendlyWithCats    Boolean
+  friendlyWithDogs    Boolean
+  friendlyWithAnimals Boolean
+  litterBoxTrained    Boolean?
+  usesScratchingPost  Boolean?
+  sterilized          Boolean
+  vaccinated          Boolean
+  treatedForParasites Boolean
+  healthStatus        HealthStatus
+  healthNotes         HealthNote[]
+  specialties         Specialty[]
+  biography           String?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+  pet                 Pet          @relation(fields: [petId], references: [id])
 }
 
-model HealthFeature {
-  id        Int      @id @default(autoincrement())
-  text      String
-  profileId Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Profile   Profile  @relation(fields: [profileId], references: [id])
+model HealthRecord {
+  id           Int           @id @default(autoincrement())
+  petId        Int
+  observations String?
+  vaccinations Vaccination[]
+  treatments   Treatment[]
+  medications  Medication[]
+  healthStatus HealthStatus
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  pet          Pet           @relation(fields: [petId], references: [id])
+}
+
+model Vaccination {
+  id               Int          @id @default(autoincrement())
+  healthRecordId   Int
+  name             String
+  dateAdministered DateTime
+  nextDueDate      DateTime?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  healthRecord     HealthRecord @relation(fields: [healthRecordId], references: [id])
+}
+
+model Treatment {
+  id               Int           @id @default(autoincrement())
+  healthRecordId   Int
+  type             TreatmentType
+  description      String
+  dateAdministered DateTime
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  healthRecord     HealthRecord  @relation(fields: [healthRecordId], references: [id])
+}
+
+model Medication {
+  id             Int          @id @default(autoincrement())
+  healthRecordId Int
+  name           String
+  dosage         String
+  startDate      DateTime
+  endDate        DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  healthRecord   HealthRecord @relation(fields: [healthRecordId], references: [id])
+}
+
+model HealthNote {
+  id          Int        @id @default(autoincrement())
+  description String
+  profileId   Int
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  petProfile  PetProfile @relation(fields: [profileId], references: [id])
 }
 
 model Specialty {
-  id        Int      @id @default(autoincrement())
-  text      String
-  profileId Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Profile   Profile  @relation(fields: [profileId], references: [id])
+  id          Int        @id @default(autoincrement())
+  description String
+  profileId   Int
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  petProfile  PetProfile @relation(fields: [profileId], references: [id])
 }
 
-model Album {
-  id        Int      @id @default(autoincrement())
-  profileId Int      @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  profile   Profile  @relation(fields: [profileId], references: [id])
-  photos    Photo[]
-}
-
-model Photo {
+model Image {
   id        Int      @id @default(autoincrement())
   src       String
   width     Int
   height    Int
-  albumId   Int
-  album     Album    @relation(fields: [albumId], references: [id])
   createdAt DateTime @default(now())
-
+  petId     Int?
+  avatarOf  Pet?     @relation("PetAvatar")
+  pet       Pet?     @relation("PetPhotos", fields: [petId], references: [id])
 }
 
-enum Sex {
+model AdoptionApplication {
+  id        Int               @id @default(autoincrement())
+  petId     Int
+  personId  Int
+  status    ApplicationStatus
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @default(now()) @updatedAt
+  pet       Pet               @relation(fields: [petId], references: [id])
+  person    Person            @relation(fields: [personId], references: [id])
+}
+
+model Person {
+  id           Int                   @id @default(autoincrement())
+  firstName    String
+  lastName     String
+  email        String                @unique
+  phone        String
+  address      String
+  isApplicant  Boolean               @default(false)
+  isFoster     Boolean               @default(false)
+  applications AdoptionApplication[]
+  fosterings   Fostering[]
+}
+
+model Fostering {
+  id        Int       @id @default(autoincrement())
+  petId     Int
+  personId  Int
+  startDate DateTime
+  endDate   DateTime?
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+  pet       Pet       @relation(fields: [petId], references: [id])
+  person    Person    @relation(fields: [personId], references: [id])
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  WITHDRAWN
+}
+
+enum Gender {
   MALE
   FEMALE
 }
 
-enum Fur {
+enum FurType {
   SHORT
+  MEDIUM
   LONG
   HAIRLESS
 }
@@ -184,4 +264,16 @@ enum HealthStatus {
   RECOVERING
   CHRONIC_CONDITION
   UNKNOWN
+}
+
+enum TreatmentType {
+  SURGERY
+  THERAPY
+  MEDICATION
+  OTHER
+}
+
+enum PetType {
+  CAT
+  DOG
 }

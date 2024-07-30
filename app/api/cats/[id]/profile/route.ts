@@ -7,6 +7,6 @@ export async function POST(req: NextRequest) {
         const newCat = await catCreateProfile(data);
         return NextResponse.json(newCat);
     } catch (error) {
-        return NextResponse.json({ error: (error as Error).message });
+        return NextResponse.json({ error: (error as Error).message }, {status: 500});
     }
 }

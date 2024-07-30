@@ -6,10 +6,10 @@ const inter = Inter({subsets: ["cyrillic"]});
 
 export const metadata: Metadata = {
     title: {
-        template: '%s | kotolog',
-        default: 'kotolog',
+        template: '%s | КОТОЛОГ',
+        default: 'КОТОЛОГ',
     },
-    description: 'next.js kotolog app',
+    description: 'Shelter app, written with NextJs',
 };
 
 export default async function RootLayout({
