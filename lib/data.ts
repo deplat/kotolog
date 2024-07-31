@@ -1,13 +1,8 @@
-import {Prisma} from '@prisma/client';
-import prisma from "@/lib/db/prisma";
-import sharp from "sharp";
 import {PetFormData, PetProfileFormData} from "@/types/pet";
-
-interface PhotoWithDimensions {
-    src: string;
-    width: number;
-    height: number;
-}
+import sharp from "sharp";
+import {Prisma} from "@prisma/client";
+import prisma from "@/lib/prisma";
+import {PhotoWithDimensions} from "@/types";
 
 export const createPet = async (data: PetFormData) => {
     try {
@@ -105,36 +100,36 @@ export const createPet = async (data: PetFormData) => {
 export const createPetProfile = async (data: PetProfileFormData) => {
     try {
         const petProfile : Prisma.PetUpdateInput = {
-                profile: {
-                    create: {
-                        socialized: data.socialized,
-                        friendlyWithCats: data.friendlyWithCats,
-                        friendlyWithDogs: data.friendlyWithDogs,
-                        friendlyWithAnimals: data.friendlyWithAnimals,
-                        litterBoxTrained: data.litterBoxTrained,
-                        usesScratchingPost: data.usesScratchingPost,
-                        sterilized: data.sterilized,
-                        vaccinated: data.vaccinated,
-                        treatedForParasites: data.treatedForParasites,
-                        healthStatus: data.healthStatus,
-                        biography: data.biography,
-                        ...(data.healthNotes.length > 0 && {
-                            healthNotes: {
-                                createMany: {
-                                    data: data.healthNotes.map((description) => ({description})),
-                                },
+            profile: {
+                create: {
+                    socialized: data.socialized,
+                    friendlyWithCats: data.friendlyWithCats,
+                    friendlyWithDogs: data.friendlyWithDogs,
+                    friendlyWithAnimals: data.friendlyWithAnimals,
+                    litterBoxTrained: data.litterBoxTrained,
+                    usesScratchingPost: data.usesScratchingPost,
+                    sterilized: data.sterilized,
+                    vaccinated: data.vaccinated,
+                    treatedForParasites: data.treatedForParasites,
+                    healthStatus: data.healthStatus,
+                    biography: data.biography,
+                    ...(data.healthNotes.length > 0 && {
+                        healthNotes: {
+                            createMany: {
+                                data: data.healthNotes.map((description) => ({description})),
                             },
-                        }),
-                        ...(data.specialties.length > 0 && {
-                            specialties: {
-                                createMany: {
-                                    data: data.specialties.map((description) => ({description})),
-                                },
+                        },
+                    }),
+                    ...(data.specialties.length > 0 && {
+                        specialties: {
+                            createMany: {
+                                data: data.specialties.map((description) => ({description})),
                             },
-                        }),
+                        },
+                    }),
 
-                    },
                 },
+            },
         };
         return await prisma.pet.update({
             where: {
@@ -147,3 +142,33 @@ export const createPetProfile = async (data: PetProfileFormData) => {
         throw error;
     }
 };
+
+export const getCatsForDashboard = async () => {
+    try {
+        const catsSelect = Prisma.validator<Prisma.PetSelect>()({
+            id: true,
+            slug: true,
+            name: true,
+            birthDate: true,
+            avatar: {
+                select: {
+                    src: true,
+                }
+            },
+            profile: {
+                select: {
+                    id: true,
+                },
+            },
+        });
+        return await prisma.pet.findMany({
+            where: {
+                petType: 'CAT',
+            },
+            select: catsSelect
+        })
+    } catch (error) {
+        console.error('Error getting cats for dashboard:', error);
+        throw error;
+    }
+}

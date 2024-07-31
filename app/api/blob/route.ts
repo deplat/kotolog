@@ -34,7 +34,7 @@ export async function POST(request: Request): Promise<NextResponse> {
                 try {
                     // Run any logic after the file upload completed
                     // const { userId } = JSON.parse(tokenPayload);
-                    // await db.update({ avatar: blob.url, userId });
+                    // await data.update({ avatar: blob.url, userId });
                 } catch (error) {
                     throw new Error('Could not update user');
                 }

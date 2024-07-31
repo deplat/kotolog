@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createPet } from '@/lib/db/pet';
-import prisma from '@/lib/db/prisma';
+import { createPet } from '@/lib/data/pet';
+import prisma from '@/lib/prisma';
 
 export async function GET() {
     try {

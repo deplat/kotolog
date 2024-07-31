@@ -1,12 +1,8 @@
 'use client'
 
 import {PetCreationForm} from "@/app/admin/PetCreationForm";
-import {ColorCreateForm} from "@/app/admin/ColorCreateForm";
-import {CatList} from "@/app/admin/CatList";
-import {ColorList} from "@/app/admin/ColorList";
-import {auth} from "@/auth";
-import NotFound from "next/dist/client/components/not-found-error";
 import {useState} from "react";
+import {Dashboard} from "@/app/admin/Dashboard";
 
 export default function Admin() {
 
@@ -27,7 +23,7 @@ const AdminPage =  () => {
                 {isPetCreationFormVisible && <PetCreationForm/>}
             </div>
             <div className="flex h-screen">
-                <CatList/>
+                <Dashboard/>
 
                 <div className='fixed bottom-0 z-50'>
                     <button onClick={handlePetCreationFormVisible}>

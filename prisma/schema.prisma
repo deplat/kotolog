@@ -95,14 +95,14 @@ model Pet {
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
   avatarId             Int?                  @unique
-  avatar               Image?                @relation("PetAvatar", fields: [avatarId], references: [id])
-  photos               Image[]               @relation("PetPhotos")
-  profile              PetProfile?
-  colors               Color[]               @relation("PetColors")
   petType              PetType
   adoptionApplications AdoptionApplication[]
   fosterings           Fostering[]
   healthRecords        HealthRecord[]
+  photos               Image[]               @relation("PetPhotos")
+  avatar               Image?                @relation("PetAvatar", fields: [avatarId], references: [id])
+  profile              PetProfile?
+  colors               Color[]               @relation("PetColors")
 }
 
 model PetProfile {
@@ -118,25 +118,25 @@ model PetProfile {
   vaccinated          Boolean
   treatedForParasites Boolean
   healthStatus        HealthStatus
-  healthNotes         HealthNote[]
-  specialties         Specialty[]
   biography           String?
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
+  healthNotes         HealthNote[]
   pet                 Pet          @relation(fields: [petId], references: [id])
+  specialties         Specialty[]
 }
 
 model HealthRecord {
   id           Int           @id @default(autoincrement())
   petId        Int
   observations String?
-  vaccinations Vaccination[]
-  treatments   Treatment[]
-  medications  Medication[]
   healthStatus HealthStatus
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   pet          Pet           @relation(fields: [petId], references: [id])
+  medications  Medication[]
+  treatments   Treatment[]
+  vaccinations Vaccination[]
 }
 
 model Vaccination {
@@ -198,8 +198,8 @@ model Image {
   height    Int
   createdAt DateTime @default(now())
   petId     Int?
-  avatarOf  Pet?     @relation("PetAvatar")
   pet       Pet?     @relation("PetPhotos", fields: [petId], references: [id])
+  avatarOf  Pet?     @relation("PetAvatar")
 }
 
 model AdoptionApplication {
@@ -209,8 +209,8 @@ model AdoptionApplication {
   status    ApplicationStatus
   createdAt DateTime          @default(now())
   updatedAt DateTime          @default(now()) @updatedAt
-  pet       Pet               @relation(fields: [petId], references: [id])
   person    Person            @relation(fields: [personId], references: [id])
+  pet       Pet               @relation(fields: [petId], references: [id])
 }
 
 model Person {
@@ -235,8 +235,8 @@ model Fostering {
   isActive  Boolean   @default(true)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
-  pet       Pet       @relation(fields: [petId], references: [id])
   person    Person    @relation(fields: [personId], references: [id])
+  pet       Pet       @relation(fields: [petId], references: [id])
 }
 
 enum ApplicationStatus {

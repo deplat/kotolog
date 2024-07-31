@@ -1,7 +1,7 @@
 import NextAuth, {type DefaultSession} from "next-auth"
 import GitHub from "next-auth/providers/github"
 import {PrismaAdapter}  from "@auth/prisma-adapter"
-import prisma from "@/lib/db/prisma";
+import prisma from "@/lib/prisma";
 
 declare module "next-auth" {
     interface Session {

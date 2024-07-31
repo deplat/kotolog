@@ -1,6 +1,6 @@
 import Image from "next/image";
 import {getAge} from "@/lib/helpers";
-import prisma from "@/lib/db/prisma";
+import prisma from "@/lib/prisma";
 
 export const revalidate = 30
 

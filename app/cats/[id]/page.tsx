@@ -1,4 +1,4 @@
-import prisma from "@/lib/db/prisma";
+import prisma from "@/lib/prisma";
 import NotFound from "next/dist/client/components/not-found-error";
 import Image from "next/image";
 import LightBox from "./LightBox";

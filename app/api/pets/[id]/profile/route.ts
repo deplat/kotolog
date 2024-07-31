@@ -1,5 +1,5 @@
 import {NextRequest, NextResponse} from "next/server";
-import {createPetProfile} from "@/lib/db/pet";
+import {createPetProfile} from "@/lib/data/pet";
 
 export async function POST(req: NextRequest) {
     try {

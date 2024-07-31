@@ -1,4 +1,4 @@
-import prisma from "@/lib/db/prisma";
+import prisma from "@/lib/prisma";
 
 export const ColorList = async () => {
     const colors = await prisma.color.findMany()

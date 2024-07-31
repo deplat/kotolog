@@ -1,6 +1,12 @@
 
 import { Prisma } from '@prisma/client';
 
+export interface PhotoWithDimensions {
+    src: string;
+    width: number;
+    height: number;
+}
+
 export type CatCreateBaseInput = {
     name: string;
     birth?: Date;
