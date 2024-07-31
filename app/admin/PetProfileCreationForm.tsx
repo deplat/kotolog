@@ -1,65 +1,47 @@
 'use client';
 import {SubmitHandler, useForm } from "react-hook-form";
-import { CatCreateProfileInput } from "@/types";
-import { useRef, useState} from "react";
-import {upload} from "@vercel/blob/client";
+import { useState} from "react";
+import {PetProfileFormData} from "@/types/pet";
 
-interface CatCreateProfileFormProps {
-    catId: number;
+interface PetCreateProfileFormProps {
+    petId: number;
 }
 
-export const CatCreateProfileForm = ({ catId }: CatCreateProfileFormProps) => {
-    const { register, handleSubmit, formState: { errors } } = useForm<CatCreateProfileInput>({
+export const PetProfileCreationForm = ({ petId }: PetCreateProfileFormProps) => {
+    const { register, handleSubmit, formState: { errors } } = useForm<PetProfileFormData>({
         defaultValues: {
-            catId,
+            petId,
             socialized: true,
-            catFriendly: true,
-            dogFriendly: false,
-            animalFriendly: false,
-            litterBox: true,
-            scratchingPost: true,
+            friendlyWithCats: true,
+            friendlyWithDogs: false,
+            friendlyWithAnimals: false,
+            litterBoxTrained: true,
+            usesScratchingPost: true,
             sterilized: true,
             vaccinated: true,
-            paraTreated: true,
+            treatedForParasites: true,
             healthStatus: 'UNKNOWN',
         },
     });
-
-    const fileInputRef = useRef<HTMLInputElement>(null);
-    const [healthFeatures, setHealthFeatures] = useState<string[]>([]);
+    const [healthNotes, setHealthNotes] = useState<string[]>([]);
     const [specialties, setSpecialties] = useState<string[]>([]);
     
-    const onSubmit: SubmitHandler<CatCreateProfileInput> = async (data) => {
-        const albumUrls: string[] = []
-        if (fileInputRef.current?.files?.length) {
-            const files = Array.from(fileInputRef.current.files);
-            for (const file of files) {
-                try {
-                    const blob = await upload('albums/' + catId + '/' + file.name, file, {
-                        access: "public",
-                        handleUploadUrl: "/api/blob"
-                    })
-                    albumUrls.push(blob.url);
-                } catch (error) {
-                    console.error('Error uploading album photo:', error);
-                }
-            }
-        }
-        const cleanedData: CatCreateProfileInput = {
+    const onSubmit: SubmitHandler<PetProfileFormData> = async (data) => {
+
+        const cleanedData: PetProfileFormData = {
             ...data,
-            healthFeatures,
+            healthNotes,
             specialties,
-            album : albumUrls,
         };
 
         Object.keys(cleanedData).forEach(
             (key) =>
-                cleanedData[key as keyof CatCreateProfileInput] === undefined &&
-                delete cleanedData[key as keyof CatCreateProfileInput],
+                cleanedData[key as keyof PetProfileFormData] === undefined &&
+                delete cleanedData[key as keyof PetProfileFormData],
         );
 
         try {
-            const response = await fetch(`/api/cats/${catId}/profile`, {
+            const response = await fetch(`/api/pets/${petId}/profile`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,9 +53,9 @@ export const CatCreateProfileForm = ({ catId }: CatCreateProfileFormProps) => {
                 console.error('Network response was not ok');
             }
             const createdProfile = await response.json();
-            console.log('Cat profile created:', createdProfile);
+            console.log('Pet profile created:', createdProfile);
         } catch (error) {
-            console.error('Error creating cat profile:', error);
+            console.error('Error creating pet profile:', error);
         }
     };
     return (
@@ -94,7 +76,7 @@ export const CatCreateProfileForm = ({ catId }: CatCreateProfileFormProps) => {
                     <input
                         type="checkbox"
                         className="form-checkbox rounded border-gray-300"
-                        {...register("catFriendly")}
+                        {...register("friendlyWithCats")}
                     />
                 </div>
 
@@ -103,7 +85,7 @@ export const CatCreateProfileForm = ({ catId }: CatCreateProfileFormProps) => {
                     <input
                         type="checkbox"
                         className="form-checkbox rounded border-gray-300"
-                        {...register("dogFriendly")}
+                        {...register("friendlyWithDogs")}
                     />
                 </div>
 
@@ -112,7 +94,7 @@ export const CatCreateProfileForm = ({ catId }: CatCreateProfileFormProps) => {
                     <input
                         type="checkbox"
                         className="form-checkbox rounded border-gray-300"
-                        {...register("animalFriendly")}
+                        {...register("friendlyWithAnimals")}
                     />
                 </div>
 
@@ -121,7 +103,7 @@ export const CatCreateProfileForm = ({ catId }: CatCreateProfileFormProps) => {
                     <input
                         type="checkbox"
                         className="form-checkbox rounded border-gray-300"
-                        {...register("litterBox")}
+                        {...register("litterBoxTrained")}
                     />
                 </div>
 
@@ -130,7 +112,7 @@ export const CatCreateProfileForm = ({ catId }: CatCreateProfileFormProps) => {
                     <input
                         type="checkbox"
                         className="form-checkbox rounded border-gray-300"
-                        {...register("scratchingPost")}
+                        {...register("usesScratchingPost")}
                     />
                 </div>
 
@@ -157,7 +139,7 @@ export const CatCreateProfileForm = ({ catId }: CatCreateProfileFormProps) => {
                     <input
                         type="checkbox"
                         className="form-checkbox rounded border-gray-300"
-                        {...register("paraTreated")}
+                        {...register("treatedForParasites")}
                     />
                 </div>
 
@@ -181,8 +163,8 @@ export const CatCreateProfileForm = ({ catId }: CatCreateProfileFormProps) => {
                     <input
                         type="text"
                         className="form-input w-3/4 rounded border-gray-300"
-                        value={healthFeatures.join(",")}
-                        onChange={(e) => setHealthFeatures(e.target.value.split(","))}
+                        value={healthNotes.join(",")}
+                        onChange={(e) => setHealthNotes(e.target.value.split(","))}
                     />
                 </div>
 
@@ -200,17 +182,7 @@ export const CatCreateProfileForm = ({ catId }: CatCreateProfileFormProps) => {
                     <label className="w-1/4">Биография</label>
                     <textarea
                         className="form-textarea w-3/4 rounded border-gray-300"
-                        {...register("bio")}
-                    />
-                </div>
-
-                <div className="form-group mb-4 flex items-center">
-                    <label className="w-1/4">Альбом</label>
-                    <input
-                    type="file"
-                    multiple
-                    ref={fileInputRef}
-                    className="form-input w-3/4 rounded border-gray-300"
+                        {...register("biography")}
                     />
                 </div>
                 <div className="flex justify-end">

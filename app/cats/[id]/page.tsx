@@ -5,19 +5,16 @@ import LightBox from "./LightBox";
 
 export const revalidate = 5
 
-async function getCatWithProfile(id: number) {
-    return prisma.cat.findUnique({
-        where: {id}, include: {
+async function getPetWithProfile(id: number) {
+    return prisma.pet.findUnique({
+        where: {id},
+        include: {
             avatar: true,
+            photos: true,
             profile: {
                 include: {
-                    healthFeatures: true,
+                    healthNotes: true,
                     specialties: true,
-                    album: {
-                        include: {
-                            photos: true
-                        }
-                    }
                 }
             }
         }
@@ -25,13 +22,13 @@ async function getCatWithProfile(id: number) {
 }
 
 export default async function CatPage({params}: { params: { id: string } }) {
-    const cat = await getCatWithProfile(Number(params.id))
+    const cat = await getPetWithProfile(Number(params.id))
     if (!cat) {
         return <NotFound/>
     }
 
     const wordEnd = () => {
-        return cat.sex === "FEMALE" && 'a'
+        return cat.gender === "FEMALE" && 'a'
     }
 
 
@@ -69,27 +66,27 @@ export default async function CatPage({params}: { params: { id: string } }) {
                                     Социализирован{wordEnd()}
                                 </li>
                             )}
-                            {cat.profile?.catFriendly && (
+                            {cat.profile?.friendlyWithCats && (
                                 <li className="mb-2">
                                     Ладит с другими кошками
                                 </li>
                             )}
-                            {cat.profile?.dogFriendly && (
+                            {cat.profile?.friendlyWithDogs && (
                                 <li className="mb-2">
                                     Ладит с собаками
                                 </li>
                             )}
-                            {cat.profile?.animalFriendly && (
+                            {cat.profile?.friendlyWithAnimals && (
                                 <li className="mb-2">
                                     Не против других животных
                                 </li>
                             )}
-                            {cat.profile?.litterBox && (
+                            {cat.profile?.litterBoxTrained && (
                                 <li className="mb-2">
                                     Приучен{wordEnd()} к лотку
                                 </li>
                             )}
-                            {cat.profile?.scratchingPost && (
+                            {cat.profile?.usesScratchingPost && (
                                 <li className="mb-2">
                                     Пользуется&nbsp;когтеточкой
                                 </li>
@@ -105,25 +102,25 @@ export default async function CatPage({params}: { params: { id: string } }) {
                                     Вакцинирован{wordEnd()}
                                 </li>
                             )}
-                            {cat.profile?.paraTreated && (
+                            {cat.profile?.treatedForParasites && (
                                 <li>
                                     Обработан{wordEnd()} от паразитов
                                 </li>
                             )}
                         </ul>
                     </div>
-                    {(cat.profile?.healthFeatures?.length && (
+                    {(cat.profile?.healthNotes?.length && (
                         <div
                             className="p-4 border-2 rounded-md bg-white"
                             style={{borderColor: "#CBD2D9"}}
                         >
                             О здоровье:
                             <hr style={{border: "1px solid #F35627"}}/>
-                                <ul className="mt-3.5">
-                                    {cat.profile.healthFeatures.map((item, index) => (
-                                        <li key={index}>{item.text}</li>
-                                    ))}
-                                </ul>
+                            <ul className="mt-3.5">
+                                {cat.profile.healthNotes.map((item, index) => (
+                                    <li key={index}>{item.description}</li>
+                                ))}
+                            </ul>
                         </div>
                     ) || <></>)}
                     {cat.profile?.specialties.length && (
@@ -133,11 +130,11 @@ export default async function CatPage({params}: { params: { id: string } }) {
                         >
                             Что любит:
                             <hr style={{border: "1px solid #F35627"}}/>
-                                <ul className="mt-3.5">
-                                    {cat.profile.specialties.map((item, index) => (
-                                        <li key={index}>{item.text}</li>
-                                    ))}
-                                </ul>
+                            <ul className="mt-3.5">
+                                {cat.profile.specialties.map((item, index) => (
+                                    <li key={index}>{item.description}</li>
+                                ))}
+                            </ul>
                         </div>
                     ) || <></>}
                 </div>
@@ -145,11 +142,11 @@ export default async function CatPage({params}: { params: { id: string } }) {
             </div>
 
             <div className="container max-w-7xl mx-auto px-4 ">
-                {cat.profile?.album && <LightBox photos={cat.profile.album.photos}/>}
-                {cat.profile?.bio && (
+                {cat.photos.length > 0 && <LightBox photos={cat.photos}/>}
+                {cat.profile?.biography && (
                     <div className="flex justify-center max-h-fit mb-10 p-3 border-2 rounded-md bg-white"
                          style={{borderColor: "#CBD2D9"}}>
-                        {cat.profile.bio}
+                        {cat.profile.biography}
                     </div>
                 )}
             </div>

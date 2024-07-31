@@ -6,18 +6,14 @@ export async function DELETE(req: NextRequest, {params}: { params: { id: number 
     const id = Number(params.id);
 
     try {
-        const cat = await prisma.cat.findUnique({
+        const cat = await prisma.pet.findUnique({
             where: {id: id},
             include: {
                 avatar: true,
+                photos: true,
                 profile: {
                     include: {
-                        album: {
-                            include: {
-                                photos: true
-                            }
-                        },
-                        healthFeatures: true,
+                        healthNotes: true,
                         specialties: true
                     }
                 }

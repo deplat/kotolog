@@ -1,8 +1,9 @@
 'use client'
 import {CatWithAvatarAndProfileId} from "@/types";
-import {CatCreateProfileForm} from "@/app/admin/CatCreateProfileForm";
+import {PetProfileCreationForm} from "@/app/admin/PetProfileCreationForm";
 import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
+import {PetCreationForm} from "@/app/admin/PetCreationForm";
 
 
 
@@ -64,7 +65,7 @@ export const CatList = () => {
             {selectedCatId && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
                     <div className="bg-white p-4 rounded shadow-lg w-1/2">
-                        <CatCreateProfileForm catId={selectedCatId} />
+                        <PetProfileCreationForm petId={selectedCatId} />
                         <button
                             className="mt-4 bg-red-500 text-white py-1 px-2 rounded"
                             onClick={() => setSelectedCatId(null)}

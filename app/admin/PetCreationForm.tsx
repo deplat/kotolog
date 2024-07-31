@@ -112,7 +112,7 @@ export const PetCreationForm = () => {
         };
 
         try {
-            const response = await fetch('/api/cats', {
+            const response = await fetch('/api/pets', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -130,8 +130,8 @@ export const PetCreationForm = () => {
                     }
                 }
             }
-            const createdCat = await response.json();
-            console.log('Cat created:', createdCat);
+            const createdPet = await response.json();
+            console.log('Pet created:', createdPet);
         } catch (error) {
             setError('root', { type: 'custom', message: 'Network Error' });
         }
@@ -150,16 +150,16 @@ export const PetCreationForm = () => {
                     <hr className="border mb-4" style={{ borderColor: '#F35627' }} />
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="form-group mb-4 flex items-center">
-                            <label className="w-1/4" htmlFor='type'>Вид:</label>
+                            <label className="w-1/4" htmlFor='petType'>Вид:</label>
                             <select
                                 className="form-select w-3/4 rounded border-gray-300"
-                                id='type'
-                                {...register('type', {required: 'Обязательное поле'})}
+                                id='petType'
+                                {...register('petType', {required: 'Обязательное поле'})}
                             >
                                 <option value='CAT'>Кошка</option>
                                 <option value='DOG'>Собака</option>
                             </select>
-                            {errors.type && <p className="text-red-600">{errors.type.message}</p>}
+                            {errors.petType && <p className="text-red-600">{errors.petType.message}</p>}
                         </div>
 
                         <div className="form-group mb-4 flex items-center">
@@ -185,10 +185,10 @@ export const PetCreationForm = () => {
                         </div>
 
                         <div className="form-group mb-4 flex items-center">
-                            <label className="w-1/4" htmlFor='birth'>Дата рождения:</label>
+                            <label className="w-1/4" htmlFor='birthDate'>Дата рождения:</label>
                             <Controller
                                 control={control}
-                                name='birth'
+                                name='birthDate'
                                 render={({field}) => (
                                     <DatePicker
                                         selected={field.value ? new Date(field.value) : null}
@@ -198,7 +198,7 @@ export const PetCreationForm = () => {
                                     />
                                 )}
                             />
-                            {errors.birth && <p className="text-red-600">{errors.birth.message}</p>}
+                            {errors.birthDate && <p className="text-red-600">{errors.birthDate.message}</p>}
                         </div>
 
                         <div className="form-group mb-4 flex items-center">

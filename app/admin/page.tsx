@@ -1,6 +1,6 @@
 'use client'
 
-import {PetCreationForm} from "@/app/admin/CatCreateBaseForm";
+import {PetCreationForm} from "@/app/admin/PetCreationForm";
 import {ColorCreateForm} from "@/app/admin/ColorCreateForm";
 import {CatList} from "@/app/admin/CatList";
 import {ColorList} from "@/app/admin/ColorList";
@@ -21,20 +21,15 @@ const AdminPage =  () => {
         setIsPetCreationFormVisible((prev) => !prev);
     };
 
-   // const session = await auth()
-   // if (!session?.user?.isAdmin) {
-   //     return <NotFound/>
-   // }
-
     return (
         <div>
             <div className='fixed grid w-screen mt-36 z-40'>
                 {isPetCreationFormVisible && <PetCreationForm/>}
             </div>
             <div className="flex h-screen">
+                <CatList/>
 
-
-                <div className='mt-auto z-50'>
+                <div className='fixed bottom-0 z-50'>
                     <button onClick={handlePetCreationFormVisible}>
                         {isPetCreationFormVisible ? '- Питомец' : '+ Питомец'}
                     </button>

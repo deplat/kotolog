@@ -1,12 +1,10 @@
-import prisma from "@/lib/db/prisma";
-import {NextResponse} from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
+import { createPet } from '@/lib/db/pet';
+import prisma from '@/lib/db/prisma';
 
 export async function GET() {
     try {
-        const cats = await prisma.pet.findMany({
-            where: {
-              petType: 'CAT',
-            },
+        const pets = await prisma.pet.findMany({
             include: {
                 avatar: {
                     select: {
@@ -22,7 +20,17 @@ export async function GET() {
                 }
             }
         });
-        return NextResponse.json(cats);
+        return NextResponse.json(pets);
+    } catch (error) {
+        return NextResponse.json({ error: (error as Error).message });
+    }
+}
+
+export async function POST(req: NextRequest) {
+    try {
+        const data = await req.json();
+        const newPet = await createPet(data);
+        return NextResponse.json(newPet);
     } catch (error) {
         return NextResponse.json({ error: (error as Error).message });
     }
