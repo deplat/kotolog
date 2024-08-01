@@ -23,14 +23,6 @@ export default async function RootLayout({
         <main className="min-h-screen bg-main">
             {children}
         </main>
-        <footer
-            className="w-screen h-72 border-t-2 border-b-4 bg-white"
-            style={{borderColor: "#CBD2D9", borderBottomColor: "#F35627"}}
-        >
-            <div className="flex justify-center h-full">
-                <p className="my-auto">Footer, лол</p>
-            </div>
-        </footer>
         </body>
         </html>
     );

@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma';
 import {NextRequest, NextResponse} from 'next/server';
+import {revalidateTag} from "next/cache";
 
 export async function GET() {
     try {
@@ -16,6 +17,7 @@ export async function POST(req: NextRequest) {
         const newColor = await prisma.color.create({
             data: {name},
         });
+        revalidateTag('dashboard-colors')
         return NextResponse.json(newColor);
     } catch (error) {
         return NextResponse.json({error: (error as Error).message});

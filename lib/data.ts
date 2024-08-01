@@ -1,5 +1,5 @@
 import {PetFormData, PetProfileFormData} from "@/types/pet";
-import sharp from "sharp";
+import sharp, {Color} from "sharp";
 import {Prisma} from "@prisma/client";
 import prisma from "@/lib/prisma";
 import {PhotoWithDimensions} from "@/types";
@@ -13,9 +13,9 @@ export const createPet = async (data: PetFormData) => {
             const src = data.avatar;
             const response = await fetch(src);
             const buffer = await response.arrayBuffer();
-            const { width, height } = await sharp(Buffer.from(buffer)).metadata();
+            const {width, height} = await sharp(Buffer.from(buffer)).metadata();
             if (width && height) {
-                avatarWithDimensions = { src, width, height };
+                avatarWithDimensions = {src, width, height};
             } else {
                 console.error('Failed to get dimensions for avatar');
                 return null;
@@ -28,9 +28,9 @@ export const createPet = async (data: PetFormData) => {
                     try {
                         const response = await fetch(src);
                         const buffer = await response.arrayBuffer();
-                        const { width, height } = await sharp(Buffer.from(buffer)).metadata();
+                        const {width, height} = await sharp(Buffer.from(buffer)).metadata();
                         if (width && height) {
-                            return { src, width, height };
+                            return {src, width, height};
                         } else {
                             console.error('Failed to get dimensions for photo');
                             return null;
@@ -49,10 +49,10 @@ export const createPet = async (data: PetFormData) => {
             slug: data.slug,
             birthDate: data.birthDate,
             gender: data.gender,
-            ...(data.furType && { furType: data.furType }),
+            ...(data.furType && {furType: data.furType}),
             ...(data.colors.length > 0 && {
                 colors: {
-                    connect: data.colors.map((id) => ({ id })),
+                    connect: data.colors.map((id) => ({id})),
                 },
             }),
             ...(avatarWithDimensions && {
@@ -99,7 +99,7 @@ export const createPet = async (data: PetFormData) => {
 
 export const createPetProfile = async (data: PetProfileFormData) => {
     try {
-        const petProfile : Prisma.PetUpdateInput = {
+        const petProfile: Prisma.PetUpdateInput = {
             profile: {
                 create: {
                     socialized: data.socialized,
@@ -143,32 +143,48 @@ export const createPetProfile = async (data: PetProfileFormData) => {
     }
 };
 
-export const getCatsForDashboard = async () => {
-    try {
-        const catsSelect = Prisma.validator<Prisma.PetSelect>()({
+export const catSelectForDashboard = Prisma.validator<Prisma.PetSelect>()({
+    id: true,
+    slug: true,
+    name: true,
+    birthDate: true,
+    avatar: {
+        select: {
+            src: true,
+            width: true,
+            height: true,
+        }
+    },
+    profile: {
+        select: {
             id: true,
-            slug: true,
-            name: true,
-            birthDate: true,
-            avatar: {
-                select: {
-                    src: true,
-                }
-            },
-            profile: {
-                select: {
-                    id: true,
-                },
-            },
-        });
-        return await prisma.pet.findMany({
-            where: {
-                petType: 'CAT',
-            },
-            select: catsSelect
-        })
-    } catch (error) {
-        console.error('Error getting cats for dashboard:', error);
-        throw error;
-    }
+        },
+    },
+});
+
+export const getCatsForDashboard = async () => {
+    return prisma.pet.findMany({
+        where: {
+            petType: 'CAT',
+        },
+        select: catSelectForDashboard,
+        orderBy: {
+            id: 'desc',
+        },
+    });
 }
+
+export type CatsForDashboard = Prisma.PromiseReturnType<typeof getCatsForDashboard>
+
+export const colorSelectForDashboard = Prisma.validator<Prisma.ColorSelect>()({
+    id: true,
+    name: true,
+})
+
+export const getColorsForDashboard = async ()=> {
+    return prisma.color.findMany({
+        select: colorSelectForDashboard
+    })
+}
+
+export type ColorsForDashboard = Prisma.PromiseReturnType<typeof getColorsForDashboard>

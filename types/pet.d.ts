@@ -1,3 +1,6 @@
+import {Prisma} from "@prisma/client";
+import prisma from "@/lib/prisma";
+
 export interface PetFormData {
     petType: 'CAT' | 'DOG';
     name: string;

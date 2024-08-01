@@ -3,7 +3,7 @@ import NotFound from "next/dist/client/components/not-found-error";
 import Image from "next/image";
 import LightBox from "./LightBox";
 
-export const revalidate = 5
+export const revalidate = 5;
 
 async function getPetWithProfile(id: number) {
     return prisma.pet.findUnique({

@@ -1,15 +1,19 @@
-'use client'
-
-import { useEffect, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { upload } from "@vercel/blob/client";
+import {useEffect, useRef, useState} from "react";
+import {Controller, useForm} from "react-hook-form";
+import {upload} from "@vercel/blob/client";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { checkSlugUnique } from "@/lib/checkSlug";
-import { useRouter } from "next/navigation";
+import {checkSlugUnique} from "@/lib/checkSlug";
+import {useRouter} from "next/navigation";
 import {PetFormData} from "@/types/pet";
+import {ColorsForDashboard} from "@/lib/data";
 
-export const PetCreationForm = () => {
+interface CatCreationFormProps {
+    colors: ColorsForDashboard;
+    closeForm: () => void;
+}
+
+export const PetCreationForm = ({colors, closeForm}: CatCreationFormProps) => {
     const {
         register,
         handleSubmit,
@@ -17,13 +21,12 @@ export const PetCreationForm = () => {
         watch,
         setError,
         clearErrors,
-        formState: { errors, isSubmitting }
+        formState: {errors, isSubmitting}
     } = useForm<PetFormData>();
     const avatarFileRef = useRef<HTMLInputElement>(null);
     const photosFileRef = useRef<HTMLInputElement>(null);
     const [isSuccess, setIsSuccess] = useState(false);
     const [slugError, setSlugError] = useState('');
-    const [colorOptions, setColorOptions] = useState<{ id: number, name: string }[]>([]);
     const [selectedColors, setSelectedColors] = useState<number[]>([]);
     const [showFurType, setShowFurType] = useState(true);
     const router = useRouter();
@@ -36,7 +39,7 @@ export const PetCreationForm = () => {
                 const isUnique = await checkSlugUnique(slug);
                 if (!isUnique) {
                     setSlugError('Slug is already in use');
-                    setError('slug', { type: 'custom', message: 'Slug is already in use' });
+                    setError('slug', {type: 'custom', message: 'Slug is already in use'});
                 } else {
                     setSlugError('');
                     clearErrors('slug');
@@ -50,19 +53,6 @@ export const PetCreationForm = () => {
         }
     }, [clearErrors, setError, watchSlug]);
 
-    useEffect(() => {
-        const fetchColors = async () => {
-            try {
-                const response = await fetch('/api/colors');
-                const colors = await response.json();
-                setColorOptions(colors);
-            } catch (error) {
-                console.error('Error fetching colors:', error);
-            }
-        };
-
-        fetchColors();
-    }, []);
 
     const toggleColorSelection = (colorId: number) => {
         setSelectedColors((prevColors) =>
@@ -126,14 +116,16 @@ export const PetCreationForm = () => {
                 const errorData = await response.json();
                 if (errorData.errors) {
                     for (const [key, value] of Object.entries(errorData.errors)) {
-                        setError(key as keyof PetFormData, { type: 'custom', message: value as string });
+                        setError(key as keyof PetFormData, {type: 'custom', message: value as string});
                     }
                 }
             }
             const createdPet = await response.json();
             console.log('Pet created:', createdPet);
+            router.refresh()
+            closeForm()
         } catch (error) {
-            setError('root', { type: 'custom', message: 'Network Error' });
+            setError('root', {type: 'custom', message: 'Network Error'});
         }
     };
 
@@ -147,7 +139,7 @@ export const PetCreationForm = () => {
             ) : (
                 <div>
                     <h3 className="text-2xl font-semibold mb-2">новый питомец.</h3>
-                    <hr className="border mb-4" style={{ borderColor: '#F35627' }} />
+                    <hr className="border mb-4" style={{borderColor: '#F35627'}}/>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="form-group mb-4 flex items-center">
                             <label className="w-1/4" htmlFor='petType'>Вид:</label>
@@ -244,7 +236,7 @@ export const PetCreationForm = () => {
                         <div className="form-group mb-4 flex items-center">
                             <label className="w-1/4" htmlFor='colors'>Окрас:</label>
                             <div className="w-3/4 flex flex-wrap" id='colors'>
-                                {colorOptions.map((color) => (
+                                {colors.map((color) => (
                                     <button
                                         type="button"
                                         key={color.id}
@@ -329,6 +321,9 @@ export const PetCreationForm = () => {
                         </div>
 
                         <div className="flex justify-end">
+                            <button
+                                className="px-4 p-2 hover:underline"
+                                type='button' onClick={closeForm}>Закрыть</button>
                             <button
                                 className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
                                 type="submit"
