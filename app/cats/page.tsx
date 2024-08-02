@@ -5,7 +5,10 @@ import prisma from "@/lib/prisma";
 export const revalidate = 30
 
 async function getCats() {
-    return  prisma.cat.findMany({
+    return  prisma.pet.findMany({
+        where: {
+            petType: 'CAT',
+        },
         include: {
             avatar: {
                 select: {
@@ -44,7 +47,7 @@ export default async function CatsPage() {
                                         {cat.name}
                                     </a>
                                 </h3>
-                                <p className="mt-1 text-lg lg:text-xl text-gray-500">{cat.birth ? getAge(cat.birth) : '\u00A0'}</p>
+                                <p className="mt-1 text-lg lg:text-xl text-gray-500">{cat.birthDate ? getAge(cat.birthDate) : '\u00A0'}</p>
                             </div>
                         </div>
                     ))}

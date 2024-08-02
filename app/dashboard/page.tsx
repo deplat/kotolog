@@ -25,21 +25,26 @@ export default async function Dashboard() {
     const cats = await getCachedCats();
 
     return (
-        <div className="h-screen">
+        <div className="h-screen p-4">
             <Controls colors={colors} />
-            <div className="flex w-full h-1/2 gap-x-4 p-4">
-                <div className="flex-1">
-                    <h2 className="text-lg font-bold mb-2">Cats</h2>
-                    <hr className="mb-2"/>
-                    <div className="h-full overflow-y-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4">
+                <div
+                    className="flex flex-col h-fit p-4 rounded-md backdrop-blur-lg bg-white/75"
+                    style={{maxHeight:"700px"}}
+                >
+                    <h2 className="text-xl font-semibold mb-2">кошки</h2>
+                    <hr className="hr primary border-2 mb-2"/>
+                    <div className="overflow-y-auto">
                         <CatList cats={cats} />
                     </div>
                 </div>
-                <div className="flex-1">
-                    <h2 className="text-lg font-bold mb-2">Colors</h2>
-                    <hr className="mb-2"/>
-                    <div className="h-full overflow-y-auto">
-                        <ColorList colors={colors} />
+                <div className="flex flex-col h-fit p-4 rounded-md backdrop-blur-lg bg-white/75"
+                     style={{maxHeight:"700px"}}
+                >
+                    <h2 className="text-xl font-semibold mb-2">окрасы</h2>
+                    <hr className="hr primary border-2 mb-2"/>
+                    <div className="overflow-y-auto">
+                        <ColorList colors={colors}/>
                     </div>
                 </div>
             </div>

@@ -25,7 +25,7 @@ export const CatList = ({ cats }: CatListProps) => {
     return (
         <>
             <div>
-                <ul className="p-4 rounded-md backdrop-blur-lg bg-white/75">
+                <ul>
                     {cats.map((cat) => (
                         <li key={cat.id} className="flex items-center gap-x-4 p-3 border-b-2">
                             <div className="w-20 h-20 flex items-center justify-center bg-gray-200 relative">

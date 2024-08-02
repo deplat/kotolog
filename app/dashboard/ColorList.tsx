@@ -6,8 +6,7 @@ interface ColorListProps {
 
 export const ColorList = ({ colors }: ColorListProps) => {
     return (
-        <div className="h-full overflow-y-auto">
-            <ul className="p-4 rounded-md backdrop-blur-lg bg-white/75">
+            <ul>
                 {colors.map((color) => (
                     <li key={color.id} className="flex items-center gap-x-4 p-3 border-b-2">
                         <span>{color.name}</span>
@@ -17,6 +16,5 @@ export const ColorList = ({ colors }: ColorListProps) => {
                     </li>
                 ))}
             </ul>
-        </div>
     )
 }

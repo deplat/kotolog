@@ -6,9 +6,18 @@ export async function DELETE(req: NextRequest, {params}: { params: { id: number 
     const id = Number(params.id);
 
     try {
-        const cat = await prisma.pet.findUnique({
+        const pet = await prisma.pet.findUnique({
             where: {id: id},
             include: {
+                adoptionApplications: true,
+                fosterings: true,
+                healthRecords: {
+                    include: {
+                        medications: true,
+                        treatments: true,
+                        vaccinations: true,
+                    }
+                },
                 avatar: true,
                 photos: true,
                 profile: {
@@ -20,55 +29,51 @@ export async function DELETE(req: NextRequest, {params}: { params: { id: number 
             }
         });
 
-        if (!cat) {
-            return NextResponse.json({error: 'No cat with this ID'}, {status: 404});
+        if (!pet) {
+            return NextResponse.json({error: 'No pet with this ID'}, {status: 404});
         }
 
-        if (cat.avatar) {
-            await del(cat.avatar.src);
-            await prisma.avatar.delete({
+        if (pet.avatar) {
+            await del(pet.avatar.src);
+            await prisma.image.delete({
                 where: {
-                    id: cat.avatar.id
+                    id: pet.avatar.id
                 }
             })
         }
 
-
-        if (cat.profile) {
-
-            if (cat.profile.healthFeatures) {
-                await prisma.healthFeature.deleteMany({
-                    where: {
-                        profileId: cat.profile.id
-                    }
-                });
-            }
-
-            if (cat.profile.specialties) {
-                await prisma.specialty.deleteMany({
-                    where : {
-                        profileId: cat.profile.id
-                    }
-                });
-            }
-
-            if (cat.profile.album) {
-                const photos = cat.profile.album.photos
-                await del(photos.map((photo) => photo.src));
-                await prisma.photo.deleteMany({
-                    where: {albumId: cat.profile.album.id}
-                });
-                await prisma.album.delete({
-                    where: {id: cat.profile.album.id}
-                });
-            }
-
-            await prisma.profile.delete({
-                where: {id: cat.profile.id}
+        if (pet.photos) {
+            await del(pet.photos.map((image) => image.src));
+            await prisma.image.deleteMany({
+                where: {petId: pet.id}
             });
         }
 
-        await prisma.cat.delete({
+        if (pet.profile) {
+            if (pet.profile.healthNotes) {
+                await prisma.healthNote.deleteMany({
+                    where: {
+                        profileId: pet.profile.id
+                    }
+                });
+            }
+
+            if (pet.profile.specialties) {
+                await prisma.specialty.deleteMany({
+                    where: {
+                        profileId: pet.profile.id
+                    }
+                });
+            }
+
+            await prisma.petProfile.delete({
+                where: {
+                    id: pet.profile.id
+                }
+            })
+        }
+
+        await prisma.pet.delete({
             where: {id}
         });
 
@@ -76,6 +81,6 @@ export async function DELETE(req: NextRequest, {params}: { params: { id: number 
 
     } catch (error) {
         console.error('Error deleting cat:', error);
-        return NextResponse.json({ error:"Internal Server Error"},{status: 500});
+        return NextResponse.json({error: "Internal Server Error"}, {status: 500});
     }
 }
