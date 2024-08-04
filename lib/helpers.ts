@@ -5,24 +5,30 @@ export const getAge = (birth: string | Date): string => {
     const monthDifference = today.getMonth() - birthDate.getMonth();
     const dayDifference = today.getDate() - birthDate.getDate();
 
-    if (yearDifference < 0 || (yearDifference === 0 && monthDifference < 0) || (yearDifference === 0 && monthDifference === 0 && dayDifference < 0)) {
+    // Adjust for negative months and days
+    let adjustedYearDifference = yearDifference;
+    let adjustedMonthDifference = monthDifference;
+
+    if (dayDifference < 0) {
+        adjustedMonthDifference--;
+    }
+    if (adjustedMonthDifference < 0) {
+        adjustedMonthDifference += 12;
+        adjustedYearDifference--;
+    }
+
+    if (adjustedYearDifference < 0) {
         return '\u00A0';
     }
 
-    if (yearDifference === 0 && monthDifference === 0 && dayDifference === 0) {
-        return '\u00A0';
-    }
-
-    if (yearDifference === 0) {
-        const ageInMonths = monthDifference + (dayDifference < 0 ? -1 : 0);
-        if (ageInMonths === 0) {
+    if (adjustedYearDifference === 0) {
+        if (adjustedMonthDifference === 0) {
             return '\u00A0';
         }
-        return formatAgeInMonths(ageInMonths);
+        return formatAgeInMonths(adjustedMonthDifference);
     }
 
-    const ageInYears = yearDifference + (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0) ? -1 : 0); // Adjust for months and days if negative
-    return formatAgeInYears(ageInYears);
+    return formatAgeInYears(adjustedYearDifference);
 }
 
 const formatAgeInMonths = (months: number): string => {
@@ -39,7 +45,6 @@ const formatAgeInMonths = (months: number): string => {
 }
 
 const formatAgeInYears = (years: number): string => {
-    if (years === 0) return '\u00A0';
     if (years % 10 === 1 && years % 100 !== 11) {
         return `${years} год`;
     } else if ([2, 3, 4].includes(years % 10) && ![12, 13, 14].includes(years % 100)) {
