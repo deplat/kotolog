@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
         const newColor = await prisma.color.create({
             data: {name},
         });
-        revalidateTag('dashboard-colors')
+        revalidateTag('colors')
         return NextResponse.json(newColor);
     } catch (error) {
         return NextResponse.json({error: (error as Error).message});

@@ -1,6 +1,7 @@
 import {NextRequest, NextResponse} from "next/server";
 import {del} from "@vercel/blob";
 import prisma from "@/lib/prisma";
+import {revalidateTag} from "next/cache";
 
 export async function DELETE(req: NextRequest, {params}: { params: { id: number } }) {
     const id = Number(params.id);
@@ -76,7 +77,7 @@ export async function DELETE(req: NextRequest, {params}: { params: { id: number 
         await prisma.pet.delete({
             where: {id}
         });
-
+        revalidateTag('cats')
         return NextResponse.json('Cat deleted successfully.');
 
     } catch (error) {

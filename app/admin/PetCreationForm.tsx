@@ -323,7 +323,10 @@ export const PetCreationForm = ({colors, closeForm}: CatCreationFormProps) => {
                         <div className="flex justify-end">
                             <button
                                 className="px-4 p-2 hover:underline"
-                                type='button' onClick={closeForm}>Закрыть</button>
+                                type='button' onClick={closeForm}
+                            >
+                                Закрыть
+                            </button>
                             <button
                                 className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
                                 type="submit"

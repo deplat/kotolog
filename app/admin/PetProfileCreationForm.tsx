@@ -1,13 +1,14 @@
-'use client';
-import {SubmitHandler, useForm } from "react-hook-form";
-import { useState} from "react";
-import {PetProfileFormData} from "@/types/pet";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useState } from "react";
+import { PetProfileFormData } from "@/types/pet";
+import {useRouter} from "next/navigation";
 
 interface PetCreateProfileFormProps {
     petId: number;
+    closeForm: () => void;
 }
 
-export const PetProfileCreationForm = ({ petId }: PetCreateProfileFormProps) => {
+export const PetProfileCreationForm = ({ petId, closeForm }: PetCreateProfileFormProps) => {
     const { register, handleSubmit, formState: { errors } } = useForm<PetProfileFormData>({
         defaultValues: {
             petId,
@@ -23,11 +24,11 @@ export const PetProfileCreationForm = ({ petId }: PetCreateProfileFormProps) => 
             healthStatus: 'UNKNOWN',
         },
     });
+    const router = useRouter()
     const [healthNotes, setHealthNotes] = useState<string[]>([]);
     const [specialties, setSpecialties] = useState<string[]>([]);
-    
-    const onSubmit: SubmitHandler<PetProfileFormData> = async (data) => {
 
+    const onSubmit: SubmitHandler<PetProfileFormData> = async (data) => {
         const cleanedData: PetProfileFormData = {
             ...data,
             healthNotes,
@@ -54,13 +55,16 @@ export const PetProfileCreationForm = ({ petId }: PetCreateProfileFormProps) => 
             }
             const createdProfile = await response.json();
             console.log('Pet profile created:', createdProfile);
+            router.refresh();
+            closeForm()
         } catch (error) {
             console.error('Error creating pet profile:', error);
         }
     };
     return (
-        <div className="container mx-auto p-4">
-            <h3 className="text-xl font-semibold mb-4">Cat Profile</h3>
+        <div className="container max-w-3xl mx-auto p-4 rounded-md backdrop-blur-lg bg-white/75">
+            <h3 className="text-xl font-semibold mb-2">Заполните профиль питомца</h3>
+            <hr className="border mb-4" style={{borderColor: '#F35627'}}/>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-group mb-4 flex items-center">
                     <label className="w-1/4">Социализирован</label>
@@ -186,6 +190,12 @@ export const PetProfileCreationForm = ({ petId }: PetCreateProfileFormProps) => 
                     />
                 </div>
                 <div className="flex justify-end">
+                    <button
+                        className="px-4 p-2 hover:underline"
+                        type='button' onClick={closeForm}
+                    >
+                        Закрыть
+                    </button>
                     <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">
                         Отправить
                     </button>

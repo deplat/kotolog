@@ -6,9 +6,9 @@ import "yet-another-react-lightbox/plugins/thumbnails.css";
 import { Lightbox } from "yet-another-react-lightbox";
 import  Inline  from "yet-another-react-lightbox/plugins/inline";
 import {useState} from "react";
-import NextJsImage from "@/app/cats/[id]/NextJsImage";
+import NextJsImage from "@/app/koshki/[id]/NextJsImage";
 import {Thumbnails} from "yet-another-react-lightbox/plugins";
-import ThumbnailImage from "@/app/cats/[id]/ThumbnailImage";
+import ThumbnailImage from "@/app/koshki/[id]/ThumbnailImage";
 
 interface Photo {
     src: string;

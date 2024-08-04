@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     try {
         const data = await req.json();
         const newPet = await createPet(data);
-        revalidateTag('dashboard-cats')
+        revalidateTag('cats')
         return NextResponse.json(newPet);
     } catch (error) {
         return NextResponse.json({ error: (error as Error).message });
