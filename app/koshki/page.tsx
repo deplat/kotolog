@@ -42,7 +42,7 @@ export default async function CatsPage() {
                             </div>
                             <div className="text-center mt-2.5">
                                 <h3 className="text-xl lg:text-2xl font-semibold text-gray-900">
-                                    <a href={`/cats/${cat.id}`}>
+                                    <a href={`/koshki/${cat.id}`}>
                                         <span aria-hidden="true" className="absolute inset-0"></span>
                                         {cat.name}
                                     </a>
