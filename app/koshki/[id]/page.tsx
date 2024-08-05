@@ -3,6 +3,7 @@ import NotFound from "next/dist/client/components/not-found-error";
 import Image from "next/image";
 import LightBox from "./LightBox";
 import {getAge} from "@/lib/helpers";
+import ContactButton from "@/app/koshki/[id]/ContactButton";
 
 export const revalidate = 5;
 
@@ -39,7 +40,7 @@ export default async function CatPage({params}: { params: { id: string } }) {
     const wordEnd = () => (isFemale ? 'a' : '');
 
     return (
-        <div className="-mb-40" style={{backgroundColor: "#F5F7FA"}}>
+        <div style={{backgroundColor: "#F5F7FA"}}>
             <div className="flex flex-col relative bottom-40 w-screen gap-y-6 justify-center">
                 <div className="w-fit h-fit p-3 mx-auto border-2 rounded-md bg-white" style={{borderColor: "#CBD2D9"}}>
                     <div className="relative w-72 aspect-h-1 aspect-w-1 rounded-md overflow-hidden">
@@ -86,13 +87,12 @@ export default async function CatPage({params}: { params: { id: string } }) {
                         <li>Обработан{wordEnd()} от паразитов</li>
                     )}
                 </ul>
-                <div className="grid grid-cols-2 gap-x-3 md:gap-x-6 w-fit mx-auto">
-                    <button className="btn secondary px-5 py-2 rounded-md">Придти в гости</button>
-                    <button className="btn primary px-5 py-2 rounded-md">Забрать домой</button>
+                <div className="flex justify-center">
+                    <ContactButton/>
                 </div>
                 <div className="container max-w-7xl mx-auto justify-center p-4">
                     <div className='flex flex-col md:flex-row flex-wrap justify-center gap-3 md:gap-6'>
-                        {(cat.profile?.healthNotes?.length) && (
+                        {(cat.profile?.healthNotes && cat.profile.healthNotes.length > 0) && (
                             <div className="flex-1 p-4 border-2 rounded-md bg-white" style={{borderColor: "#CBD2D9"}}>
                                 Про здоровье:
                                 <hr style={{border: "1px solid #F35627"}}/>
@@ -103,7 +103,7 @@ export default async function CatPage({params}: { params: { id: string } }) {
                                 </ul>
                             </div>
                         )}
-                        {(cat.profile?.specialties?.length) && (
+                        {(cat.profile?.specialties && cat.profile.specialties.length > 0) && (
                             <div className="flex-1 p-4 border-2 rounded-md bg-white" style={{borderColor: "#CBD2D9"}}>
                                 Характер и привычки:
                                 <hr style={{border: "1px solid #F35627"}}/>
