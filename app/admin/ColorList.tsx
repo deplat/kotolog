@@ -1,10 +1,10 @@
 'use client'
 
-import { ColorsForDashboard } from "@/lib/data";
+import {Colors} from "@/lib/data";
 import {useRouter} from "next/navigation";
 
 interface ColorListProps {
-    colors: ColorsForDashboard
+    colors: Colors
 }
 
 export const ColorList = ({ colors }: ColorListProps) => {

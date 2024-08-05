@@ -1,17 +1,17 @@
 import { useRouter } from "next/navigation";
-import { CatsForDashboard } from "@/lib/data";
+import {Cats} from "@/lib/data";
 import Image from "next/image";
 
 interface CatListProps {
-    cats: CatsForDashboard;
+    cats: Cats;
     onAddProfile: (catId: number) => void;
 }
 
 export const CatList = ({ cats, onAddProfile }: CatListProps) => {
     const router = useRouter();
 
-    const handleViewProfile = async (catId: number) => {
-        router.push(`/koshki/${catId}`);
+    const handleViewProfile = async (catSlug: string) => {
+        router.push(`/koshki/${catSlug}`);
     };
 
     const handleDeleteCat = async (id: number) => {
@@ -48,7 +48,7 @@ export const CatList = ({ cats, onAddProfile }: CatListProps) => {
                                 {cat.profile ? (
                                     <button
                                         className="bg-blue-500 text-white py-1 px-2 rounded"
-                                        onClick={() => handleViewProfile(cat.id)}
+                                        onClick={() => handleViewProfile(cat.slug)}
                                     >
                                         Профиль
                                     </button>

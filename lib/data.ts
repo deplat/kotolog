@@ -1,8 +1,9 @@
 import {PetFormData, PetProfileFormData} from "@/types/pet";
-import sharp, {Color} from "sharp";
+import sharp from "sharp";
 import {Prisma} from "@prisma/client";
 import prisma from "@/lib/prisma";
 import {PhotoWithDimensions} from "@/types";
+import {unstable_cache} from "next/cache";
 
 export const createPet = async (data: PetFormData) => {
     try {
@@ -143,7 +144,7 @@ export const createPetProfile = async (data: PetProfileFormData) => {
     }
 };
 
-export const catSelectForDashboard = Prisma.validator<Prisma.PetSelect>()({
+export const catSelect = Prisma.validator<Prisma.PetSelect>()({
     id: true,
     slug: true,
     name: true,
@@ -162,29 +163,45 @@ export const catSelectForDashboard = Prisma.validator<Prisma.PetSelect>()({
     },
 });
 
-export const getCatsForDashboard = async () => {
+export const getCats = async () => {
     return prisma.pet.findMany({
         where: {
             petType: 'CAT',
         },
-        select: catSelectForDashboard,
+        select: catSelect,
         orderBy: {
             id: 'desc',
         },
     });
 }
 
-export type CatsForDashboard = Prisma.PromiseReturnType<typeof getCatsForDashboard>
+export type Cats = Prisma.PromiseReturnType<typeof getCats>
 
-export const colorSelectForDashboard = Prisma.validator<Prisma.ColorSelect>()({
+export const colorSelect = Prisma.validator<Prisma.ColorSelect>()({
     id: true,
     name: true,
 })
 
-export const getColorsForDashboard = async ()=> {
+export const getColors = async ()=> {
     return prisma.color.findMany({
-        select: colorSelectForDashboard
+        select: colorSelect
     })
 }
 
-export type ColorsForDashboard = Prisma.PromiseReturnType<typeof getColorsForDashboard>
+export type Colors = Prisma.PromiseReturnType<typeof getColors>
+
+export const getCachedColors = unstable_cache(
+    async () => getColors(),
+    ['colors'],
+    {
+        tags: ['colors']
+    }
+);
+
+export const getCachedCats = unstable_cache(
+    async () => getCats(),
+    ['cats'],
+    {
+        tags: ['cats']
+    }
+);

@@ -6,10 +6,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import {checkSlugUnique} from "@/lib/checkSlug";
 import {useRouter} from "next/navigation";
 import {PetFormData} from "@/types/pet";
-import {ColorsForDashboard} from "@/lib/data";
+import {Colors} from "@/lib/data";
 
 interface CatCreationFormProps {
-    colors: ColorsForDashboard;
+    colors: Colors;
     closeForm: () => void;
 }
 

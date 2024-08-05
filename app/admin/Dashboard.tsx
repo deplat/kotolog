@@ -4,13 +4,13 @@ import { useState } from "react";
 import { PetCreationForm } from "@/app/admin/PetCreationForm";
 import { ColorCreationForm } from "@/app/admin/ColorCreationForm";
 import { PetProfileCreationForm } from "@/app/admin/PetProfileCreationForm";
-import { CatsForDashboard, ColorsForDashboard } from "@/lib/data";
+import {Cats, Colors} from "@/lib/data";
 import { CatList } from "@/app/admin/CatList";
 import { ColorList } from "@/app/admin/ColorList";
 
 interface DashboardProps {
-    colors: ColorsForDashboard;
-    cats: CatsForDashboard;
+    colors: Colors;
+    cats: Cats;
 }
 
 export const Dashboard = ({ colors, cats }: DashboardProps) => {
