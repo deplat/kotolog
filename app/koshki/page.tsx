@@ -19,7 +19,7 @@ async function getCats() {
                 }
             }
         }
-    }) // will be passed to the page component as props
+    })
 }
 
 export default async function CatsPage() {
