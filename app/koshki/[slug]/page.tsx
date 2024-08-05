@@ -3,13 +3,11 @@ import NotFound from "next/dist/client/components/not-found-error";
 import Image from "next/image";
 import LightBox from "./LightBox";
 import {getAge} from "@/lib/helpers";
-import ContactButton from "@/app/koshki/[id]/ContactButton";
+import ContactButton from "@/app/koshki/[slug]/ContactButton";
 
-export const revalidate = 5;
-
-async function getPetWithProfile(id: number) {
+async function getPetWithProfile(slug: string) {
     return prisma.pet.findUnique({
-        where: {id},
+        where: {slug},
         include: {
             avatar: true,
             photos: true,
@@ -23,9 +21,9 @@ async function getPetWithProfile(id: number) {
     });
 }
 
-export default async function CatPage({params}: { params: { id: string } }) {
+export default async function CatPage({params}: { params: { slug: string } }) {
 
-    const cat = await getPetWithProfile(Number(params.id))
+    const cat = await getPetWithProfile(params.slug)
     if (!cat) {
         return <NotFound/>
     }
@@ -128,17 +126,3 @@ export default async function CatPage({params}: { params: { id: string } }) {
         </div>
     )
 }
-
-
-/*
-  {cat.profile?.album && (
-    <div className="flex justify-center my-10" style={{height: "700px"}}>
-        <div className="flex overflow-x-auto overflow-y-hidden gap-x-4">
-            {cat.profile.album.photos.map((photo, index) => (
-                <Image key={index} src={photo.src} alt={cat.name} width={photo.width} height={photo.height}
-                    className="h-full min-w-fit"/>
-                     ))}
-          </div>
-    </div>
-  )}
- */

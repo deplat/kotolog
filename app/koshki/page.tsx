@@ -2,8 +2,6 @@ import Image from "next/image";
 import {getAge} from "@/lib/helpers";
 import prisma from "@/lib/prisma";
 
-export const revalidate = 30
-
 async function getCats() {
     return  prisma.pet.findMany({
         where: {
@@ -42,7 +40,7 @@ export default async function CatsPage() {
                             </div>
                             <div className="text-center mt-2.5">
                                 <h3 className="text-xl lg:text-2xl font-semibold text-gray-900">
-                                    <a href={`/koshki/${cat.id}`}>
+                                    <a href={`/koshki/${cat.slug}`}>
                                         <span aria-hidden="true" className="absolute inset-0"></span>
                                         {cat.name}
                                     </a>
