@@ -150,6 +150,7 @@ export const catSelect = Prisma.validator<Prisma.PetSelect>()({
     name: true,
     gender: true,
     birthDate: true,
+    furType: true,
     avatar: {
         select: {
             src: true,
@@ -161,6 +162,12 @@ export const catSelect = Prisma.validator<Prisma.PetSelect>()({
         select: {
             id: true,
         },
+    },
+    colors: {
+        select: {
+            id: true,
+            name: true
+        }
     },
 });
 
@@ -206,3 +213,16 @@ export const getCachedCats = unstable_cache(
         tags: ['cats']
     }
 );
+
+export const getListOfUniqueColorsFromCats = async () => {
+    const uniqueColors : Colors = await prisma.$queryRaw`SELECT DISTINCT name FROM "Color" WHERE id IN (SELECT "A" FROM "_PetColors")`;
+    return uniqueColors.map((color: { name: string }) => color.name);
+}
+
+export const getCachedListOfUniqueColorsFromCats = unstable_cache(
+    async () => getListOfUniqueColorsFromCats(),
+    ['unique_colors_from_cats'],
+    {
+        tags: ['unique_colors_from_cats'],
+    }
+)
