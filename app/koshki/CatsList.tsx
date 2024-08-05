@@ -1,14 +1,28 @@
+'use client'
+
 import Image from "next/image";
 import {getAge} from "@/lib/helpers";
 import {Cats} from "@/lib/data";
+import {useState} from "react";
+import {Filter} from "@/app/koshki/Filter";
 
 interface CatsListProps {
     initialCats: Cats
 }
 
 export const CatsList = ({initialCats} : CatsListProps) => {
+    const [filteredCats, setFilteredCats] = useState<Cats>(initialCats);
+    const handleFilterChange = (filters) => {
+        let newCats = initialCats;
+        if (filters.gender) {
+            newCats = newCats.filter(cat => cat.gender === filters.gender);
+        }
+        setFilteredCats(newCats);
+    }
     return (
         <div>
+            <Filter onFilterChange={handleFilterChange}/>
+            <div className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 md:gap-x-6 lg:grid-cols-3 lg:gap-x-8 xl:grid-cols-4">
             {initialCats.map((cat) => (
                 <div key={cat.id} className="group relative">
                     <div
@@ -30,6 +44,7 @@ export const CatsList = ({initialCats} : CatsListProps) => {
                     </div>
                 </div>
             ))}
+            </div>
         </div>
     )
 }

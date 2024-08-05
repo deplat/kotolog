@@ -148,6 +148,7 @@ export const catSelect = Prisma.validator<Prisma.PetSelect>()({
     id: true,
     slug: true,
     name: true,
+    gender: true,
     birthDate: true,
     avatar: {
         select: {
