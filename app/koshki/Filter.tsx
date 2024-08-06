@@ -73,7 +73,7 @@ export const Filter = ({ uniqueColors, onFilterChange }: FilterProps) => {
         >
             <div className="relative">
                 <button
-                    className={`rounded-md border px-4 py-2 text-sm text-gray-700 font-medium ${gender && 'border-orange-500'} hover:bg-gray-50`}
+                    className={`rounded-md border px-4 py-2 text-sm text-gray-700 font-medium ${gender && 'border-orange-500'} bg-white hover:bg-gray-50`}
                     onClick={() => toggleDropdown('gender')}
                 >
                     Пол
@@ -91,7 +91,7 @@ export const Filter = ({ uniqueColors, onFilterChange }: FilterProps) => {
 
             <div className="relative">
                 <button
-                    className={`rounded-md border px-4 py-2 text-sm font-medium text-gray-700 ${furType && 'border-orange-500'} hover:bg-gray-50`}
+                    className={`rounded-md border px-4 py-2 text-sm font-medium text-gray-700 ${furType && 'border-orange-500'} bg-white hover:bg-gray-50`}
                     onClick={() => toggleDropdown('furType')}
                 >
                     Тип шерсти
@@ -109,7 +109,7 @@ export const Filter = ({ uniqueColors, onFilterChange }: FilterProps) => {
 
             <div className="relative">
                 <button
-                    className={`rounded-md border px-4 py-2 text-sm text-gray-700 font-medium ${colors.length > 0 && 'border-orange-500'} hover:bg-gray-50`}
+                    className={`rounded-md border px-4 py-2 text-sm text-gray-700 font-medium ${colors.length > 0 && 'border-orange-500'} bg-white hover:bg-gray-50`}
                     onClick={() => toggleDropdown('colors')}
                 >
                     Окрас
@@ -136,7 +136,7 @@ export const Filter = ({ uniqueColors, onFilterChange }: FilterProps) => {
 
             <div className="relative">
                 <button
-                    className={`rounded-md border px-4 py-2 text-sm text-gray-700 font-medium ${age && 'border-orange-500'} hover:bg-gray-50`}
+                    className={`rounded-md border px-4 py-2 text-sm text-gray-700 font-medium ${age && 'border-orange-500'} bg-white hover:bg-gray-50`}
                     onClick={() => toggleDropdown('age')}
                 >
                     Возраст
