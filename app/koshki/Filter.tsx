@@ -84,7 +84,7 @@ export const Filter = ({ uniqueColors, onFilterChange }: FilterProps) => {
             {/* Filter Button */}
             <button
                 onClick={() => setIsFilterVisible(!isFilterVisible)}
-                className="fixed bottom-4 right-4 flex items-center justify-center gap-x-2 px-4 py-2 rounded-md bg-orange-500 text-white z-50"
+                className="fixed bottom-4 right-4 flex items-center justify-center gap-x-2 px-4 py-2 rounded-md bg-orange-500 text-white shadow-lg z-50"
             >
                 <FaFilter />
                 <span>Фильтр</span>
