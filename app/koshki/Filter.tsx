@@ -108,7 +108,7 @@ export const Filter = ({ uniqueColors, onFilterChange }: FilterProps) => {
                                 Пол
                             </button>
                             {showGender && (
-                                <div className="absolute mt-2 w-36 rounded-md backdrop-blur-lg bg-white/75 shadow-md">
+                                <div className="absolute mt-2 w-36 rounded-md backdrop-blur-lg bg-white/75 shadow-md z-50">
                                     <div className='p-2' role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                                         <button
                                             className={`w-full px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-500 hover:text-white ${gender === '' ? 'bg-orange-500 text-white' : 'text-gray-700'}`}
@@ -135,7 +135,7 @@ export const Filter = ({ uniqueColors, onFilterChange }: FilterProps) => {
                                 Тип&nbsp;шерсти
                             </button>
                             {showFurType && (
-                                <div className="absolute mt-2 w-36 rounded-md backdrop-blur-lg bg-white/75 shadow-md">
+                                <div className="absolute mt-2 w-36 rounded-md backdrop-blur-lg bg-white/75 shadow-md z-50">
                                     <div className='p-2' role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                                         <button
                                             className={`w-full px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-500 hover:text-white ${furType === '' ? 'bg-orange-500 text-white' : 'text-gray-700'}`}
@@ -162,7 +162,7 @@ export const Filter = ({ uniqueColors, onFilterChange }: FilterProps) => {
                                 Окрас
                             </button>
                             {showColors && (
-                                <div className="absolute mt-2 w-56 rounded-md backdrop-blur-lg bg-white/75 shadow-md">
+                                <div className="absolute mt-2 w-56 rounded-md backdrop-blur-lg bg-white/75 shadow-md z-50">
                                     <div className="p-2" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                                         {uniqueColors.map((color) => (
                                             <div key={color} className="block px-4 py-2 text-sm text-gray-700">
@@ -189,7 +189,7 @@ export const Filter = ({ uniqueColors, onFilterChange }: FilterProps) => {
                                 Возраст
                             </button>
                             {showAge && (
-                                <div className="absolute mt-2 w-36 rounded-md backdrop-blur-lg bg-white/75 shadow-md">
+                                <div className="absolute mt-2 w-36 rounded-md backdrop-blur-lg bg-white/75 shadow-md z-50">
                                     <div className='p-2' role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                                         <button
                                             className={`w-full px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-500 hover:text-white ${age === '' ? 'bg-orange-500 text-white' : 'text-gray-700'}`}
