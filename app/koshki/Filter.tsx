@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState } from "react";
-import { FaFilter } from "react-icons/fa";
+import {useEffect, useRef, useState} from "react";
+import {FaFilter} from "react-icons/fa6";
+import {FaXmark} from "react-icons/fa6";
 
 type FilterProps = {
     uniqueColors: string[];
     onFilterChange: (filters: { gender?: string; furType?: string; colors?: string[]; age?: string }) => void;
 };
 
-export const Filter = ({ uniqueColors, onFilterChange }: FilterProps) => {
+export const Filter = ({uniqueColors, onFilterChange}: FilterProps) => {
     const [gender, setGender] = useState<string | undefined>();
     const [furType, setFurType] = useState<string | undefined>();
     const [colors, setColors] = useState<string[]>([]);
@@ -41,7 +42,7 @@ export const Filter = ({ uniqueColors, onFilterChange }: FilterProps) => {
     };
 
     const applyFilters = () => {
-        onFilterChange({ gender, furType, colors, age });
+        onFilterChange({gender, furType, colors, age});
     };
 
     const resetFilters = () => {
@@ -84,10 +85,13 @@ export const Filter = ({ uniqueColors, onFilterChange }: FilterProps) => {
             {/* Filter Button */}
             <button
                 onClick={() => setIsFilterVisible(!isFilterVisible)}
-                className="fixed bottom-4 right-4 flex items-center justify-center gap-x-2 px-4 py-2 rounded-md bg-orange-500 text-white shadow-lg z-50"
+                className={`fixed bottom-4 right-4 flex flex-row items-center justify-center gap-x-2 p-3 border-2 border-orange-500 rounded-full bg-white shadow-lg z-50`}
             >
-                <FaFilter />
-                <span>Фильтр</span>
+                {isFilterVisible ? (
+                    <FaXmark className='text-orange-500'/>
+                ) : (
+                    <FaFilter className='text-orange-500'/>
+                )}
             </button>
 
             {/* Container for Filter Bar */}
@@ -108,8 +112,10 @@ export const Filter = ({ uniqueColors, onFilterChange }: FilterProps) => {
                                 Пол
                             </button>
                             {showGender && (
-                                <div className="absolute mt-2 w-36 rounded-md backdrop-blur-lg bg-white/75 shadow-md z-50">
-                                    <div className='p-2' role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                <div
+                                    className="absolute mt-2 w-36 rounded-md backdrop-blur-lg bg-white/75 shadow-md z-50">
+                                    <div className='p-2' role="menu" aria-orientation="vertical"
+                                         aria-labelledby="options-menu">
                                         <button
                                             className={`w-full px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-500 hover:text-white ${gender === '' ? 'bg-orange-500 text-white' : 'text-gray-700'}`}
                                             onClick={() => handleGenderChange('')}>Любой
@@ -135,8 +141,10 @@ export const Filter = ({ uniqueColors, onFilterChange }: FilterProps) => {
                                 Тип&nbsp;шерсти
                             </button>
                             {showFurType && (
-                                <div className="absolute mt-2 w-36 rounded-md backdrop-blur-lg bg-white/75 shadow-md z-50">
-                                    <div className='p-2' role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                <div
+                                    className="absolute mt-2 w-36 rounded-md backdrop-blur-lg bg-white/75 shadow-md z-50">
+                                    <div className='p-2' role="menu" aria-orientation="vertical"
+                                         aria-labelledby="options-menu">
                                         <button
                                             className={`w-full px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-500 hover:text-white ${furType === '' ? 'bg-orange-500 text-white' : 'text-gray-700'}`}
                                             onClick={() => handleFurTypeChange('')}>Любой
@@ -162,8 +170,10 @@ export const Filter = ({ uniqueColors, onFilterChange }: FilterProps) => {
                                 Окрас
                             </button>
                             {showColors && (
-                                <div className="absolute mt-2 w-56 rounded-md backdrop-blur-lg bg-white/75 shadow-md z-50">
-                                    <div className="p-2" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                <div
+                                    className="absolute mt-2 w-56 rounded-md backdrop-blur-lg bg-white/75 shadow-md z-50">
+                                    <div className="p-2" role="menu" aria-orientation="vertical"
+                                         aria-labelledby="options-menu">
                                         {uniqueColors.map((color) => (
                                             <div key={color} className="block px-4 py-2 text-sm text-gray-700">
                                                 <label className="inline-flex items-center">
@@ -189,8 +199,10 @@ export const Filter = ({ uniqueColors, onFilterChange }: FilterProps) => {
                                 Возраст
                             </button>
                             {showAge && (
-                                <div className="absolute mt-2 w-36 rounded-md backdrop-blur-lg bg-white/75 shadow-md z-50">
-                                    <div className='p-2' role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                <div
+                                    className="absolute mt-2 w-36 rounded-md backdrop-blur-lg bg-white/75 shadow-md z-50">
+                                    <div className='p-2' role="menu" aria-orientation="vertical"
+                                         aria-labelledby="options-menu">
                                         <button
                                             className={`w-full px-4 py-2 text-sm font-medium rounded-md hover:bg-orange-500 hover:text-white ${age === '' ? 'bg-orange-500 text-white' : 'text-gray-700'}`}
                                             onClick={() => handleAgeChange('')}>Любой
