@@ -31,7 +31,9 @@ export const CatsList = ({ initialCats, uniqueColors }: CatsListProps) => {
         }
 
         if (filters.colors && filters.colors.length > 0) {
-            newCats = newCats.filter(cat => filters.colors?.every(color => cat.colors?.some(catColor => catColor.name === color)));
+            newCats = newCats.filter(cat =>
+                filters.colors?.some(color => cat.colors?.some(catColor => catColor.name === color))
+            );
         }
 
         if (filters.age) {
@@ -39,14 +41,16 @@ export const CatsList = ({ initialCats, uniqueColors }: CatsListProps) => {
             if (filters.age === "under1") {
                 newCats = newCats.filter(cat => {
                     if (!cat.birthDate) return false;
-                    const ageInYears = today.getFullYear() - new Date(cat.birthDate).getFullYear();
-                    return ageInYears < 1;
+                    const birthDate = new Date(cat.birthDate);
+                    const ageInYears = today.getFullYear() - birthDate.getFullYear();
+                    return ageInYears < 1 || (ageInYears === 1 && today < new Date(birthDate.setFullYear(birthDate.getFullYear() + 1)));
                 });
             } else if (filters.age === "above1") {
                 newCats = newCats.filter(cat => {
                     if (!cat.birthDate) return false;
-                    const ageInYears = today.getFullYear() - new Date(cat.birthDate).getFullYear();
-                    return ageInYears >= 1;
+                    const birthDate = new Date(cat.birthDate);
+                    const ageInYears = today.getFullYear() - birthDate.getFullYear();
+                    return ageInYears > 1 || (ageInYears === 1 && today >= new Date(birthDate.setFullYear(birthDate.getFullYear() + 1)));
                 });
             }
         }
