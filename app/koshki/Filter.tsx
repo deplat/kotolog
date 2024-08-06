@@ -92,12 +92,12 @@ export const Filter = ({ uniqueColors, onFilterChange }: FilterProps) => {
 
             {/* Container for Filter Bar */}
             <div
-                className={`fixed top-0 left-0 w-full flex justify-center transition-transform transform ${isFilterVisible ? "translate-y-0" : "-translate-y-full"}`}
+                className={`fixed top-0 left-0 w-full flex justify-center transition-transform transform ${isFilterVisible ? "translate-y-0" : "-translate-y-full"} z-10`}
             >
                 {/* Filter Bar */}
                 <div
                     ref={filterRef}
-                    className="flex flex-wrap gap-y-2 w-full max-w-2xl p-4 rounded-md bg-white shadow-lg z-10"
+                    className="flex flex-wrap gap-y-2 w-full max-w-2xl p-4 rounded-md bg-white shadow-lg"
                 >
                     <div className="flex flex-wrap gap-x-2 gap-y-2 flex-grow">
                         <div className="relative">
