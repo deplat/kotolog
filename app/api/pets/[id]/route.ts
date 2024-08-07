@@ -34,7 +34,7 @@ export async function DELETE(req: NextRequest, {params}: { params: { id: number 
             return NextResponse.json({error: 'No pet with this ID'}, {status: 404});
         }
 
-        if (pet.avatar) {
+        if (pet.avatar?.src) {
             await del(pet.avatar.src);
             await prisma.image.delete({
                 where: {
