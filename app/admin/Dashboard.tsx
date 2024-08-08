@@ -38,10 +38,9 @@ export const Dashboard = ({ colors, cats }: DashboardProps) => {
 
     return (
         <>
-            <div className="flex gap-4">
+            <div className="flex gap-4" style={{maxHeight: '700px'}}>
                 <div
                     className="flex flex-col h-fit p-4 rounded-md backdrop-blur-lg bg-white/75"
-                    style={{ maxHeight: "700px" }}
                 >
                     <h2 className="text-xl font-semibold mb-2">кошки</h2>
                     <hr className="hr primary border-2 mb-2" />
@@ -50,7 +49,6 @@ export const Dashboard = ({ colors, cats }: DashboardProps) => {
                     </div>
                 </div>
                 <div className="flex flex-col h-fit p-4 rounded-md backdrop-blur-lg bg-white/75"
-                     style={{ maxHeight: "700px" }}
                 >
                     <h2 className="text-xl font-semibold mb-2">окрасы</h2>
                     <hr className="hr primary border-2 mb-2" />
