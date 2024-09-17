@@ -12,7 +12,7 @@ import {
   Checkbox,
 } from '@headlessui/react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { Colors } from '@/lib/data'
+import { Colors } from '../data-access/color'
 import DatePicker from 'react-datepicker'
 import { IoClose, IoListCircle, IoCheckmark } from 'react-icons/io5'
 import clsx from 'clsx'

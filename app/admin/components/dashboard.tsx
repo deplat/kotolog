@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { ColorCreationForm } from '@/app/admin/components/color-editor'
-import { Colors } from '@/lib/data'
+import { Colors } from '../data-access/color'
 import { CatList } from '@/app/admin/components/pet-list'
 import { ColorList } from '@/app/admin/components/color-list'
 import { PetEditForm } from '@/app/admin/components/pet-editor'
