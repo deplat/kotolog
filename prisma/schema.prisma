@@ -1,0 +1,279 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  isAdmin       Boolean         @default(false)
+  image         String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  accounts      Account[]
+  Authenticator Authenticator[]
+  sessions      Session[]
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
+}
+
+model Color {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  pets      Pet[]    @relation("PetColors")
+}
+
+model Pet {
+  id                   Int                   @id @default(autoincrement())
+  name                 String
+  slug                 String                @unique
+  birthDate            DateTime?
+  gender               Gender
+  furType              FurType?
+  isUnclaimed          Boolean
+  isFeatured           Boolean
+  isAvailable          Boolean
+  isAdopted            Boolean
+  isVisible            Boolean               @default(true)
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  avatarId             Int?                  @unique
+  petType              PetType
+  adoptionApplications AdoptionApplication[]
+  fosterings           Fostering[]
+  healthRecords        HealthRecord[]
+  photos               Image[]               @relation("PetPhotos")
+  avatar               Image?                @relation("PetAvatar", fields: [avatarId], references: [id])
+  profile              PetProfile?
+  colors               Color[]               @relation("PetColors")
+}
+
+model PetProfile {
+  id                  Int          @id @default(autoincrement())
+  petId               Int          @unique
+  socialized          Boolean
+  friendlyWithCats    Boolean
+  friendlyWithDogs    Boolean
+  friendlyWithAnimals Boolean
+  litterBoxTrained    Boolean?
+  usesScratchingPost  Boolean?
+  sterilized          Boolean
+  vaccinated          Boolean
+  treatedForParasites Boolean
+  healthStatus        HealthStatus
+  biography           String?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+  healthNotes         HealthNote[]
+  pet                 Pet          @relation(fields: [petId], references: [id])
+  specialties         Specialty[]
+}
+
+model HealthRecord {
+  id           Int           @id @default(autoincrement())
+  petId        Int
+  observations String?
+  healthStatus HealthStatus
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  pet          Pet           @relation(fields: [petId], references: [id])
+  medications  Medication[]
+  treatments   Treatment[]
+  vaccinations Vaccination[]
+}
+
+model Vaccination {
+  id               Int          @id @default(autoincrement())
+  healthRecordId   Int
+  name             String
+  dateAdministered DateTime
+  nextDueDate      DateTime?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  healthRecord     HealthRecord @relation(fields: [healthRecordId], references: [id])
+}
+
+model Treatment {
+  id               Int           @id @default(autoincrement())
+  healthRecordId   Int
+  type             TreatmentType
+  description      String
+  dateAdministered DateTime
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  healthRecord     HealthRecord  @relation(fields: [healthRecordId], references: [id])
+}
+
+model Medication {
+  id             Int          @id @default(autoincrement())
+  healthRecordId Int
+  name           String
+  dosage         String
+  startDate      DateTime
+  endDate        DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  healthRecord   HealthRecord @relation(fields: [healthRecordId], references: [id])
+}
+
+model HealthNote {
+  id          Int        @id @default(autoincrement())
+  description String
+  profileId   Int
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  petProfile  PetProfile @relation(fields: [profileId], references: [id])
+}
+
+model Specialty {
+  id          Int        @id @default(autoincrement())
+  description String
+  profileId   Int
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  petProfile  PetProfile @relation(fields: [profileId], references: [id])
+}
+
+model Image {
+  id        Int      @id @default(autoincrement())
+  src       String
+  width     Int
+  height    Int
+  createdAt DateTime @default(now())
+  petId     Int?
+  pet       Pet?     @relation("PetPhotos", fields: [petId], references: [id])
+  avatarOf  Pet?     @relation("PetAvatar")
+}
+
+model AdoptionApplication {
+  id        Int               @id @default(autoincrement())
+  petId     Int
+  personId  Int
+  status    ApplicationStatus
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @default(now()) @updatedAt
+  person    Person            @relation(fields: [personId], references: [id])
+  pet       Pet               @relation(fields: [petId], references: [id])
+}
+
+model Person {
+  id           Int                   @id @default(autoincrement())
+  firstName    String
+  lastName     String
+  email        String                @unique
+  phone        String
+  address      String
+  isApplicant  Boolean               @default(false)
+  isFoster     Boolean               @default(false)
+  applications AdoptionApplication[]
+  fosterings   Fostering[]
+}
+
+model Fostering {
+  id        Int       @id @default(autoincrement())
+  petId     Int
+  personId  Int
+  startDate DateTime
+  endDate   DateTime?
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+  person    Person    @relation(fields: [personId], references: [id])
+  pet       Pet       @relation(fields: [petId], references: [id])
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  WITHDRAWN
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum FurType {
+  SHORT
+  MEDIUM
+  LONG
+  HAIRLESS
+}
+
+enum HealthStatus {
+  HEALTHY
+  UNDER_TREATMENT
+  RECOVERING
+  CHRONIC_CONDITION
+  UNKNOWN
+}
+
+enum TreatmentType {
+  SURGERY
+  THERAPY
+  MEDICATION
+  OTHER
+}
+
+enum PetType {
+  CAT
+  DOG
+}
