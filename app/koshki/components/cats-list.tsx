@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { Cats } from '@/lib/data'
+import { Cats } from '../data-access/cat'
 import clsx from 'clsx'
 
 interface CatsListProps {
