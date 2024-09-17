@@ -1,6 +1,6 @@
 'use client'
 
-import { Colors } from '@/lib/data'
+import { Colors } from '../data-access/color'
 import { useRouter } from 'next/navigation'
 import { IoClose } from 'react-icons/io5'
 

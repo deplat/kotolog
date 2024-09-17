@@ -1,6 +1,6 @@
 import { Control, Controller } from 'react-hook-form'
 import { PetFormData } from '@/types'
-import { Colors } from '@/lib/data'
+import { Colors } from '../data-access/color'
 import { Fieldset, Label, Legend } from '@headlessui/react'
 
 export const ColorsField = ({
