@@ -2,7 +2,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { ColorCreateInput } from '@/types'
 import { useRouter } from 'next/navigation'
 
-export const ColorCreationForm = ({ closeForm }: { closeForm: () => void }) => {
+export const ColorEditor = ({ closeForm }: { closeForm: () => void }) => {
   const {
     register,
     handleSubmit,

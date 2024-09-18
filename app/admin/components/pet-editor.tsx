@@ -19,19 +19,18 @@ import clsx from 'clsx'
 import { PetFormData } from '@/types'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { checkSlugUnique } from '@/lib/checkSlug'
-import { createPet, Pet, updatePet } from '../data-access/pet'
+import { createPet, getPetBySlug, Pet, updatePet } from '../data-access/pet'
 import 'react-datepicker/dist/react-datepicker.css'
 import { AvatarUpload } from '@/app/admin/components/avatar-uploader'
 import { ColorsField } from '@/app/admin/components/colors-field'
 
-interface PetEditFormProps {
+interface PetEditorProps {
   pet?: Pet
   colors: Colors
   closeForm: () => void
 }
 
-export const PetEditForm = ({ pet, colors, closeForm }: PetEditFormProps) => {
+export const PetEditor = ({ pet, colors, closeForm }: PetEditorProps) => {
   const {
     register,
     handleSubmit,
@@ -104,8 +103,8 @@ export const PetEditForm = ({ pet, colors, closeForm }: PetEditFormProps) => {
   useEffect(() => {
     const checkSlug = async (slug: string) => {
       try {
-        const isUnique = await checkSlugUnique(slug)
-        if (!isUnique) {
+        const existingPet = await getPetBySlug(slug)
+        if (existingPet) {
           setSlugError('Slug is already in use')
           setError('slug', { type: 'custom', message: 'Slug is already in use' })
         } else {

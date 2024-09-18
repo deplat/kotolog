@@ -8,7 +8,7 @@ interface CatListProps {
   onEditPet: (petId: number) => void
 }
 
-export const CatList = ({ pets, onEditPet }: CatListProps) => {
+export const PetList = ({ pets, onEditPet }: CatListProps) => {
   const router = useRouter()
 
   const handleDeleteCat = async (id: number) => {

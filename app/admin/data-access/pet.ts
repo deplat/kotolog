@@ -71,6 +71,17 @@ export const getPet = async (id: number) => {
   }
 }
 
+export const getPetBySlug = async (slug: string) => {
+  try {
+    return await prisma.pet.findUnique({
+      where: { slug },
+      select: { slug: true },
+    })
+  } catch (error) {
+    throw error
+  }
+}
+
 export const getPets = async () => {
   return prisma.pet.findMany({
     include: petInclude,
