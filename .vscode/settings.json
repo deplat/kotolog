@@ -2,5 +2,8 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "editor.formatOnType": true,
-  "prettier.configPath": ".prettierrc"
+  "prettier.configPath": ".prettierrc",
+  "eslint.format.enable": true,
+  "prettier.experimentalTernaries": true,
+  "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
 }

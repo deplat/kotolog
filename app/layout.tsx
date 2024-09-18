@@ -3,8 +3,8 @@ import { Source_Serif_4 } from 'next/font/google'
 import './globals.css'
 import { siteMetadata } from '@/data/siteMetadata'
 import { ThemeProvider } from '@/app/theme-provider'
-import { Header } from '@/components/Header'
-import { Footer } from '@/components/Footer'
+import { Header } from '@/components/header'
+import { Footer } from '@/components/footer'
 import clsx from 'clsx'
 
 const source_serif = Source_Serif_4({
