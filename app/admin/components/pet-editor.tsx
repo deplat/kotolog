@@ -21,7 +21,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createPet, getPetBySlug, Pet, updatePet } from '../data-access/pet'
 import 'react-datepicker/dist/react-datepicker.css'
-import { AvatarUpload } from '@/app/admin/components/avatar-uploader'
+import { AvatarSelect } from '@/app/admin/components/avatar-uploader'
 import { ColorsField } from '@/app/admin/components/colors-field'
 
 interface PetEditorProps {
@@ -94,8 +94,11 @@ export const PetEditor = ({ pet, colors, closeForm }: PetEditorProps) => {
 
   const [avatarFile, setAvatarFile] = useState<File | null>(null)
   const [avatarUploaded, setAvatarUploaded] = useState<boolean>(false)
+  const [photosFiles, setPhotosFiles] = useState<File[]>([])
+  const [photosUploaded, setPhotosUploaded] = useState<boolean>(false)
   const [slugError, setSlugError] = useState('')
   const [selectedColors, setSelectedColors] = useState<number[]>([])
+
   const router = useRouter()
 
   const watchSlug = watch('slug')
@@ -328,46 +331,16 @@ export const PetEditor = ({ pet, colors, closeForm }: PetEditorProps) => {
                 {...field}
                 className="scrollbar-hide mx-auto flex w-1/2 min-w-fit max-w-full overflow-x-scroll"
               >
-                <Field>
-                  <Radio
-                    value={null}
-                    className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
-                  >
-                    NO
-                  </Radio>
-                </Field>
-                <Field>
-                  <Radio
-                    value="SHORT"
-                    className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
-                  >
-                    SHORT
-                  </Radio>
-                </Field>
-                <Field>
-                  <Radio
-                    value="MEDIUM"
-                    className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
-                  >
-                    MEDIUM
-                  </Radio>
-                </Field>
-                <Field>
-                  <Radio
-                    value="LONG"
-                    className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
-                  >
-                    LONG
-                  </Radio>
-                </Field>
-                <Field>
-                  <Radio
-                    value="HAIRLESS"
-                    className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
-                  >
-                    HAIRLESS
-                  </Radio>
-                </Field>
+                {[null, 'SHORT', 'MEDIUM', 'LONG', 'HAIRLESS'].map((value) => (
+                  <Field key={value}>
+                    <Radio
+                      value={value}
+                      className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
+                    >
+                      {value ? value : 'NO'}
+                    </Radio>
+                  </Field>
+                ))}
               </RadioGroup>
             )}
           />
@@ -413,7 +386,7 @@ export const PetEditor = ({ pet, colors, closeForm }: PetEditorProps) => {
           />
         </Field>
         <ColorsField colors={colors} control={control} />
-        <AvatarUpload control={control} setAvatarFile={setAvatarFile} />
+        <AvatarSelect control={control} setAvatarFile={setAvatarFile} />
       </Fieldset>
       <Button
         type="submit"

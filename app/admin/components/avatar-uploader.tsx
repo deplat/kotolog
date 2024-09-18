@@ -4,7 +4,7 @@ import { PetFormData } from '@/types'
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import NextImage from 'next/image'
 
-export const AvatarUpload = ({
+export const AvatarSelect = ({
   control,
   setAvatarFile,
 }: {
