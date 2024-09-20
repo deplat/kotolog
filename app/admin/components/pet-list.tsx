@@ -5,14 +5,12 @@ import { deletePet, Pets } from '../data-access/pet'
 export const PetList = ({
   pets,
   onEditPet,
+  onDeletePet,
 }: {
   pets: Pets
   onEditPet: (petId: number) => void
+  onDeletePet: (petId: number) => void
 }) => {
-  const handleDeleteCat = async (id: number) => {
-    await deletePet(id)
-  }
-
   return (
     <>
       <div>
@@ -45,7 +43,7 @@ export const PetList = ({
                 </button>
               </div>
               <div className="items-center">
-                <button className="text-red-600" onClick={() => handleDeleteCat(pet.id)}>
+                <button className="text-red-600" onClick={() => onDeletePet(pet.id)}>
                   <IoClose size={24} />
                 </button>
               </div>

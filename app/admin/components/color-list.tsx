@@ -4,11 +4,7 @@ import { IoClose } from 'react-icons/io5'
 import { Colors } from '../data-access/color'
 import { deleteColor } from '../data-access/color'
 
-interface ColorListProps {
-  colors: Colors
-}
-
-export const ColorList = ({ colors }: ColorListProps) => {
+export const ColorList = ({ colors }: { colors: Colors }) => {
   const handleDeleteColor = async (id: number) => {
     await deleteColor(id)
   }
