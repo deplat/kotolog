@@ -1,21 +1,16 @@
-import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { IoClose, IoDocument } from 'react-icons/io5'
-import { Pets } from '../data-access/pet'
+import { deletePet, Pets } from '../data-access/pet'
 
-interface CatListProps {
+export const PetList = ({
+  pets,
+  onEditPet,
+}: {
   pets: Pets
   onEditPet: (petId: number) => void
-}
-
-export const PetList = ({ pets, onEditPet }: CatListProps) => {
-  const router = useRouter()
-
+}) => {
   const handleDeleteCat = async (id: number) => {
-    await fetch(`/api/pets/${id}`, {
-      method: 'DELETE',
-    })
-    router.refresh()
+    await deletePet(id)
   }
 
   return (
