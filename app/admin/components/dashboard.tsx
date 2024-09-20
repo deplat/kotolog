@@ -8,6 +8,7 @@ import { ColorList } from '@/app/admin/components/color-list'
 import { ColorEditor } from '@/app/admin/components/color-editor'
 import { PetList } from '@/app/admin/components/pet-list'
 import { PetEditor } from '@/app/admin/components/pet-editor'
+import { set } from 'react-hook-form'
 
 export const Dashboard = ({ colors, pets }: { colors: Colors; pets: Pets }) => {
   const [showPetEditor, setShowPetEditor] = useState(false)
@@ -20,6 +21,15 @@ export const Dashboard = ({ colors, pets }: { colors: Colors; pets: Pets }) => {
 
   const toggleColorEditor = () => {
     setShowColorEditor((prev) => !prev)
+  }
+
+  const closePetEditor = () => {
+    setShowPetEditor(false)
+    setPet(null)
+  }
+
+  const closeColorEditor = () => {
+    setShowColorEditor(false)
   }
 
   const handleEditPet = async (petId: number) => {
@@ -66,13 +76,13 @@ export const Dashboard = ({ colors, pets }: { colors: Colors; pets: Pets }) => {
         </Button>
         {showPetEditor && (
           <div className="fixed left-0 top-0 z-50 h-screen w-screen overflow-hidden">
-            <PetEditor colors={colors} pet={pet} closeForm={() => setShowPetEditor(false)} />
+            <PetEditor colors={colors} pet={pet} closeEditor={closePetEditor} />
           </div>
         )}
 
         {showColorEditor && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
-            <ColorEditor closeForm={() => setShowColorEditor(false)} />
+            <ColorEditor closeEditor={closeColorEditor} />
           </div>
         )}
       </div>

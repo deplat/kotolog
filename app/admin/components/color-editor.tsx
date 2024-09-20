@@ -2,7 +2,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { ColorCreateInput } from '@/types'
 import { useRouter } from 'next/navigation'
 
-export const ColorEditor = ({ closeForm }: { closeForm: () => void }) => {
+export const ColorEditor = ({ closeEditor }: { closeEditor: () => void }) => {
   const {
     register,
     handleSubmit,
@@ -24,8 +24,7 @@ export const ColorEditor = ({ closeForm }: { closeForm: () => void }) => {
       }
       const createdColor = await response.json()
       console.log('Color created:', createdColor)
-      router.refresh()
-      closeForm()
+      closeEditor()
     } catch (error) {
       console.error('Error creating color:', error)
     }
@@ -44,7 +43,7 @@ export const ColorEditor = ({ closeForm }: { closeForm: () => void }) => {
           {errors.name && <p className="text-red-600">{errors.name.message}</p>}
         </div>
         <div className="flex justify-end">
-          <button className="p-2 px-4 hover:underline" type="button" onClick={closeForm}>
+          <button className="p-2 px-4 hover:underline" type="button" onClick={closeEditor}>
             Закрыть
           </button>
           <button

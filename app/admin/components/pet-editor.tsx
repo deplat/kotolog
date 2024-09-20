@@ -27,11 +27,11 @@ import 'react-datepicker/dist/react-datepicker.css'
 export const PetEditor = ({
   pet,
   colors,
-  closeForm,
+  closeEditor,
 }: {
   pet: Pet | null
   colors: Colors
-  closeForm: () => void
+  closeEditor: () => void
 }) => {
   const {
     register,
@@ -188,7 +188,7 @@ export const PetEditor = ({
       const updatedPet = await updatePet(pet.id, formattedData)
       console.log(updatedPet)
     }
-    router.refresh()
+    closeEditor()
   }
   const renderCheckbox = (key: any, label: string) => (
     <Controller
@@ -412,7 +412,7 @@ export const PetEditor = ({
       >
         Save
       </Button>
-      <Button onClick={closeForm} className="fixed bottom-5 right-5 z-90">
+      <Button onClick={closeEditor} className="fixed bottom-5 right-5 z-90">
         <IoClose size={24} />
       </Button>
     </form>

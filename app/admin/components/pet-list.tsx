@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { IoClose, IoDocument } from 'react-icons/io5'
+import { IoClose, IoDocument, IoTrashBin } from 'react-icons/io5'
 import { deletePet, Pets } from '../data-access/pet'
 
 export const PetList = ({
@@ -44,7 +44,7 @@ export const PetList = ({
               </div>
               <div className="items-center">
                 <button className="text-red-600" onClick={() => onDeletePet(pet.id)}>
-                  <IoClose size={24} />
+                  <IoTrashBin size={24} />
                 </button>
               </div>
             </li>
