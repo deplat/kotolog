@@ -12,25 +12,27 @@ import {
   Checkbox,
 } from '@headlessui/react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { Colors } from '../data-access/color'
-import DatePicker from 'react-datepicker'
-import { IoClose, IoListCircle, IoCheckmark } from 'react-icons/io5'
-import clsx from 'clsx'
-import { PetFormData } from '@/types'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createPet, getPetBySlug, Pet, updatePet } from '../data-access/pet'
-import 'react-datepicker/dist/react-datepicker.css'
 import { AvatarSelect } from '@/app/admin/components/avatar-uploader'
 import { ColorsField } from '@/app/admin/components/colors-field'
+import { createPet, getPetBySlug, Pet, updatePet } from '../data-access/pet'
+import { PetFormData } from '@/types'
+import { Colors } from '../data-access/color'
+import { IoClose, IoListCircle, IoCheckmark } from 'react-icons/io5'
+import clsx from 'clsx'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
-interface PetEditorProps {
-  pet?: Pet
+export const PetEditor = ({
+  pet,
+  colors,
+  closeForm,
+}: {
+  pet: Pet | null
   colors: Colors
   closeForm: () => void
-}
-
-export const PetEditor = ({ pet, colors, closeForm }: PetEditorProps) => {
+}) => {
   const {
     register,
     handleSubmit,
@@ -108,6 +110,7 @@ export const PetEditor = ({ pet, colors, closeForm }: PetEditorProps) => {
       try {
         const existingPet = await getPetBySlug(slug)
         if (existingPet) {
+          console.log(existingPet.slug)
           setSlugError('Slug is already in use')
           setError('slug', { type: 'custom', message: 'Slug is already in use' })
         } else {
@@ -226,9 +229,19 @@ export const PetEditor = ({ pet, colors, closeForm }: PetEditorProps) => {
               {...register('name', { required: 'Name is required' })}
               className={clsx(
                 'ms-auto w-3/4 shrink-0 border-0 bg-transparent md:w-1/2',
-                'data-[focus]:ring-600 data-[focus]:ring-2'
+                'data-[focus]:ring-2 data-[focus]:ring-orange-600'
               )}
             />
+            {errors.name && (
+              <div
+                className={clsx(
+                  'absolute rounded-xl bg-black px-8 py-4 text-red-500',
+                  'bottom-5 left-5'
+                )}
+              >
+                {errors.name.message}
+              </div>
+            )}
           </Field>
           <Field className="flex w-full items-center justify-center">
             <Label className="me-6 w-full text-end">Slug</Label>
@@ -240,6 +253,11 @@ export const PetEditor = ({ pet, colors, closeForm }: PetEditorProps) => {
                 'data-[focus]:ring-2 data-[focus]:ring-orange-600'
               )}
             />
+            {errors.slug && (
+              <span className={clsx('absolute text-red-500', 'bottom-0 left-0')}>
+                {errors.slug.message}
+              </span>
+            )}
           </Field>
           <Field className="flex w-full items-center justify-center">
             <Label htmlFor="birthDate" className="me-6 w-full text-end">
@@ -394,7 +412,7 @@ export const PetEditor = ({ pet, colors, closeForm }: PetEditorProps) => {
       >
         Save
       </Button>
-      <Button onClick={closeForm} className="fixed bottom-5 right-5">
+      <Button onClick={closeForm} className="fixed bottom-5 right-5 z-90">
         <IoClose size={24} />
       </Button>
     </form>

@@ -44,7 +44,7 @@ export default function RootLayout({
     <html lang={siteMetadata.lang} className={source_serif.className} suppressHydrationWarning>
       <body
         className={clsx(
-          'flex min-h-screen flex-col scroll-smooth bg-gray-100 text-stone-900',
+          'flex h-screen flex-col scroll-smooth bg-gray-100 text-stone-900',
           'from-gray-800 to-black dark:bg-gray-800 dark:bg-gradient-to-br dark:text-stone-200'
         )}
       >

@@ -1,18 +1,17 @@
 'use client'
 
 import { useState } from 'react'
-import { ColorEditor } from '@/app/admin/components/color-editor'
-import { Colors } from '../data-access/color'
-import { PetList } from '@/app/admin/components/pet-list'
-import { ColorList } from '@/app/admin/components/color-list'
-import { PetEditor } from '@/app/admin/components/pet-editor'
-import { getPet, Pet, Pets } from '@/app/admin/data-access/pet'
 import { Button } from '@headlessui/react'
+import { Colors } from '../data-access/color'
+import { getPet, Pet, Pets } from '../data-access/pet'
+import { ColorList } from '@/app/admin/components/color-list'
+import { ColorEditor } from '@/app/admin/components/color-editor'
+import { PetList } from '@/app/admin/components/pet-list'
+import { PetEditor } from '@/app/admin/components/pet-editor'
 
 export const Dashboard = ({ colors, pets }: { colors: Colors; pets: Pets }) => {
   const [isPetEditorVisible, setIsPetEditorVisible] = useState(false)
   const [isColorEditorVisible, setIsColorEditorVisible] = useState(false)
-  const [isPetEditFormVisible, setIsPetEditFormVisible] = useState(false)
   const [selectedPetId, setSelectedPetId] = useState<number | null>(null)
   const [pet, setPet] = useState<Pet>(null)
 
@@ -24,15 +23,11 @@ export const Dashboard = ({ colors, pets }: { colors: Colors; pets: Pets }) => {
     setIsColorEditorVisible((prev) => !prev)
   }
 
-  const togglePetEditForm = () => {
-    setIsPetEditFormVisible((prev) => !prev)
-  }
-
   const handleEditPet = async (petId: number) => {
     setSelectedPetId(petId)
     const pet = await getPet(petId)
     setPet(pet)
-    setIsPetEditFormVisible(true)
+    setIsPetEditorVisible(true)
   }
 
   return (
@@ -54,7 +49,7 @@ export const Dashboard = ({ colors, pets }: { colors: Colors; pets: Pets }) => {
         </div>
       </div>
 
-      <div className="overflow-visiblew fixed bottom-5 right-5 z-50 flex gap-x-1">
+      <div className="fixed bottom-5 right-5 z-50 flex gap-x-1">
         <Button
           onClick={togglePetEditor}
           className="min-w-24 rounded-md bg-stone-600 px-4 py-2 text-lg font-semibold text-stone-300 data-[hover]:bg-stone-900 data-[focus]:outline-none data-[focus]:ring-8 data-[focus]:ring-stone-50 data-[focus]:ring-offset-2"
@@ -69,19 +64,13 @@ export const Dashboard = ({ colors, pets }: { colors: Colors; pets: Pets }) => {
         </Button>
         {isPetEditorVisible && (
           <div className="fixed left-0 top-0 z-50 h-screen w-screen overflow-hidden">
-            <PetEditor colors={colors} closeForm={togglePetEditForm} />
+            <PetEditor colors={colors} pet={pet} closeForm={togglePetEditor} />
           </div>
         )}
 
         {isColorEditorVisible && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
             <ColorEditor closeForm={toggleColorEditor} />
-          </div>
-        )}
-
-        {isPetEditFormVisible && selectedPetId && (
-          <div className="fixed left-0 top-0 z-50 h-screen w-screen overflow-hidden">
-            <PetEditor pet={pet} colors={colors} closeForm={togglePetEditForm} />
           </div>
         )}
       </div>

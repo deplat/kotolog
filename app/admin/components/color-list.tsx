@@ -1,8 +1,9 @@
 'use client'
 
-import { Colors } from '../data-access/color'
 import { useRouter } from 'next/navigation'
 import { IoClose } from 'react-icons/io5'
+import { Colors } from '../data-access/color'
+import { deleteColor } from '../data-access/color'
 
 interface ColorListProps {
   colors: Colors
@@ -11,10 +12,7 @@ interface ColorListProps {
 export const ColorList = ({ colors }: ColorListProps) => {
   const router = useRouter()
   const handleDeleteColor = async (id: number) => {
-    await fetch(`/api/colors/${id}`, {
-      method: 'DELETE',
-    })
-    router.refresh()
+    await deleteColor(id)
   }
   return (
     <ul>
