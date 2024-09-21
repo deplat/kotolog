@@ -14,11 +14,11 @@ import {
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { AvatarSelect } from '@/app/admin/components/avatar-uploader'
-import { ColorsField } from '@/app/admin/components/colors-field'
-import { createPet, getPetBySlug, Pet, updatePet } from '../data-access/pet'
+import { AvatarSelect } from '../avatar-select'
+import { ColorsField } from '@/app/admin/(components)/colors-field'
+import { createPet, getPetBySlug, Pet, updatePet } from '../(data-access)/pet'
 import { PetData } from '@/types'
-import { Colors } from '../data-access/color'
+import { Colors } from '../(data-access)/color'
 import { IoClose, IoListCircle, IoCheckmark } from 'react-icons/io5'
 import clsx from 'clsx'
 import DatePicker from 'react-datepicker'
@@ -75,27 +75,29 @@ export const PetEditor = ({
           photos: pet.photos,
         }
       : {
-          petType: 'CAT',
           birthDate: null,
           gender: 'FEMALE',
+          petType: 'CAT',
           furType: null,
           isUnclaimed: false,
           isFeatured: false,
           isAvailable: true,
           isAdopted: false,
           isVisible: false,
-          colors: [],
-          avatar: null,
-          photos: [],
-          biography: null,
-          healthStatus: 'UNKNOWN',
-          sterilized: true,
-          vaccinated: true,
-          treatedForParasites: true,
           socialized: true,
           friendlyWithCats: true,
           friendlyWithDogs: false,
           friendlyWithAnimals: false,
+          photos: [],
+          healthStatus: 'UNKNOWN',
+          healthNotes: [],
+          specialties: [],
+          sterilized: true,
+          vaccinated: true,
+          treatedForParasites: true,
+          biography: null,
+          colors: [],
+          avatar: null
         },
   })
 
@@ -410,6 +412,7 @@ export const PetEditor = ({
         </Field>
         <ColorsField colors={colors} control={control} />
         <AvatarSelect control={control} setAvatarFile={setAvatarFile} />
+        <PhotosSelect control={control} setPhotosFiles={setPhotosFiles}/>
       </Fieldset>
       <Button
         type="submit"

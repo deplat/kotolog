@@ -1,12 +1,17 @@
-import { HealthNote } from '@prisma/client'
 
 export interface ImageWithDimensions {
+  id: number
   src: string
   width: number
   height: number
 }
 
-export interface healthNote {
+export interface Color {
+  id: number
+  name: string
+}
+
+export interface HealthNote {
   id: number
   description: string
 }
@@ -16,7 +21,7 @@ export interface Specialty {
 }
 
 export interface PetData {
-  id?: number
+  id: number | null
   name: string
   slug: string
   birthDate: Date | null

@@ -1,25 +1,25 @@
-import { getCachedColors } from './data-access/color'
-import { Dashboard } from '@/app/admin/components/dashboard'
+import { CachedColors } from './(data-access)/color'
+import { Dashboard } from '@/app/admin/(components)/dashboard'
 import { auth } from '@/auth'
-import { SignIn } from '@/components/auth/signin-button'
-import { SignOut } from '@/components/auth/signout-button'
-import { cachedPets } from '@/app/admin/data-access/pet'
+import { SignIn } from '@/app/(components)/auth/signin-button'
+import { SignOut } from '@/app/(components)/auth/signout-button'
+import { cachedPets } from '@/app/admin/(data-access)/pet'
 
 export default async function Admin() {
   const session = await auth()
   if (!session)
     return (
-      <div>
-        Not authenticated :( <SignIn />
+      <div className='flex justify-center items-center'>
+        <p>Not authenticated :( <SignIn /></p>
       </div>
     )
   if (!session.user.isAdmin)
     return (
-      <div>
-        Not authorized :( <SignOut />
+      <div className='flex justify-center items-center'>
+        <p>Not authorized :( <SignOut /></p>
       </div>
     )
-  const colors = await getCachedColors()
+  const colors = await CachedColors()
   const pets = await cachedPets()
 
   return (

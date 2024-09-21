@@ -1,32 +1,28 @@
+import { Color } from '@/types'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { ColorCreateInput } from '@/types'
-import { useRouter } from 'next/navigation'
+import { createColor, updateColor } from '../(data-access)/color'
+
+
+
 
 export const ColorEditor = ({ closeEditor }: { closeEditor: () => void }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ColorCreateInput>()
-  const router = useRouter()
-  const onSubmit: SubmitHandler<ColorCreateInput> = async (data) => {
+  } = useForm<Color>()
+  const onSubmit: SubmitHandler<Color> = async (data) => {
     try {
-      const response = await fetch('/api/colors', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
-
-      if (!response.ok) {
-        console.error('Network response was not ok')
-      }
-      const createdColor = await response.json()
+      if (data.id) {
+        const updatedColor = updateColor(data.id, data.name)
+        console.log('Color updated:', updatedColor)
+      } else {
+        const createdColor = await createColor(data.name)
       console.log('Color created:', createdColor)
+      }
       closeEditor()
     } catch (error) {
-      console.error('Error creating color:', error)
+      console.error('Error creating or updating color:', error)
     }
   }
   return (

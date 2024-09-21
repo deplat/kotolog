@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import { Source_Serif_4 } from 'next/font/google'
 import './globals.css'
 import { siteMetadata } from '@/data/siteMetadata'
-import { ThemeProvider } from '@/app/theme-provider'
-import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
+import { ThemeProvider } from '@/app/(components)/theme-provider'
+import { Header } from '@/app/(components)/header'
+import { Footer } from '@/app/(components)/footer'
 import clsx from 'clsx'
 
 const source_serif = Source_Serif_4({
@@ -44,7 +44,7 @@ export default function RootLayout({
     <html lang={siteMetadata.lang} className={source_serif.className} suppressHydrationWarning>
       <body
         className={clsx(
-          'flex min-h-screen flex-col scroll-smooth bg-gray-100 text-stone-900',
+          'flex min-h-screen flex-col text-stone-900 scroll-smooth bg-gray-100 ',
           'from-gray-800 to-black dark:bg-gray-800 dark:bg-gradient-to-br dark:text-stone-200'
         )}
       >
@@ -53,7 +53,7 @@ export default function RootLayout({
             <Header />
           </div>
           <main className="flex flex-1">{children}</main>
-          <div className={clsx('mx-auto w-full max-w-7xl p-4 px-4 py-4 sm:px-6')}>
+          <div className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6">
             <Footer />
           </div>
         </ThemeProvider>

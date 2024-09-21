@@ -1,8 +1,8 @@
 'use client'
 
 import { IoClose } from 'react-icons/io5'
-import { Colors } from '../data-access/color'
-import { deleteColor } from '../data-access/color'
+import { Colors } from '../(data-access)/color'
+import { deleteColor } from '../(data-access)/color'
 
 export const ColorList = ({ colors }: { colors: Colors }) => {
   const handleDeleteColor = async (id: number) => {

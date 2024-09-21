@@ -35,6 +35,17 @@ export const createPet = async (data: PetData) => {
           sterilized: data.sterilized,
           vaccinated: data.vaccinated,
           treatedForParasites: data.treatedForParasites,
+          healthNotes: {
+            createMany: {
+              data: data.healthNotes
+
+            }
+          },
+          specialties: {
+            createMany: {
+              data: data.specialties
+            }
+          },
           healthStatus: data.healthStatus,
           biography: data.biography,
         },
@@ -47,6 +58,13 @@ export const createPet = async (data: PetData) => {
           create: { src: data.avatar.src, width: data.avatar.width, height: data.avatar.height },
         },
       }),
+      ...(data.photos && {
+        photos: {
+          createMany: {
+            data: data.photos
+          }
+        }
+      })
     }
     const createdPet = await prisma.pet.create({
       data: createInput,
@@ -55,6 +73,7 @@ export const createPet = async (data: PetData) => {
     try {
       revalidateTag('pets')
       revalidateTag('cats')
+      revalidateTag('unique_colors_from_cats')
     } catch (revalidateError) {
       console.error('Tag revalidation failed:', revalidateError)
     }

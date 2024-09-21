@@ -82,10 +82,11 @@ model Color {
 
 model Pet {
   id                   Int                   @id @default(autoincrement())
+  petType              PetType              
   name                 String
   slug                 String                @unique
   birthDate            DateTime?
-  gender               Gender
+  gender               Gender?
   furType              FurType?
   isUnclaimed          Boolean
   isFeatured           Boolean
@@ -95,14 +96,13 @@ model Pet {
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
   avatarId             Int?                  @unique
-  petType              PetType
   adoptionApplications AdoptionApplication[]
   fosterings           Fostering[]
   healthRecords        HealthRecord[]
-  photos               Image[]               @relation("PetPhotos")
-  avatar               Image?                @relation("PetAvatar", fields: [avatarId], references: [id])
   profile              PetProfile?
   colors               Color[]               @relation("PetColors")
+  avatar               Image?                @relation("PetAvatar", fields: [avatarId], references: [id])
+  photos               Image[]               @relation("PetPhotos")
 }
 
 model PetProfile {

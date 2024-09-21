@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import { Button } from '@headlessui/react'
-import { Colors } from '../data-access/color'
-import { deletePet, getPet, Pet, Pets } from '../data-access/pet'
+import { Colors } from '../(data-access)/color'
+import { deletePet, getPet, Pet, Pets } from '../(data-access)/pet'
 import { ColorList } from '@/app/admin/components/color-list'
 import { ColorEditor } from '@/app/admin/components/color-editor'
 import { PetList } from '@/app/admin/components/pet-list'

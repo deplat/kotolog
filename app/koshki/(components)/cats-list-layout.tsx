@@ -6,7 +6,7 @@ import { CatsList } from '@/app/koshki/components/cats-list'
 import { IoClose, IoFilter, IoPaw } from 'react-icons/io5'
 import { Transition } from '@headlessui/react'
 import clsx from 'clsx'
-import { Cats } from '../data-access/cat'
+import { Cats } from '../(data-access)/cat'
 
 interface CatsListLayoutProps {
   initialCats: Cats

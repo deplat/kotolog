@@ -1,6 +1,6 @@
 import { Control, Controller } from 'react-hook-form'
 import { Field, Input, Label } from '@headlessui/react'
-import { PetFormData } from '@/types'
+import { PetData } from '@/types'
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import NextImage from 'next/image'
 
@@ -8,7 +8,7 @@ export const AvatarSelect = ({
   control,
   setAvatarFile,
 }: {
-  control: Control<PetFormData>
+  control: Control<PetData>
   setAvatarFile: Dispatch<SetStateAction<File | null>>
 }) => {
   const [error, setError] = useState<string | null>(null)

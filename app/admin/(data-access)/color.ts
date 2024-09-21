@@ -19,8 +19,6 @@ export const createColor = async (name: string) => {
     })
     try {
       revalidateTag('colors')
-      revalidateTag('pets')
-      revalidateTag('cats')
     } catch (revalidateError) {
       console.error('Tag revalidation failed:', revalidateError)
     }
@@ -55,8 +53,6 @@ export const updateColor = async (id: number, name: string) => {
     })
     try {
       revalidateTag('colors')
-      revalidateTag('pets')
-      revalidateTag('cats')
     } catch (revalidateError) {
       console.error('Tag revalidation failed:', revalidateError)
     }
@@ -87,6 +83,6 @@ export const deleteColor = async (id: number) => {
   }
 }
 
-export const getCachedColors = unstable_cache(getColors, ['colors'], {
+export const CachedColors = unstable_cache(getColors, ['colors'], {
   tags: ['colors'],
 })
