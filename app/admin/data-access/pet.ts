@@ -3,14 +3,14 @@
 import { Prisma } from '@prisma/client'
 import prisma from '@/lib/prisma'
 import { revalidateTag, unstable_cache } from 'next/cache'
-import { PetFormData } from '@/types'
+import { PetData } from '@/types'
 import { prismaErrorHandler } from '@/lib/errorHandlers'
 
 export type Pet = Prisma.PromiseReturnType<typeof getPet>
 export type Pets = Prisma.PromiseReturnType<typeof getPets>
 
 /*  CREATE  */
-export const createPet = async (data: PetFormData) => {
+export const createPet = async (data: PetData) => {
   try {
     const createInput: Prisma.PetCreateInput = {
       name: data.name,
@@ -66,9 +66,41 @@ export const createPet = async (data: PetFormData) => {
 
 /*  READ  */
 const petInclude = Prisma.validator<Prisma.PetInclude>()({
-  avatar: true,
-  photos: true,
-  profile: true,
+  avatar: {
+    select: {
+      src: true,
+      width: true,
+      height: true,
+    },
+  },
+  photos: {
+    select: {
+      src: true,
+      width: true,
+      height: true,
+    },
+  },
+  profile: {
+    select: {
+      socialized: true,
+      friendlyWithCats: true,
+      friendlyWithDogs: true,
+      friendlyWithAnimals: true,
+      litterBoxTrained: true,
+      usesScratchingPost: true,
+      sterilized: true,
+      vaccinated: true,
+      treatedForParasites: true,
+      healthStatus: true,
+      healthNotes: {
+        select: { id: true, description: true },
+      },
+      specialties: {
+        select: { id: true, description: true },
+      },
+      biography: true,
+    },
+  },
   colors: true,
 })
 
@@ -110,7 +142,7 @@ export const cachedPets = unstable_cache(async () => getPets(), ['pets'], {
 })
 
 /*  UPDATE  */
-export const updatePet = async (id: number, data: PetFormData) => {
+export const updatePet = async (id: number, data: PetData) => {
   try {
     const updateInput: Prisma.PetUpdateInput = {
       name: data.name,

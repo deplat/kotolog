@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation'
 import { AvatarSelect } from '@/app/admin/components/avatar-uploader'
 import { ColorsField } from '@/app/admin/components/colors-field'
 import { createPet, getPetBySlug, Pet, updatePet } from '../data-access/pet'
-import { PetFormData } from '@/types'
+import { PetData } from '@/types'
 import { Colors } from '../data-access/color'
 import { IoClose, IoListCircle, IoCheckmark } from 'react-icons/io5'
 import clsx from 'clsx'
@@ -42,10 +42,10 @@ export const PetEditor = ({
     setValue,
     clearErrors,
     formState: { errors, isSubmitting },
-  } = useForm<PetFormData>({
+  } = useForm<PetData>({
     defaultValues: pet
       ? {
-          avatar: pet.avatar,
+          id: pet.id,
           name: pet.name,
           slug: pet.slug,
           birthDate: pet.birthDate,
@@ -54,6 +54,7 @@ export const PetEditor = ({
           furType: pet.furType,
           isUnclaimed: pet.isUnclaimed,
           isFeatured: pet.isFeatured,
+          isAvailable: pet.isAvailable,
           isAdopted: pet.isAdopted,
           isVisible: pet.isVisible,
           socialized: pet.profile?.socialized,
@@ -66,8 +67,12 @@ export const PetEditor = ({
           vaccinated: pet.profile?.vaccinated,
           treatedForParasites: pet.profile?.treatedForParasites,
           healthStatus: pet.profile?.healthStatus,
+          healthNotes: pet.profile?.healthNotes,
+          specialties: pet.profile?.specialties,
           biography: pet.profile?.biography,
           colors: pet.colors?.map((color) => color.id),
+          avatar: pet.avatar,
+          photos: pet.photos,
         }
       : {
           petType: 'CAT',
@@ -134,7 +139,7 @@ export const PetEditor = ({
     )
   }
 
-  const onSubmit: SubmitHandler<PetFormData> = async (data) => {
+  const onSubmit: SubmitHandler<PetData> = async (data) => {
     if (slugError) return
     if (avatarFile) {
       try {
@@ -173,7 +178,7 @@ export const PetEditor = ({
       }
     }
 
-    const formattedData: PetFormData = {
+    const formattedData: PetData = {
       ...data,
       colors: selectedColors,
     }

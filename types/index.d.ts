@@ -1,30 +1,33 @@
+import { HealthNote } from '@prisma/client'
+
 export interface ImageWithDimensions {
   src: string
   width: number
   height: number
 }
 
-export interface ColorCreateInput {
-  name: string
+export interface healthNote {
+  id: number
+  description: string
+}
+export interface Specialty {
+  id: number
+  description: string
 }
 
-export interface PetFormData {
+export interface PetData {
   id?: number
-  petType: 'CAT' | 'DOG'
   name: string
   slug: string
   birthDate: Date | null
   gender: 'MALE' | 'FEMALE'
+  petType: 'CAT' | 'DOG'
   furType: null | 'SHORT' | 'MEDIUM' | 'LONG' | 'HAIRLESS'
-  colors: number[]
   isUnclaimed: boolean
   isFeatured: boolean
   isAvailable: boolean
   isAdopted: boolean
   isVisible: boolean
-  avatar: ImageWithDimensions | null
-  photos: string[]
-  biography: string | null
   socialized: boolean
   friendlyWithCats: boolean
   friendlyWithDogs: boolean
@@ -35,4 +38,10 @@ export interface PetFormData {
   vaccinated: boolean
   treatedForParasites: boolean
   healthStatus: 'HEALTHY' | 'UNDER_TREATMENT' | 'RECOVERING' | 'CHRONIC_CONDITION' | 'UNKNOWN'
+  healthNotes: HealthNote[]
+  specialties: Specialty[]
+  biography: string | null
+  colors: number[]
+  avatar: ImageWithDimensions | null
+  photos: ImageWithDimensions[]
 }
