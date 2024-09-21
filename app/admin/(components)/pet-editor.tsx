@@ -14,7 +14,6 @@ import {
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { AvatarSelect } from '../avatar-select'
 import { ColorsField } from '@/app/admin/(components)/colors-field'
 import { createPet, getPetBySlug, Pet, updatePet } from '../(data-access)/pet'
 import { PetData } from '@/types'
@@ -23,6 +22,8 @@ import { IoClose, IoListCircle, IoCheckmark } from 'react-icons/io5'
 import clsx from 'clsx'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { PhotosSelector } from './photos-selector'
+import { AvatarSelector } from './avatar-selector'
 
 export const PetEditor = ({
   pet,
@@ -411,8 +412,8 @@ export const PetEditor = ({
           />
         </Field>
         <ColorsField colors={colors} control={control} />
-        <AvatarSelect control={control} setAvatarFile={setAvatarFile} />
-        <PhotosSelect control={control} setPhotosFiles={setPhotosFiles}/>
+        <AvatarSelector control={control} setAvatarFile={setAvatarFile} />
+        <PhotosSelector control={control} photosFiles={photosFiles} setPhotosFiles={setPhotosFiles}/>
       </Fieldset>
       <Button
         type="submit"

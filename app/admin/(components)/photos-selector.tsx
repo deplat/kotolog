@@ -4,39 +4,42 @@ import { PetData } from '@/types'
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import NextImage from 'next/image'
 
-export const AvatarSelect = ({
+export const PhotosSelector = ({
   control,
-  setAvatarFile,
+  photosFiles,
+  setPhotosFiles,
 }: {
-  control: Control<PetData>
-  setAvatarFile: Dispatch<SetStateAction<File | null>>
+    control: Control<PetData>
+  photosFiles: File[]
+  setPhotosFiles: Dispatch<SetStateAction<File[]>>
 }) => {
   const [error, setError] = useState<string | null>(null)
   const [imagePreviewSrc, setImagePreviewSrc] = useState<string | null>(null)
-  const handleImageChange = (
+  const handleImagesChange = (
     e: ChangeEvent<HTMLInputElement>,
-    onChange: (...event: never[]) => void
   ) => {
-    const file = e.target.files ? e.target.files[0] : null
-    if (file && (file.type === 'image/jpeg' || file.type === 'image/jpg')) {
-      const fileReader = new FileReader()
-      fileReader.onload = (e) => {
-        const imageSrc = e.target?.result as string
-        setImagePreviewSrc(imageSrc)
-
-        const img = new Image()
-        img.src = imageSrc
-        img.onload = () => {
-          const width = img.width
-          const height = img.height
-          // @ts-ignore
-          onChange(imageSrc, width, height)
-          setAvatarFile(file)
+    if (e.target.files) {
+      let i: number
+      const files = []
+      for (i = 0; i < e.target.files.length; i += 1) {
+        files[i] = e.target.files[i].arrayBuffer()
+      }
+      const processedFiles = files.map((file) => {
+        const fileReader = new FileReader
+        fileReader.onload = (e) => {
+          const imageSrc = e.target?.result as string
+          const img = new Image()
+          img.src = imageSrc
+          img.onload = () => {
+            const width = img.width
+            const height = img.height
+          }
         }
       }
-      fileReader.readAsDataURL(file)
+      )
+
     } else {
-      setError('Please upload a valid jpg or jpeg image')
+      setError('Select valid "jpg" or "jpeg" images')
     }
   }
 
@@ -50,11 +53,10 @@ export const AvatarSelect = ({
             <Label>Avatar:</Label>
             <Input
               type="file"
+              multiple
               accept="image/jpeg, image/jpg"
               ref={field.ref}
-              onChange={(e) => {
-                handleImageChange(e, field.onChange)
-              }}
+              onChange={handleImagesChange}
             />
             {error && <p className="text-red-600">{error}</p>}
           </Field>
