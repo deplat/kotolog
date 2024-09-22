@@ -25,7 +25,7 @@ export interface PetData {
   name: string
   slug: string
   birthDate: Date | null
-  gender: 'MALE' | 'FEMALE'
+  gender: 'MALE' | 'FEMALE' | null
   petType: 'CAT' | 'DOG'
   furType: null | 'SHORT' | 'MEDIUM' | 'LONG' | 'HAIRLESS'
   isUnclaimed: boolean

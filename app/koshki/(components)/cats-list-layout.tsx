@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { CatsFilter } from '@/app/koshki/components/cats-filter'
-import { CatsList } from '@/app/koshki/components/cats-list'
+import { CatsFilter } from '@/app/koshki/(components)/cats-filter'
+import { CatsList } from '@/app/koshki/(components)/cats-list'
 import { IoClose, IoFilter, IoPaw } from 'react-icons/io5'
 import { Transition } from '@headlessui/react'
 import clsx from 'clsx'

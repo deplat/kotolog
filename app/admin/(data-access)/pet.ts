@@ -149,7 +149,7 @@ export const getPetBySlug = async (slug: string) => {
   try {
     return await prisma.pet.findUnique({
       where: { slug },
-      select: { slug: true },
+      select: { id: true, slug: true },
     })
   } catch (error) {
     throw prismaErrorHandler(error)

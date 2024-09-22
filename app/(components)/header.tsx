@@ -1,4 +1,4 @@
-import { ThemeSwitch } from '@/components/theme-switcher'
+import { ThemeSwitch } from '@/app/(components)/theme-switcher'
 import Link from 'next/link'
 
 export const Header = () => {

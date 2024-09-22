@@ -13,30 +13,43 @@ export const AvatarSelector = ({
 }) => {
   const [error, setError] = useState<string | null>(null)
   const [imagePreviewSrc, setImagePreviewSrc] = useState<string | null>(null)
+
   const handleImageChange = (
     e: ChangeEvent<HTMLInputElement>,
-    onChange: (...event: never[]) => void
+    onChange: (image: { src: string, width: number, height: number }) => void
   ) => {
     const file = e.target.files ? e.target.files[0] : null
-    if (file && (file.type === 'image/jpeg' || file.type === 'image/jpg')) {
+
+    // Clear previous errors
+    setError(null)
+
+    if (file) {
+      if (!['image/jpeg', 'image/jpg'].includes(file.type)) {
+        setError('Please upload a valid JPG or JPEG image.')
+        return
+      }
+
+      const MAX_FILE_SIZE = 16 * 1024 * 1024 // 16MB
+      if (file.size > MAX_FILE_SIZE) {
+        setError('File size exceeds the 5MB limit.')
+        return
+      }
+
       const fileReader = new FileReader()
-      fileReader.onload = (e) => {
-        const imageSrc = e.target?.result as string
+      fileReader.onload = (event) => {
+        const imageSrc = event.target?.result as string
         setImagePreviewSrc(imageSrc)
 
         const img = new Image()
-        img.src = imageSrc
         img.onload = () => {
           const width = img.width
           const height = img.height
-          // @ts-ignore
-          onChange(imageSrc, width, height)
+          onChange({ src: imageSrc, width, height })
           setAvatarFile(file)
         }
+        img.src = imageSrc // Set img.src after img.onload is defined
       }
       fileReader.readAsDataURL(file)
-    } else {
-      setError('Please upload a valid jpg or jpeg image')
     }
   }
 
@@ -46,20 +59,21 @@ export const AvatarSelector = ({
       control={control}
       render={({ field }) => (
         <div>
-          <Field className="flex">
-            <Label>Avatar:</Label>
+          <Field className="flex flex-col gap-2">
+            <Label htmlFor="avatar">Avatar:</Label>
             <Input
+              id="avatar"
               type="file"
               accept="image/jpeg, image/jpg"
               ref={field.ref}
-              onChange={(e) => {
-                handleImageChange(e, field.onChange)
-              }}
+              onChange={(e) => handleImageChange(e, field.onChange)}
             />
             {error && <p className="text-red-600">{error}</p>}
           </Field>
           {imagePreviewSrc && (
-            <NextImage src={imagePreviewSrc} width={300} height={300} alt="Preview" />
+            <div className="mt-4">
+              <NextImage src={imagePreviewSrc} width={300} height={300} alt="Avatar Preview" />
+            </div>
           )}
         </div>
       )}

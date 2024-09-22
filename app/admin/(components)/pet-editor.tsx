@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ColorsField } from '@/app/admin/(components)/colors-field'
 import { createPet, getPetBySlug, Pet, updatePet } from '../(data-access)/pet'
-import { PetData } from '@/types'
+import { ImageWithDimensions, PetData } from '@/types'
 import { Colors } from '../(data-access)/color'
 import { IoClose, IoListCircle, IoCheckmark } from 'react-icons/io5'
 import clsx from 'clsx'
@@ -103,21 +103,17 @@ export const PetEditor = ({
   })
 
   const [avatarFile, setAvatarFile] = useState<File | null>(null)
-  const [avatarUploaded, setAvatarUploaded] = useState<boolean>(false)
   const [photosFiles, setPhotosFiles] = useState<File[]>([])
-  const [photosUploaded, setPhotosUploaded] = useState<boolean>(false)
   const [slugError, setSlugError] = useState('')
   const [selectedColors, setSelectedColors] = useState<number[]>([])
-
-  const router = useRouter()
 
   const watchSlug = watch('slug')
 
   useEffect(() => {
-    const checkSlug = async (slug: string) => {
+    const checkSlug = async (slug: string, id?: number) => {
       try {
         const existingPet = await getPetBySlug(slug)
-        if (existingPet) {
+        if (existingPet && existingPet.id != id) {
           console.log(existingPet.slug)
           setSlugError('Slug is already in use')
           setError('slug', { type: 'custom', message: 'Slug is already in use' })
@@ -130,7 +126,8 @@ export const PetEditor = ({
       }
     }
     if (watchSlug) {
-      checkSlug(watchSlug)
+      checkSlug(watchSlug, pet?.id)  
+
     }
   }, [clearErrors, setError, watchSlug])
 
@@ -144,43 +141,83 @@ export const PetEditor = ({
 
   const onSubmit: SubmitHandler<PetData> = async (data) => {
     if (slugError) return
-    if (avatarFile) {
+   if (avatarFile) {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ filename: avatarFile.name, contentType: avatarFile.type }),
+      })
+      if (response.ok) {
+        const { url, fields, bucket, region } = await response.json()
+        const avatarUploadFormData = new FormData()
+        Object.entries(fields).forEach(([key, value]) => {
+          avatarUploadFormData.append(key, value as string)
+        })
+        avatarUploadFormData.append('file', avatarFile)
+
+        const uploadResponse = await fetch(url, {
+          method: 'POST',
+          body: avatarUploadFormData,
+        })
+
+        if (uploadResponse.ok) {
+          // Set the full URL of the avatar after upload
+          const avatarUrl = `https://${bucket}.s3.${region}.amazonaws.com/${fields.key}`
+          setValue('avatar.src', avatarUrl)
+        } else {
+          console.error('S3 Upload Error:', uploadResponse)
+        }
+      }
+    } catch (error) {
+      console.error('Avatar upload error:', error.message)
+    }
+  }
+
+  // Upload photos if provided
+  if (photosFiles.length > 0) {
+    const uploadedPhotos: ImageWithDimensions[] = []
+
+    for (const file of photosFiles) {
       try {
-        // 1. Get pre-signed URL for uploading to S3
-        const response = await fetch(process.env.NEXT_PUBLIC_BASE_URL + '/api/upload', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ filename: avatarFile.name, contentType: avatarFile.type }),
+          body: JSON.stringify({ filename: file.name, contentType: file.type }),
         })
         if (response.ok) {
-          const { url, fields } = await response.json()
-          console.log(url, fields.key)
-          const avatarUploadFormData = new FormData()
+          const { url, fields, bucket, region } = await response.json()
+          const photoUploadFormData = new FormData()
           Object.entries(fields).forEach(([key, value]) => {
-            avatarUploadFormData.append(key, value as string)
+            photoUploadFormData.append(key, value as string)
           })
-          avatarUploadFormData.append('file', avatarFile)
+          photoUploadFormData.append('file', file)
 
           const uploadResponse = await fetch(url, {
             method: 'POST',
-            body: avatarUploadFormData,
+            body: photoUploadFormData,
           })
 
           if (uploadResponse.ok) {
-            setAvatarUploaded(true)
-            console.log(avatarUploaded)
-            setValue('avatar.src', url + fields.key)
+            // Set the full URL of each uploaded photo
+            const photoUrl = `https://${bucket}.s3.${region}.amazonaws.com/${fields.key}`
+            uploadedPhotos.push({ src: photoUrl })
           } else {
             console.error('S3 Upload Error:', uploadResponse)
           }
         }
       } catch (error) {
-        console.log((error as Error).message)
+        console.error('Photo upload error:', (error as Error).message)
       }
     }
 
+    // Set the photos after all have been uploaded
+    setValue('photos', uploadedPhotos)
+  }
     const formattedData: PetData = {
       ...data,
       colors: selectedColors,
@@ -413,7 +450,7 @@ export const PetEditor = ({
         </Field>
         <ColorsField colors={colors} control={control} />
         <AvatarSelector control={control} setAvatarFile={setAvatarFile} />
-        <PhotosSelector control={control} photosFiles={photosFiles} setPhotosFiles={setPhotosFiles}/>
+        <PhotosSelector control={control} setPhotosFiles={setPhotosFiles}/>
       </Fieldset>
       <Button
         type="submit"
