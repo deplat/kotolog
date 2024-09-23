@@ -13,7 +13,6 @@ import {
 } from '@headlessui/react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { ColorsField } from '@/app/admin/(components)/colors-field'
 import { createPet, getPetBySlug, Pet, updatePet } from '../(data-access)/pet'
 import { ImageWithDimensions, PetData } from '@/types'
@@ -151,13 +150,12 @@ export const PetEditor = ({
         body: JSON.stringify({ filename: avatarFile.name, contentType: avatarFile.type }),
       })
       if (response.ok) {
-        const { url, fields, bucket, region } = await response.json()
+        const { url, fields } = await response.json()
         const avatarUploadFormData = new FormData()
         Object.entries(fields).forEach(([key, value]) => {
           avatarUploadFormData.append(key, value as string)
         })
         avatarUploadFormData.append('file', avatarFile)
-
         const uploadResponse = await fetch(url, {
           method: 'POST',
           body: avatarUploadFormData,
@@ -165,14 +163,17 @@ export const PetEditor = ({
 
         if (uploadResponse.ok) {
           // Set the full URL of the avatar after upload
-          const avatarUrl = `https://${bucket}.s3.${region}.amazonaws.com/${fields.key}`
-          setValue('avatar.src', avatarUrl)
+          const avatarUrl = `https://s3.timeweb.cloud/31c3d159-kotolog/${fields.key}`
+          console.log(avatarFile)
+          console.log(avatarUrl)
+          console.log(uploadResponse)
+          setValue('avatar', {src: avatarUrl, width: fields.width, height: fields.height})
         } else {
           console.error('S3 Upload Error:', uploadResponse)
         }
       }
     } catch (error) {
-      console.error('Avatar upload error:', error.message)
+      console.error('Avatar upload error:', (error as Error).message)
     }
   }
 

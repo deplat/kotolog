@@ -1,6 +1,6 @@
 
 export interface ImageWithDimensions {
-  id: number
+  id?: number
   src: string
   width: number
   height: number
