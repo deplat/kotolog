@@ -206,7 +206,7 @@ export const PetEditor = ({
           if (uploadResponse.ok) {
             // Set the full URL of each uploaded photo
             const photoUrl = `https://${bucket}.s3.${region}.amazonaws.com/${fields.key}`
-            uploadedPhotos.push({ src: photoUrl })
+            uploadedPhotos.push({ src: photoUrl, width: fields.width, height: fields.height })
           } else {
             console.error('S3 Upload Error:', uploadResponse)
           }
