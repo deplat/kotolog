@@ -40,6 +40,7 @@ export const PetEditor = ({
     watch,
     setError,
     setValue,
+    getValues,
     clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<PetData>({
@@ -102,6 +103,7 @@ export const PetEditor = ({
   })
 
   const [avatarFile, setAvatarFile] = useState<File | null>(null)
+  const [avatar, setAvatar] = useState<ImageWithDimensions | null>(null)
   const [photosFiles, setPhotosFiles] = useState<File[]>([])
   const [slugError, setSlugError] = useState('')
   const [selectedColors, setSelectedColors] = useState<number[]>([])
@@ -163,11 +165,12 @@ export const PetEditor = ({
 
         if (uploadResponse.ok) {
           // Set the full URL of the avatar after upload
-          const avatarUrl = `https://s3.timeweb.cloud/31c3d159-kotolog/${fields.key}`
+          const avatarUrl = uploadResponse.url + fields.key
           console.log(avatarFile)
           console.log(avatarUrl)
           console.log(uploadResponse)
-          setValue('avatar', {src: avatarUrl, width: fields.width, height: fields.height})
+          setValue('avatar', { src: avatarUrl, width: fields.width, height: fields.height })
+          console.log(getValues('avatar'))
         } else {
           console.error('S3 Upload Error:', uploadResponse)
         }
