@@ -98,7 +98,7 @@ export const PetEditor = ({
           treatedForParasites: true,
           biography: null,
           colors: [],
-          avatar: null
+          avatar: null,
         },
   })
 
@@ -127,8 +127,7 @@ export const PetEditor = ({
       }
     }
     if (watchSlug) {
-      checkSlug(watchSlug, pet?.id)  
-
+      checkSlug(watchSlug, pet?.id)
     }
   }, [clearErrors, setError, watchSlug])
 
@@ -141,94 +140,103 @@ export const PetEditor = ({
   }
 
   const onSubmit: SubmitHandler<PetData> = async (data) => {
-    if (errors) return
-   if (avatar && avatarFile) {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ filename: avatarFile.name, contentType: avatarFile.type }),
-      })
-      if (response.ok) {
-        const { url, fields } = await response.json()
-        const avatarUploadFormData = new FormData()
-        Object.entries(fields).forEach(([key, value]) => {
-          avatarUploadFormData.append(key, value as string)
-        })
-        avatarUploadFormData.append('file', avatarFile)
-        const uploadResponse = await fetch(url, {
-          method: 'POST',
-          body: avatarUploadFormData,
-        })
-
-        if (uploadResponse.ok) {
-          // Set the full URL of the avatar after upload
-          const avatarUrl = uploadResponse.url + fields.key
-          console.log(avatarFile)
-          console.log(avatarUrl)
-          console.log(uploadResponse)
-          setAvatar({src: avatarUrl, width:avatar.width, height: avatar.height})
-        } else {
-          console.error('S3 Upload Error:', uploadResponse)
-        }
-      }
-    } catch (error) {
-      console.error('Avatar upload error:', (error as Error).message)
+    console.log('submit')
+    if (errors.slug) {
+      console.log(errors.slug)
+      return
     }
-  }
-
-  // Upload photos if provided
-  if (photosFiles.length > 0) {
-    const uploadedPhotos: ImageWithDimensions[] = []
-
-    for (const file of photosFiles) {
+    let avatarUrl: string | null = null
+    if (avatar && avatarFile) {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ filename: file.name, contentType: file.type }),
+          body: JSON.stringify({ filename: avatarFile.name, contentType: avatarFile.type }),
         })
         if (response.ok) {
-          const { url, fields, bucket, region } = await response.json()
-          const photoUploadFormData = new FormData()
+          const { url, fields } = await response.json()
+          const avatarUploadFormData = new FormData()
           Object.entries(fields).forEach(([key, value]) => {
-            photoUploadFormData.append(key, value as string)
+            avatarUploadFormData.append(key, value as string)
           })
-          photoUploadFormData.append('file', file)
-
+          avatarUploadFormData.append('file', avatarFile)
           const uploadResponse = await fetch(url, {
             method: 'POST',
-            body: photoUploadFormData,
+            body: avatarUploadFormData,
           })
 
           if (uploadResponse.ok) {
-            // Set the full URL of each uploaded photo
-            const photoUrl = `https://${bucket}.s3.${region}.amazonaws.com/${fields.key}`
-            uploadedPhotos.push({ src: photoUrl, width: fields.width, height: fields.height })
+            // Set the full URL of the avatar after upload
+            console.log(avatarFile)
+            console.log(avatar)
+            avatarUrl = `${uploadResponse.url}${fields.key}`
+            console.log(avatarUrl)
+            console.log(uploadResponse)
+            console.log(avatar)
           } else {
             console.error('S3 Upload Error:', uploadResponse)
           }
         }
       } catch (error) {
-        console.error('Photo upload error:', (error as Error).message)
+        console.error('Avatar upload error:', (error as Error).message)
       }
     }
 
-    // Set the photos after all have been uploaded
-    setValue('photos', uploadedPhotos)
-  }
+    // Upload photos if provided
+    if (photosFiles.length > 0) {
+      const uploadedPhotos: ImageWithDimensions[] = []
+
+      for (const file of photosFiles) {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ filename: file.name, contentType: file.type }),
+          })
+          if (response.ok) {
+            const { url, fields, bucket, region } = await response.json()
+            const photoUploadFormData = new FormData()
+            Object.entries(fields).forEach(([key, value]) => {
+              photoUploadFormData.append(key, value as string)
+            })
+            photoUploadFormData.append('file', file)
+
+            const uploadResponse = await fetch(url, {
+              method: 'POST',
+              body: photoUploadFormData,
+            })
+
+            if (uploadResponse.ok) {
+              // Set the full URL of each uploaded photo
+              const photoUrl = `https://${bucket}.s3.${region}.amazonaws.com/${fields.key}`
+              uploadedPhotos.push({ src: photoUrl, width: fields.width, height: fields.height })
+            } else {
+              console.error('S3 Upload Error:', uploadResponse)
+            }
+          }
+        } catch (error) {
+          console.error('Photo upload error:', (error as Error).message)
+        }
+      }
+
+      // Set the photos after all have been uploaded
+      setValue('photos', uploadedPhotos)
+    }
     const formattedData: PetData = {
       ...data,
       colors: selectedColors,
-      avatar
+      avatar: {
+        src: avatarUrl
+          ? avatarUrl
+          : 'https://s3.timeweb.cloud/31c3d159-kotolog/10ba607d-eb99-424e-8172-4ef032642e32',
+        width: avatar?.width || 300,
+        height: avatar?.height || 300,
+      },
     }
-
-    console.log(formattedData)
-
     if (!pet?.id) {
       const createdPet = await createPet(formattedData)
       console.log(createdPet)
@@ -454,7 +462,7 @@ export const PetEditor = ({
         </Field>
         <ColorsField colors={colors} control={control} />
         <AvatarSelector control={control} setAvatar={setAvatar} setAvatarFile={setAvatarFile} />
-        <PhotosSelector control={control} setPhotosFiles={setPhotosFiles}/>
+        <PhotosSelector control={control} setPhotosFiles={setPhotosFiles} />
       </Fieldset>
       <Button
         type="submit"

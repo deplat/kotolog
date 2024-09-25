@@ -9,11 +9,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '7srwfaunr1krwltq.public.blob.vercel-storage.com',
+        hostname: 's3.timeweb.cloud',
       },
       {
         protocol: 'https',
-        hostname: 's3.timeweb.cloud',
+        hostname: '31c3d159-kotolog.s3.timeweb.cloud',
       },
     ],
   },

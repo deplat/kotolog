@@ -9,7 +9,7 @@ export const AvatarSelector = ({
   setAvatar,
   setAvatarFile,
 }: {
-    control: Control<PetData>
+  control: Control<PetData>
   setAvatar: Dispatch<SetStateAction<ImageWithDimensions | null>>
   setAvatarFile: Dispatch<SetStateAction<File | null>>
 }) => {
@@ -18,11 +18,10 @@ export const AvatarSelector = ({
 
   const handleImageChange = (
     e: ChangeEvent<HTMLInputElement>,
-    onChange: (image: { src: string, width: number, height: number }) => void
+    onChange: (image: { src: string; width: number; height: number }) => void
   ) => {
     const file = e.target.files ? e.target.files[0] : null
 
-    // Clear previous errors
     setError(null)
 
     if (file) {
@@ -46,7 +45,7 @@ export const AvatarSelector = ({
         img.onload = () => {
           const width = img.width
           const height = img.height
-          setAvatar({src: imageSrc, width, height})
+          setAvatar({ src: imageSrc, width, height })
           setAvatarFile(file)
         }
         img.src = imageSrc // Set img.src after img.onload is defined
