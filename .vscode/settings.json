@@ -6,5 +6,5 @@
   "prettier.configPath": ".prettierrc",
   "eslint.format.enable": true,
   "prettier.experimentalTernaries": true,
-  "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
