@@ -1,14 +1,16 @@
 import { Control, Controller } from 'react-hook-form'
 import { Field, Input, Label } from '@headlessui/react'
-import { PetData } from '@/types'
+import { ImageWithDimensions, PetData } from '@/types'
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import NextImage from 'next/image'
 
 export const AvatarSelector = ({
   control,
+  setAvatar,
   setAvatarFile,
 }: {
-  control: Control<PetData>
+    control: Control<PetData>
+  setAvatar: Dispatch<SetStateAction<ImageWithDimensions | null>>
   setAvatarFile: Dispatch<SetStateAction<File | null>>
 }) => {
   const [error, setError] = useState<string | null>(null)
@@ -44,7 +46,7 @@ export const AvatarSelector = ({
         img.onload = () => {
           const width = img.width
           const height = img.height
-          onChange({ src: imageSrc, width, height })
+          setAvatar({src: imageSrc, width, height})
           setAvatarFile(file)
         }
         img.src = imageSrc // Set img.src after img.onload is defined

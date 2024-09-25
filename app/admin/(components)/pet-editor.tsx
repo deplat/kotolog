@@ -141,8 +141,8 @@ export const PetEditor = ({
   }
 
   const onSubmit: SubmitHandler<PetData> = async (data) => {
-    if (slugError) return
-   if (avatarFile) {
+    if (errors) return
+   if (avatar && avatarFile) {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`, {
         method: 'POST',
@@ -169,8 +169,7 @@ export const PetEditor = ({
           console.log(avatarFile)
           console.log(avatarUrl)
           console.log(uploadResponse)
-          setValue('avatar', { src: avatarUrl, width: fields.width, height: fields.height })
-          console.log(getValues('avatar'))
+          setAvatar({src: avatarUrl, width:avatar.width, height: avatar.height})
         } else {
           console.error('S3 Upload Error:', uploadResponse)
         }
@@ -225,6 +224,7 @@ export const PetEditor = ({
     const formattedData: PetData = {
       ...data,
       colors: selectedColors,
+      avatar
     }
 
     console.log(formattedData)
@@ -453,7 +453,7 @@ export const PetEditor = ({
           />
         </Field>
         <ColorsField colors={colors} control={control} />
-        <AvatarSelector control={control} setAvatarFile={setAvatarFile} />
+        <AvatarSelector control={control} setAvatar={setAvatar} setAvatarFile={setAvatarFile} />
         <PhotosSelector control={control} setPhotosFiles={setPhotosFiles}/>
       </Fieldset>
       <Button
