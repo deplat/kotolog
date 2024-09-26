@@ -16,10 +16,7 @@ export const AvatarSelector = ({
   const [error, setError] = useState<string | null>(null)
   const [imagePreviewSrc, setImagePreviewSrc] = useState<string | null>(null)
 
-  const handleImageChange = (
-    e: ChangeEvent<HTMLInputElement>,
-    onChange: (image: { src: string; width: number; height: number }) => void
-  ) => {
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null
 
     setError(null)
@@ -48,7 +45,7 @@ export const AvatarSelector = ({
           setAvatar({ src: imageSrc, width, height })
           setAvatarFile(file)
         }
-        img.src = imageSrc // Set img.src after img.onload is defined
+        img.src = imageSrc
       }
       fileReader.readAsDataURL(file)
     }
@@ -67,7 +64,7 @@ export const AvatarSelector = ({
               type="file"
               accept="image/jpeg, image/jpg"
               ref={field.ref}
-              onChange={(e) => handleImageChange(e, field.onChange)}
+              onChange={(e) => handleImageChange(e)}
             />
             {error && <p className="text-red-600">{error}</p>}
           </Field>

@@ -105,7 +105,6 @@ export const PetEditor = ({
   const [avatarFile, setAvatarFile] = useState<File | null>(null)
   const [avatar, setAvatar] = useState<ImageWithDimensions | null>(null)
   const [photosFiles, setPhotosFiles] = useState<File[]>([])
-  const [slugError, setSlugError] = useState('')
   const [selectedColors, setSelectedColors] = useState<number[]>([])
 
   const watchSlug = watch('slug')
@@ -116,14 +115,12 @@ export const PetEditor = ({
         const existingPet = await getPetBySlug(slug)
         if (existingPet && existingPet.id != id) {
           console.log(existingPet.slug)
-          setSlugError('Slug is already in use')
           setError('slug', { type: 'custom', message: 'Slug is already in use' })
         } else {
-          setSlugError('')
           clearErrors('slug')
         }
       } catch (error) {
-        setSlugError('Error checking Slug')
+        setError('slug', { type: 'custom', message: 'Cannot check slug' })
       }
     }
     if (watchSlug) {
@@ -140,12 +137,20 @@ export const PetEditor = ({
   }
 
   const onSubmit: SubmitHandler<PetData> = async (data) => {
-    console.log('submit')
+    console.log(isSubmitting)
+
     if (errors.slug) {
       console.log(errors.slug)
       return
     }
+    if (errors.name) console.log(errors.name)
+    if (errors.colors) console.log(errors.colors)
+    if (errors.avatar) console.log(errors.avatar)
+    if (errors.photos) console.log(errors.photos)
+
     let avatarUrl: string | null = null
+    const photos: ImageWithDimensions[] = []
+
     if (avatar && avatarFile) {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`, {
@@ -168,13 +173,11 @@ export const PetEditor = ({
           })
 
           if (uploadResponse.ok) {
-            // Set the full URL of the avatar after upload
             console.log(avatarFile)
             console.log(avatar)
+            console.log(uploadResponse)
             avatarUrl = `${uploadResponse.url}${fields.key}`
             console.log(avatarUrl)
-            console.log(uploadResponse)
-            console.log(avatar)
           } else {
             console.error('S3 Upload Error:', uploadResponse)
           }
@@ -184,7 +187,6 @@ export const PetEditor = ({
       }
     }
 
-    // Upload photos if provided
     if (photosFiles.length > 0) {
       const uploadedPhotos: ImageWithDimensions[] = []
 
