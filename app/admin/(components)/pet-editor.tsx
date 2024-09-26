@@ -71,8 +71,6 @@ export const PetEditor = ({
     control,
     watch,
     setError,
-    setValue,
-    getValues,
     clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<PetData>({
