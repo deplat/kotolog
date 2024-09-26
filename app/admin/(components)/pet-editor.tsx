@@ -180,6 +180,8 @@ export const PetEditor = ({
     if (errors.avatar) console.log(errors.avatar)
     if (errors.photos) console.log(errors.photos)
 
+    const uploadedPhotos: ImageWithDimensions[] = []
+
     if (avatar && avatarFile) {
       try {
         const avatarUrl = await uploadFile(avatarFile)
@@ -195,42 +197,18 @@ export const PetEditor = ({
       }
     }
 
-    if (photosFiles.length > 0) {
-      const uploadedPhotos: ImageWithDimensions[] = []
-
-      for (const file of photosFiles) {
-        try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ filename: file.name, contentType: file.type }),
+    for (const file of photosFiles) {
+      try {
+        const photoUrl = await uploadFile(file)
+        if (photoUrl) {
+          uploadedPhotos.push({
+            src: photoUrl,
+            width: 300,
+            height: 300,
           })
-          if (response.ok) {
-            const { url, fields, bucket, region } = await response.json()
-            const photoUploadFormData = new FormData()
-            Object.entries(fields).forEach(([key, value]) => {
-              photoUploadFormData.append(key, value as string)
-            })
-            photoUploadFormData.append('file', file)
-
-            const uploadResponse = await fetch(url, {
-              method: 'POST',
-              body: photoUploadFormData,
-            })
-
-            if (uploadResponse.ok) {
-              // Set the full URL of each uploaded photo
-              const photoUrl = `https://${bucket}.s3.${region}.amazonaws.com/${fields.key}`
-              uploadedPhotos.push({ src: photoUrl, width: fields.width, height: fields.height })
-            } else {
-              console.error('S3 Upload Error:', uploadResponse)
-            }
-          }
-        } catch (error) {
-          console.error('Photo upload error:', (error as Error).message)
         }
+      } catch (error) {
+        console.error('Photo upload error:', (error as Error).message)
       }
     }
     const formattedData: PetData = {
