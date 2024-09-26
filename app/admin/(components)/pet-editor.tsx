@@ -445,7 +445,7 @@ export const PetEditor = ({
         type="submit"
         className="fixed bottom-5 rounded-full bg-gray-700/45 px-8 py-4 text-lg"
       >
-        Save
+        Save!
       </Button>
       <Button onClick={closeEditor} className="fixed bottom-5 right-5 z-90">
         <IoClose size={24} />
