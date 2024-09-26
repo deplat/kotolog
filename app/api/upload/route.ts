@@ -1,6 +1,7 @@
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post'
 import { S3Client } from '@aws-sdk/client-s3'
 import { v4 as uuidv4 } from 'uuid'
+import { headers } from 'next/headers'
 
 export async function POST(request: Request) {
   const { filename, contentType } = await request.json()
@@ -25,7 +26,14 @@ export async function POST(request: Request) {
       Expires: 600, // Seconds before the pre-signed post expires. 3600 by default.
     })
 
-    return Response.json({ url, fields })
+    return Response.json(
+      { url, fields },
+      {
+        headers: {
+          'Access-Control-Allow-Origin': `${process.env.NEXT_PUBLIC_BASE_URL}`,
+        },
+      }
+    )
   } catch (error) {
     return Response.json({ error: (error as Error).message })
   }
