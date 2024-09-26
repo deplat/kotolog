@@ -24,6 +24,38 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { PhotosSelector } from './photos-selector'
 import { AvatarSelector } from './avatar-selector'
 
+const uploadFile = async (file: File) => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ filename: file.name, contentType: file.type }),
+    })
+    if (!response.ok) {
+      throw new Error('Failed to get presigned url')
+    }
+    const { url, fields } = await response.json()
+    const formData = new FormData()
+    Object.entries(fields).forEach(([key, value]) => {
+      formData.append(key, value as string)
+    })
+    formData.append('file', file)
+    const uploadResponse = await fetch(url, {
+      method: 'POST',
+      body: formData,
+    })
+    if (!uploadResponse.ok) {
+      throw new Error('Failed to upload file')
+    }
+    return `${uploadResponse.url}${fields.key}`
+  } catch (error) {
+    console.error(error)
+    return null
+  }
+}
+
 export const PetEditor = ({
   pet,
   colors,
@@ -148,38 +180,14 @@ export const PetEditor = ({
     if (errors.avatar) console.log(errors.avatar)
     if (errors.photos) console.log(errors.photos)
 
-    let avatarUrl: string | null = null
-    const photos: ImageWithDimensions[] = []
-
     if (avatar && avatarFile) {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ filename: avatarFile.name, contentType: avatarFile.type }),
-        })
-        if (response.ok) {
-          const { url, fields } = await response.json()
-          const avatarUploadFormData = new FormData()
-          Object.entries(fields).forEach(([key, value]) => {
-            avatarUploadFormData.append(key, value as string)
-          })
-          avatarUploadFormData.append('file', avatarFile)
-          const uploadResponse = await fetch(url, {
-            method: 'POST',
-            body: avatarUploadFormData,
-          })
-
-          if (uploadResponse.ok) {
-            console.log(avatarFile)
-            console.log(avatar)
-            console.log(uploadResponse)
-            avatarUrl = `${uploadResponse.url}${fields.key}`
-            console.log(avatarUrl)
-          } else {
-            console.error('S3 Upload Error:', uploadResponse)
+        const avatarUrl = await uploadFile(avatarFile)
+        if (avatarUrl) {
+          data.avatar = {
+            src: avatarUrl,
+            width: avatar.width,
+            height: avatar.height,
           }
         }
       } catch (error) {
@@ -224,21 +232,12 @@ export const PetEditor = ({
           console.error('Photo upload error:', (error as Error).message)
         }
       }
-
-      // Set the photos after all have been uploaded
-      setValue('photos', uploadedPhotos)
     }
     const formattedData: PetData = {
       ...data,
       colors: selectedColors,
-      avatar: {
-        src: avatarUrl
-          ? avatarUrl
-          : 'https://s3.timeweb.cloud/31c3d159-kotolog/10ba607d-eb99-424e-8172-4ef032642e32',
-        width: avatar?.width || 300,
-        height: avatar?.height || 300,
-      },
     }
+    console.log(formattedData)
     if (!pet?.id) {
       const createdPet = await createPet(formattedData)
       console.log(createdPet)
