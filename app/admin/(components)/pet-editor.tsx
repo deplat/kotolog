@@ -23,6 +23,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { PhotosSelector } from './photos-selector'
 import { AvatarSelector } from './avatar-selector'
+import { error } from 'node:console'
 
 const uploadFile = async (file: File) => {
   try {
@@ -242,6 +243,7 @@ export const PetEditor = ({
             <IoCheckmark className="hidden size-5 group-data-[checked]:block" />
           </Checkbox>
           <Label className="dark:text-stone-300">{label}</Label>
+          {errors[key as keyof PetData] && <p>{errors[key as keyof PetData].message}</p>}
         </Field>
       )}
     />
