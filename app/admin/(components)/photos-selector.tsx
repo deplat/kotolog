@@ -1,24 +1,24 @@
 import { Control, Controller } from 'react-hook-form'
 import { Field, Input, Label } from '@headlessui/react'
-import { PetData } from '@/types'
+import { ImageWithDimensions, PetData } from '@/types'
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import NextImage from 'next/image'
 
 export const PhotosSelector = ({
   control,
   setPhotosFiles,
+  setPhotos,
 }: {
   control: Control<PetData>
   setPhotosFiles: Dispatch<SetStateAction<File[]>>
+  setPhotos: Dispatch<SetStateAction<ImageWithDimensions[]>>
 }) => {
   const [errors, setErrors] = useState<string[]>([])
-  const [imagePreviews, setImagePreviews] = useState<string[]>([])
+  const [photosPreviews, setPhotosPreviews] = useState<string[]>([])
 
-  const handleImagesChange = (
-    e: ChangeEvent<HTMLInputElement>,
-    onChange: (images: { src: string; width: number; height: number }[]) => void
-  ) => {
+  const handleImagesChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files ? Array.from(e.target.files) : []
+    const photos: ImageWithDimensions[] = []
     const validFiles: File[] = []
     const newPreviews: string[] = []
     const errorMessages: string[] = []
@@ -46,16 +46,16 @@ export const PhotosSelector = ({
         img.onload = () => {
           const width = img.width
           const height = img.height
-          onChange([...validFiles.map((f) => ({ src: imageSrc, width, height }))])
+          photos.push({ src: imageSrc, width, height })
         }
-        img.src = imageSrc
       }
       fileReader.readAsDataURL(file)
     })
 
     // Set state for previews and errors
-    setImagePreviews(newPreviews)
+    setPhotosPreviews(newPreviews)
     setErrors(errorMessages)
+    setPhotos(photos)
     setPhotosFiles(validFiles)
   }
 
@@ -71,9 +71,9 @@ export const PhotosSelector = ({
               id="avatars"
               type="file"
               accept="image/jpeg, image/jpg"
-              multiple // Allow multiple files
+              multiple
               ref={field.ref}
-              onChange={(e) => handleImagesChange(e, field.onChange)}
+              onChange={(e) => handleImagesChange(e)}
             />
             {errors.length > 0 && (
               <div className="text-red-600">
@@ -84,8 +84,14 @@ export const PhotosSelector = ({
             )}
           </Field>
           <div className="mt-4 grid grid-cols-3 gap-4">
-            {imagePreviews.map((src, index) => (
-              <NextImage key={index} src={src} width={100} height={100} alt={`Preview ${index + 1}`} />
+            {photosPreviews.map((src, index) => (
+              <NextImage
+                key={index}
+                src={src}
+                width={300}
+                height={300}
+                alt={`Preview ${index + 1}`}
+              />
             ))}
           </div>
         </div>

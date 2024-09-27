@@ -135,6 +135,7 @@ export const PetEditor = ({
   const [avatarFile, setAvatarFile] = useState<File | null>(null)
   const [avatar, setAvatar] = useState<ImageWithDimensions | null>(null)
   const [photosFiles, setPhotosFiles] = useState<File[]>([])
+  const [photos, setPhotos] = useState<ImageWithDimensions[]>([])
   const [selectedColors, setSelectedColors] = useState<number[]>([])
 
   const watchSlug = watch('slug')
@@ -439,7 +440,7 @@ export const PetEditor = ({
         </Field>
         <ColorsField colors={colors} control={control} />
         <AvatarSelector control={control} setAvatar={setAvatar} setAvatarFile={setAvatarFile} />
-        <PhotosSelector control={control} setPhotosFiles={setPhotosFiles} />
+        <PhotosSelector control={control} setPhotos={setPhotos} setPhotosFiles={setPhotosFiles} />
       </Fieldset>
       <Button
         type="submit"

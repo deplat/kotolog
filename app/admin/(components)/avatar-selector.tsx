@@ -45,7 +45,6 @@ export const AvatarSelector = ({
           setAvatar({ src: imageSrc, width, height })
           setAvatarFile(file)
         }
-        img.src = imageSrc
       }
       fileReader.readAsDataURL(file)
     }
