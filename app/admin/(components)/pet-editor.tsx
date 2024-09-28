@@ -243,7 +243,7 @@ export const PetEditor = ({
             <IoCheckmark className="hidden size-5 group-data-[checked]:block" />
           </Checkbox>
           <Label className="dark:text-stone-300">{label}</Label>
-          {errors[key as keyof PetData] && <p>{errors[key as keyof PetData].message}</p>}
+          {errors[key as keyof PetData] && <p>{errors[key as keyof PetData]?.message}</p>}
         </Field>
       )}
     />
