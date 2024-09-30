@@ -1,12 +1,12 @@
 import prisma from '@/lib/prisma'
 import NotFound from 'next/dist/client/components/not-found-error'
 import Image from 'next/image'
+import { IoCheckmark } from 'react-icons/io5'
 import { getAge } from '@/lib/helpers'
 import ContactButton from '@/app/(components)/contact-button'
+import clsx from 'clsx'
 import { PhotosCarousel } from './(components)/embla-carousel'
 import '@/app/globals.css'
-import clsx from 'clsx'
-import { IoCheckmark } from 'react-icons/io5'
 
 async function getPetWithProfile(slug: string) {
   return prisma.pet.findUnique({
@@ -51,7 +51,7 @@ export default async function CatPage({ params }: { params: { slug: string } }) 
   return (
     <div className="flex w-full flex-col justify-center px-4 py-[15vh] sm:px-6">
       <div className="mb-8 text-center text-2xl font-medium">Знакомьтесь — {cat.name}!</div>
-      <div className="mx-auto mb-8 h-fit w-fit rounded-lg shadow-xl">
+      <div className="mx-auto mb-8 size-fit rounded-lg shadow-xl">
         <div className="aspect-h-1 aspect-w-1 relative w-72 overflow-hidden rounded-lg">
           <Image
             src={

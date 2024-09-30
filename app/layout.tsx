@@ -44,16 +44,16 @@ export default function RootLayout({
     <html lang={siteMetadata.lang} className={source_serif.className} suppressHydrationWarning>
       <body
         className={clsx(
-          'flex min-h-screen flex-col text-stone-900 scroll-smooth bg-gray-100 ',
+          'flex min-h-screen flex-col scroll-smooth bg-gray-100 text-stone-900',
           'from-gray-800 to-black dark:bg-gray-800 dark:bg-gradient-to-br dark:text-stone-200'
         )}
       >
         <ThemeProvider attribute="class" defaultTheme={siteMetadata.theme} enableSystem>
-          <div className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6">
+          <div className="mx-auto w-full max-w-7xl p-4 sm:px-6">
             <Header />
           </div>
           <main className="flex flex-1">{children}</main>
-          <div className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6">
+          <div className="mx-auto w-full max-w-7xl p-4 sm:px-6">
             <Footer />
           </div>
         </ThemeProvider>

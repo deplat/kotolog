@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && prisma migrate deploy && next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "@auth/core": "^0.34.2",
@@ -39,9 +40,6 @@
     "yet-another-react-lightbox": "^3.21.6"
   },
   "devDependencies": {
-    "@eslint/compat": "^1.1.1",
-    "@eslint/eslintrc": "^3.1.0",
-    "@eslint/js": "^9.11.1",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.9",
     "@types/node": "^20.16.10",
@@ -53,17 +51,14 @@
     "@typescript-eslint/parser": "^8.7.0",
     "eslint": "^9.11.1",
     "eslint-config-next": "^14.2.13",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-import": "^2.30.0",
-    "eslint-plugin-jsx-a11y": "^6.10.0",
+    "eslint-define-config": "^2.1.0",
     "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-tailwindcss": "^3.17.4",
-    "eslint-plugin-unused-imports": "^4.1.4",
     "globals": "^15.9.0",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.8",
     "prisma": "^5.20.0",
+    "t": "^0.5.1",
     "typescript": "^5.6.2",
     "vercel": "^35.2.4"
   },
