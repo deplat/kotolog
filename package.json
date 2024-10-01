@@ -40,6 +40,7 @@
     "yet-another-react-lightbox": "^3.21.6"
   },
   "devDependencies": {
+    "@next/eslint-plugin-next": "^14.2.13",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.9",
     "@types/node": "^20.16.10",
@@ -52,7 +53,11 @@
     "eslint": "^9.11.1",
     "eslint-config-next": "^14.2.13",
     "eslint-define-config": "^2.1.0",
+    "eslint-plugin-import": "^2.30.0",
+    "eslint-plugin-jsx-a11y": "^6.10.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.37.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-tailwindcss": "^3.17.4",
     "globals": "^15.9.0",
     "prettier": "^3.3.3",

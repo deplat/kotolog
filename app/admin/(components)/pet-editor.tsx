@@ -15,7 +15,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 import { ColorsField } from '@/app/admin/(components)/colors-field'
 import { createPet, getPetBySlug, Pet, updatePet } from '../(data-access)/pet'
-import { ImageWithDimensions, PetData } from '@/types'
+import { Color, ImageWithDimensions, PetData } from '@/types'
 import { Colors } from '../(data-access)/color'
 import { IoClose, IoListCircle, IoCheckmark } from 'react-icons/io5'
 import clsx from 'clsx'
@@ -23,7 +23,6 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { PhotosSelector } from './photos-selector'
 import { AvatarSelector } from './avatar-selector'
-import { error } from 'node:console'
 
 const uploadFile = async (file: File) => {
   try {
@@ -53,7 +52,7 @@ const uploadFile = async (file: File) => {
     return `${uploadResponse.url}${fields.key}`
   } catch (error) {
     console.error(error)
-    return null
+    throw error
   }
 }
 
@@ -102,7 +101,7 @@ export const PetEditor = ({
           healthNotes: pet.profile?.healthNotes,
           specialties: pet.profile?.specialties,
           biography: pet.profile?.biography,
-          colors: pet.colors?.map((color) => color.id),
+          colors: pet.colors?.map((color: Color) => color.id),
           avatar: pet.avatar,
           photos: pet.photos,
         }
