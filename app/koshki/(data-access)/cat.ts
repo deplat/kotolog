@@ -1,6 +1,6 @@
 import prisma from '@/lib/prisma'
 import { revalidateTag, unstable_cache } from 'next/cache'
-import { getAge } from '@/lib/helpers'
+import { getAge } from '@/lib/getAge'
 import { Prisma } from '@prisma/client'
 
 export type Cats = Prisma.PromiseReturnType<typeof getCats>
