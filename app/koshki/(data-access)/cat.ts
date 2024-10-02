@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma'
-import { revalidateTag, unstable_cache } from 'next/cache'
+import { unstable_cache } from 'next/cache'
 import { getAge } from '@/lib/getAge'
 import { Prisma } from '@prisma/client'
 
