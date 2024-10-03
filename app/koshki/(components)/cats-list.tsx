@@ -18,14 +18,7 @@ export const CatsList = ({ cats }: CatsListProps) => {
           )}
         >
           <div className="aspect-h-1 aspect-w-1 relative w-full overflow-hidden rounded-t-lg sm:shadow-md">
-            <Image
-              src={
-                cat.avatar?.src ||
-                'https://7srwfaunr1krwltq.public.blob.vercel-storage.com/static/paw-main'
-              }
-              alt={cat.name}
-              fill
-            />
+            <Image src={cat.avatar?.src || ''} alt={cat.name} fill />
           </div>
           <div className="my-4 text-center">
             <h3 className="text-xl font-semibold lg:text-2xl">

@@ -55,7 +55,7 @@ export const PhotosCarousel: React.FC<PropType> = (props) => {
         <div className="embla__container">
           {slides.map((photo, index) => (
             <div
-              className="embla__slide shrink-0 grow-0 basis-1/2 cursor-pointer pb-7 pl-2.5 sm:basis-1/3 sm:pl-4 md:basis-1/4"
+              className="embla__slide flex shrink-0 grow-0 basis-1/2 cursor-pointer items-center pb-7 pl-2.5 sm:basis-1/3 sm:pl-4 md:basis-1/4"
               key={index}
             >
               <Image

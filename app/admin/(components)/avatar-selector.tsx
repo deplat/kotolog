@@ -15,39 +15,64 @@ export const AvatarSelector = ({
 }) => {
   const [error, setError] = useState<string | null>(null)
   const [imagePreviewSrc, setImagePreviewSrc] = useState<string | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null
 
     setError(null)
+    setLoading(true)
 
     if (file) {
       if (!['image/jpeg', 'image/jpg'].includes(file.type)) {
         setError('Please upload a valid JPG or JPEG image.')
+        setLoading(false)
         return
       }
 
       const MAX_FILE_SIZE = 16 * 1024 * 1024 // 16MB
       if (file.size > MAX_FILE_SIZE) {
-        setError('File size exceeds the 5MB limit.')
+        setError('File size exceeds the 16MB limit.')
+        setLoading(false)
         return
       }
 
-      const fileReader = new FileReader()
-      fileReader.onload = (event) => {
-        const imageSrc = event.target?.result as string
+      try {
+        const imageSrc = await readFileAsDataURL(file)
         setImagePreviewSrc(imageSrc)
 
-        const img = new Image()
-        img.onload = () => {
-          const width = img.width
-          const height = img.height
-          setAvatar({ src: imageSrc, width, height })
-          setAvatarFile(file)
-        }
+        const dimensions = await getImageDimensions(imageSrc)
+        setAvatar({ src: imageSrc, width: dimensions.width, height: dimensions.height })
+        setAvatarFile(file)
+      } catch (error) {
+        setError('Error processing the image.')
+      } finally {
+        setLoading(false)
       }
-      fileReader.readAsDataURL(file)
+    } else {
+      setLoading(false)
     }
+  }
+
+  const readFileAsDataURL = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader()
+      fileReader.onload = (event) => {
+        resolve(event.target?.result as string)
+      }
+      fileReader.onerror = () => reject('Error reading file.')
+      fileReader.readAsDataURL(file)
+    })
+  }
+
+  const getImageDimensions = (src: string): Promise<{ width: number; height: number }> => {
+    return new Promise((resolve) => {
+      const img = new Image()
+      img.onload = () => {
+        resolve({ width: img.width, height: img.height })
+      }
+      img.src = src
+    })
   }
 
   return (
@@ -63,11 +88,12 @@ export const AvatarSelector = ({
               type="file"
               accept="image/jpeg, image/jpg"
               ref={field.ref}
-              onChange={(e) => handleImageChange(e)}
+              onChange={handleImageChange}
             />
             {error && <p className="text-red-600">{error}</p>}
+            {loading && <p>Processing image...</p>}
           </Field>
-          {imagePreviewSrc && (
+          {imagePreviewSrc && !loading && (
             <div className="mt-4">
               <NextImage src={imagePreviewSrc} width={300} height={300} alt="Avatar Preview" />
             </div>

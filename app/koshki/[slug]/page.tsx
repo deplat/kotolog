@@ -53,14 +53,7 @@ export default async function CatPage({ params }: { params: { slug: string } }) 
       <div className="mb-8 text-center text-2xl font-medium">Знакомьтесь — {cat.name}!</div>
       <div className="mx-auto mb-8 size-fit rounded-lg shadow-xl">
         <div className="aspect-h-1 aspect-w-1 relative w-72 overflow-hidden rounded-lg">
-          <Image
-            src={
-              cat.avatar?.src ||
-              'https://7srwfaunr1krwltq.public.blob.vercel-storage.com/static/paw-main'
-            }
-            alt={cat.name}
-            fill
-          />
+          <Image src={cat.avatar?.src || ''} alt={cat.name} fill />
         </div>
       </div>
       {catAge && catAge !== '\u00A0' && (

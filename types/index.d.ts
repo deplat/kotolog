@@ -1,6 +1,12 @@
-
 export interface ImageWithDimensions {
   id?: number
+  src: string
+  width: number
+  height: number
+}
+
+export interface ImageFileWithDimensions {
+  file: File
   src: string
   width: number
   height: number

@@ -15,7 +15,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 import { ColorsField } from '@/app/admin/(components)/colors-field'
 import { createPet, getPetBySlug, Pet, updatePet } from '../(data-access)/pet'
-import { Color, ImageWithDimensions, PetData } from '@/types'
+import { Color, ImageWithDimensions, ImageFileWithDimensions, PetData } from '@/types'
 import { Colors } from '../(data-access)/color'
 import { IoClose, IoListCircle, IoCheckmark } from 'react-icons/io5'
 import clsx from 'clsx'
@@ -134,8 +134,9 @@ export const PetEditor = ({
 
   const [avatarFile, setAvatarFile] = useState<File | null>(null)
   const [avatar, setAvatar] = useState<ImageWithDimensions | null>(null)
-  const [photosFiles, setPhotosFiles] = useState<File[]>([])
-  const [photos, setPhotos] = useState<ImageWithDimensions[]>([])
+  const [imageFilesWithDimensions, setImageFilesWithDimensions] = useState<
+    ImageFileWithDimensions[]
+  >([])
   const [selectedColors, setSelectedColors] = useState<number[]>([])
 
   const watchSlug = watch('slug')
@@ -196,9 +197,9 @@ export const PetEditor = ({
       }
     }
 
-    for (const file of photosFiles) {
+    for (const item of imageFilesWithDimensions) {
       try {
-        const photoUrl = await uploadFile(file)
+        const photoUrl = await uploadFile(item.file)
         if (photoUrl) {
           uploadedPhotos.push({
             src: photoUrl,
@@ -210,6 +211,7 @@ export const PetEditor = ({
         console.error('Photo upload error:', (error as Error).message)
       }
     }
+    data.photos = uploadedPhotos
     const formattedData: PetData = {
       ...data,
       colors: selectedColors,
@@ -252,7 +254,7 @@ export const PetEditor = ({
     <form
       onSubmit={handleSubmit(onSubmit)}
       className={clsx(
-        'flex h-full w-full flex-wrap items-center justify-center overflow-y-auto overflow-x-hidden bg-gray-200 px-4',
+        'mb-10 flex h-full w-full flex-wrap items-center justify-center overflow-y-auto overflow-x-hidden bg-gray-200 px-4',
         'from-gray-800 to-black dark:bg-gray-800 dark:bg-gradient-to-br dark:text-stone-200'
       )}
     >
@@ -441,7 +443,10 @@ export const PetEditor = ({
         </Field>
         <ColorsField colors={colors} control={control} />
         <AvatarSelector control={control} setAvatar={setAvatar} setAvatarFile={setAvatarFile} />
-        <PhotosSelector control={control} setPhotos={setPhotos} setPhotosFiles={setPhotosFiles} />
+        <PhotosSelector
+          control={control}
+          setImageFilesWithDimensions={setImageFilesWithDimensions}
+        />
       </Fieldset>
       <Button
         type="submit"

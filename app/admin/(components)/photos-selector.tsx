@@ -1,62 +1,62 @@
 import { Control, Controller } from 'react-hook-form'
 import { Field, Input, Label } from '@headlessui/react'
-import { ImageWithDimensions, PetData } from '@/types'
+import { ImageFileWithDimensions, PetData } from '@/types'
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import NextImage from 'next/image'
 
 export const PhotosSelector = ({
   control,
-  setPhotosFiles,
-  setPhotos,
+  setImageFilesWithDimensions,
 }: {
   control: Control<PetData>
-  setPhotosFiles: Dispatch<SetStateAction<File[]>>
-  setPhotos: Dispatch<SetStateAction<ImageWithDimensions[]>>
+  setImageFilesWithDimensions: Dispatch<SetStateAction<ImageFileWithDimensions[]>>
 }) => {
   const [errors, setErrors] = useState<string[]>([])
-  const [photosPreviews, setPhotosPreviews] = useState<string[]>([])
+  const [photosPreviews, setPhotosPreviews] = useState<ImageFileWithDimensions[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
 
   const handleImagesChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setLoading(true)
     const files = e.target.files ? Array.from(e.target.files) : []
-    const photos: ImageWithDimensions[] = []
-    const validFiles: File[] = []
-    const newPreviews: string[] = []
-    const errorMessages: string[] = []
 
-    files.forEach((file) => {
-      if (!['image/jpeg', 'image/jpg'].includes(file.type)) {
-        errorMessages.push(`${file.name}: Please upload a valid JPG or JPEG image.`)
-        return
-      }
-
-      const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
-      if (file.size > MAX_FILE_SIZE) {
-        errorMessages.push(`${file.name}: File size exceeds the 5MB limit.`)
-        return
-      }
-
-      validFiles.push(file)
-
-      const fileReader = new FileReader()
-      fileReader.onload = (event) => {
-        const imageSrc = event.target?.result as string
-        newPreviews.push(imageSrc)
-
-        const img = new Image()
-        img.onload = () => {
-          const width = img.width
-          const height = img.height
-          photos.push({ src: imageSrc, width, height })
+    const imageFilePromises = files.map((file) => {
+      return new Promise<ImageFileWithDimensions | string>((resolve) => {
+        if (!['image/jpeg', 'image/jpg'].includes(file.type)) {
+          resolve(`${file.name}: Please upload a valid JPG or JPEG image.`)
+          return
         }
-      }
-      fileReader.readAsDataURL(file)
+
+        const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+        if (file.size > MAX_FILE_SIZE) {
+          resolve(`${file.name}: File size exceeds the 5MB limit.`)
+          return
+        }
+
+        const fileReader = new FileReader()
+        fileReader.onload = (event) => {
+          const imageSrc = event.target?.result as string
+          const img = new Image()
+          img.onload = () => {
+            resolve({ file, width: img.width, height: img.height, src: imageSrc })
+          }
+          img.onerror = () => resolve('Error loading image')
+          img.src = imageSrc
+        }
+        fileReader.readAsDataURL(file)
+      })
     })
 
-    // Set state for previews and errors
-    setPhotosPreviews(newPreviews)
-    setErrors(errorMessages)
-    setPhotos(photos)
-    setPhotosFiles(validFiles)
+    Promise.all(imageFilePromises).then((results) => {
+      const newErrors = results.filter((result) => typeof result === 'string') as string[]
+      const validImages = results.filter(
+        (result) => typeof result !== 'string'
+      ) as ImageFileWithDimensions[]
+
+      setErrors(newErrors)
+      setPhotosPreviews(validImages as ImageFileWithDimensions[])
+      setImageFilesWithDimensions(validImages as ImageFileWithDimensions[])
+      setLoading(false)
+    })
   }
 
   return (
@@ -73,7 +73,7 @@ export const PhotosSelector = ({
               accept="image/jpeg, image/jpg"
               multiple
               ref={field.ref}
-              onChange={(e) => handleImagesChange(e)}
+              onChange={handleImagesChange}
             />
             {errors.length > 0 && (
               <div className="text-red-600">
@@ -83,17 +83,21 @@ export const PhotosSelector = ({
               </div>
             )}
           </Field>
-          <div className="mt-4 grid grid-cols-3 gap-4">
-            {photosPreviews.map((src, index) => (
-              <NextImage
-                key={index}
-                src={src}
-                width={300}
-                height={300}
-                alt={`Preview ${index + 1}`}
-              />
-            ))}
-          </div>
+          {loading ? (
+            <p>Processing photos...</p>
+          ) : (
+            <div className="mt-4 grid grid-cols-3 gap-4">
+              {photosPreviews.map((imageFile, index) => (
+                <NextImage
+                  key={index}
+                  src={imageFile.src}
+                  width={300}
+                  height={300}
+                  alt={`Preview ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
     />
