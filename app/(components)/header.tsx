@@ -14,9 +14,6 @@ export const Header = () => {
         <Link href="/koshki" className="text-lg hover:text-orange-600">
           Питомцы
         </Link>
-        <Link href="https://blog.kotolog76.ru" className="text-lg hover:text-orange-600">
-          Блог
-        </Link>
         <ThemeSwitch />
       </div>
     </header>

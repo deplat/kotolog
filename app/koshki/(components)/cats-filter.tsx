@@ -85,7 +85,7 @@ export const CatsFilter = ({ uniqueColors, onFilterChange, toggleFilter }: Filte
         <Fieldset className="mb-4 flex flex-col space-y-2">
           <Legend className="font-semibold">Возраст</Legend>
           {renderCheckbox('age', 'kitten', 'Котёнок (до 1 года)')}
-          {renderCheckbox('age', 'cat', 'Кошка')}
+          {renderCheckbox('age', 'cat', 'Взрослый')}
         </Fieldset>
 
         {/* Fur Type Filter */}
