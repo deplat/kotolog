@@ -3,7 +3,7 @@ import { PetData } from '@/types'
 import { Colors } from '../(data-access)/color'
 import { Fieldset, Label, Legend } from '@headlessui/react'
 
-export const ColorsField = ({
+export const ColorsSelector = ({
   control,
   colors,
 }: {

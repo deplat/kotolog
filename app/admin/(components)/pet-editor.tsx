@@ -13,7 +13,7 @@ import {
 } from '@headlessui/react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
-import { ColorsField } from '@/app/admin/(components)/colors-field'
+import { ColorsSelector } from '@/app/admin/(components)/colors-selector'
 import { createPet, getPetBySlug, Pet, updatePet } from '../(data-access)/pet'
 import { Color, ImageWithDimensions, ImageFileWithDimensions, PetData } from '@/types'
 import { Colors } from '../(data-access)/color'
@@ -137,7 +137,6 @@ export const PetEditor = ({
   const [imageFilesWithDimensions, setImageFilesWithDimensions] = useState<
     ImageFileWithDimensions[]
   >([])
-  const [selectedColors, setSelectedColors] = useState<number[]>([])
 
   const watchSlug = watch('slug')
 
@@ -159,14 +158,6 @@ export const PetEditor = ({
       checkSlug(watchSlug, pet?.id)
     }
   }, [clearErrors, setError, watchSlug])
-
-  const toggleColorSelection = (colorId: number) => {
-    setSelectedColors((prevColors) =>
-      prevColors.includes(colorId)
-        ? prevColors.filter((id) => id !== colorId)
-        : [...prevColors, colorId]
-    )
-  }
 
   const onSubmit: SubmitHandler<PetData> = async (data) => {
     console.log(isSubmitting)
@@ -212,17 +203,14 @@ export const PetEditor = ({
       }
     }
     data.photos = uploadedPhotos
-    const formattedData: PetData = {
-      ...data,
-      colors: selectedColors,
-    }
-    console.log(formattedData)
+
+    console.log(data)
     if (!pet?.id) {
-      const createdPet = await createPet(formattedData)
+      const createdPet = await createPet(data)
       console.log(createdPet)
     }
     if (pet) {
-      const updatedPet = await updatePet(pet.id, formattedData)
+      const updatedPet = await updatePet(pet.id, data)
       console.log(updatedPet)
     }
     closeEditor()
@@ -441,7 +429,7 @@ export const PetEditor = ({
             )}
           />
         </Field>
-        <ColorsField colors={colors} control={control} />
+        <ColorsSelector colors={colors} control={control} />
         <AvatarSelector control={control} setAvatar={setAvatar} setAvatarFile={setAvatarFile} />
         <PhotosSelector
           control={control}
