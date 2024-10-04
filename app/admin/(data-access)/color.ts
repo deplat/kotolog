@@ -83,6 +83,6 @@ export const deleteColor = async (id: number) => {
   }
 }
 
-export const CachedColors = unstable_cache(getColors, ['colors'], {
+export const cachedColors = unstable_cache(getColors, ['colors'], {
   tags: ['colors'],
 })
