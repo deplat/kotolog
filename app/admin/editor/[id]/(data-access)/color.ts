@@ -31,10 +31,9 @@ export const createColor = async (name: string) => {
 
 const getColors = async () => {
   try {
-    const colors = await prisma.color.findMany({
+    return await prisma.color.findMany({
       select: colorSelect,
     })
-    return colors
   } catch (error) {
     console.error('Error getting colors:', error)
     throw prismaErrorHandler(error)

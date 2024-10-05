@@ -3,16 +3,14 @@
 import { useState } from 'react'
 import { Button } from '@headlessui/react'
 import { Colors } from '../editor/[id]/(data-access)/color'
-import { deletePet, getPet, Pet, Pets } from '../(data-access)/pet'
+import { Pets } from '../(data-access)/pet'
 import { ColorList } from '@/app/admin/(components)/color-list'
 import { ColorEditor } from '@/app/admin/(components)/color-editor'
 import { PetList } from '@/app/admin/(components)/pet-list'
-import { PetEditor } from '@/app/admin/(components)/pet-editor'
 
 export const Dashboard = ({ colors, pets }: { colors: Colors; pets: Pets }) => {
   const [showPetEditor, setShowPetEditor] = useState(false)
   const [showColorEditor, setShowColorEditor] = useState(false)
-  const [pet, setPet] = useState<Pet>(null)
 
   const togglePetEditor = () => {
     setShowPetEditor((prev) => !prev)
@@ -22,23 +20,17 @@ export const Dashboard = ({ colors, pets }: { colors: Colors; pets: Pets }) => {
     setShowColorEditor((prev) => !prev)
   }
 
-  const closePetEditor = () => {
-    setShowPetEditor(false)
-    setPet(null)
-  }
-
   const closeColorEditor = () => {
     setShowColorEditor(false)
   }
 
   const handleEditPet = async (petId: number) => {
-    const pet = await getPet(petId)
-    setPet(pet)
+    console.log(petId)
     setShowPetEditor(true)
   }
 
   const handleDeletePet = async (petId: number) => {
-    await deletePet(petId)
+    console.log(petId)
   }
 
   return (
@@ -74,9 +66,7 @@ export const Dashboard = ({ colors, pets }: { colors: Colors; pets: Pets }) => {
           {showColorEditor ? '- color' : '+ color'}
         </Button>
         {showPetEditor && (
-          <div className="fixed left-0 top-0 z-50 h-screen w-screen overflow-hidden">
-            <PetEditor colors={colors} pet={pet} closeEditor={closePetEditor} />
-          </div>
+          <div className="fixed left-0 top-0 z-50 h-screen w-screen overflow-hidden"></div>
         )}
 
         {showColorEditor && (
