@@ -1,6 +1,6 @@
 import Image from 'next/image'
-import { IoClose, IoDocument, IoTrashBin } from 'react-icons/io5'
-import { deletePet, Pets } from '../(data-access)/pet'
+import { IoDocument, IoTrashBin } from 'react-icons/io5'
+import { Pets } from '../(data-access)/pet'
 
 export const PetList = ({
   pets,
