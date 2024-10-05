@@ -121,10 +121,11 @@ export const createPet = async (data: PetData) => {
 
 export const getPet = async (id: number) => {
   try {
-    return await prisma.pet.findUnique({
+    const pet = await prisma.pet.findUnique({
       where: { id },
       include: petInclude,
     })
+    return pet
   } catch (error) {
     throw prismaErrorHandler(error)
   }
