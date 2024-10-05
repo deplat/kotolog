@@ -1,4 +1,4 @@
-import { cachedColors } from './(data-access)/color'
+import { cachedColors } from './editor/[id]/(data-access)/color'
 import { Dashboard } from '@/app/admin/(components)/dashboard'
 import { auth } from '@/auth'
 import { SignIn } from '@/app/(components)/auth/signin-button'

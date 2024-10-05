@@ -9,62 +9,25 @@ import {
   Radio,
   RadioGroup,
   Textarea,
-  Checkbox,
 } from '@headlessui/react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
-import { ColorsSelector } from '@/app/admin/(components)/colors-selector'
-import { createPet, getPetBySlug, Pet, updatePet } from '../(data-access)/pet'
+import { ColorsSelector } from '../(components)/'
+import { Pet, createPet, updatePet } from '../(data-access)'
 import { Color, ImageWithDimensions, ImageFileWithDimensions, PetData } from '@/types'
-import { Colors } from '../(data-access)/color'
-import { IoClose, IoListCircle, IoCheckmark } from 'react-icons/io5'
+import { Colors } from '../(data-access)'
+import { IoClose, IoListCircle } from 'react-icons/io5'
 import clsx from 'clsx'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { PhotosSelector } from './photos-selector'
-import { AvatarSelector } from './avatar-selector'
+import { PhotosSelector } from '../(components)'
+import { AvatarSelector } from '../(components)'
+import { uploadFileAndGetURL } from '@/lib/file-uploading'
+import { ControlledCheckbox } from '../(components)'
+import { router } from 'next/client'
+import { getPetBySlug } from '@/app/admin/editor/[id]/(data-access)/pet'
 
-const uploadFile = async (file: File) => {
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/upload`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ filename: file.name, contentType: file.type }),
-    })
-    if (!response.ok) {
-      throw new Error('Failed to get presigned url')
-    }
-    const { url, fields } = await response.json()
-    const formData = new FormData()
-    Object.entries(fields).forEach(([key, value]) => {
-      formData.append(key, value as string)
-    })
-    formData.append('file', file)
-    const uploadResponse = await fetch(url, {
-      method: 'POST',
-      body: formData,
-    })
-    if (!uploadResponse.ok) {
-      throw new Error('Failed to upload file')
-    }
-    return `${uploadResponse.url}${fields.key}`
-  } catch (error) {
-    console.error(error)
-    throw error
-  }
-}
-
-export const PetEditor = ({
-  pet,
-  colors,
-  closeEditor,
-}: {
-  pet: Pet | null
-  colors: Colors
-  closeEditor: () => void
-}) => {
+export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) => {
   const {
     register,
     handleSubmit,
@@ -138,6 +101,8 @@ export const PetEditor = ({
     ImageFileWithDimensions[]
   >([])
 
+  const redirectToEditorMain = () => router.push(`/admin/editor`)
+
   const watchSlug = watch('slug')
 
   useEffect(() => {
@@ -175,7 +140,7 @@ export const PetEditor = ({
 
     if (avatar && avatarFile) {
       try {
-        const avatarUrl = await uploadFile(avatarFile)
+        const avatarUrl = await uploadFileAndGetURL(avatarFile)
         if (avatarUrl) {
           data.avatar = {
             src: avatarUrl,
@@ -190,7 +155,7 @@ export const PetEditor = ({
 
     for (const item of imageFilesWithDimensions) {
       try {
-        const photoUrl = await uploadFile(item.file)
+        const photoUrl = await uploadFileAndGetURL(item.file)
         if (photoUrl) {
           uploadedPhotos.push({
             src: photoUrl,
@@ -209,34 +174,12 @@ export const PetEditor = ({
       const createdPet = await createPet(data)
       console.log(createdPet)
     }
+
     if (pet) {
       const updatedPet = await updatePet(pet.id, data)
       console.log(updatedPet)
     }
-    closeEditor()
   }
-  const renderCheckbox = (key: any, label: string) => (
-    <Controller
-      control={control}
-      name={key}
-      render={({ field }) => (
-        <Field className="flex w-full items-center space-x-4">
-          <Checkbox
-            checked={field.value}
-            onChange={field.onChange}
-            className={clsx(
-              'group size-6 rounded-md bg-gray-800/15 p-0.5 ring-1 ring-inset ring-white/15',
-              'date-[checked]:bg-orange-500 data-[checked]:text-white dark:data-[checked]:bg-orange-600'
-            )}
-          >
-            <IoCheckmark className="hidden size-5 group-data-[checked]:block" />
-          </Checkbox>
-          <Label className="dark:text-stone-300">{label}</Label>
-          {errors[key as keyof PetData] && <p>{errors[key as keyof PetData]?.message}</p>}
-        </Field>
-      )}
-    />
-  )
 
   return (
     <form
@@ -390,26 +333,81 @@ export const PetEditor = ({
           />
         </Fieldset>
         <div className="flex flex-col space-y-2">
-          {renderCheckbox('isAdopted', 'adopted')}
-          {renderCheckbox('isFeatured', 'featured')}
-          {renderCheckbox('isAvailable', 'available')}
-          {renderCheckbox('isUnclaimed', 'unclaimed')}
-          {renderCheckbox('isVisible', 'visible')}
+          <ControlledCheckbox control={control} errors={errors} key="isAdopted" label="adopted" />
+          <ControlledCheckbox control={control} errors={errors} key="isFeatured" label="featured" />
+          <ControlledCheckbox
+            control={control}
+            errors={errors}
+            key="isAvailable"
+            label="available"
+          />
+          <ControlledCheckbox
+            control={control}
+            errors={errors}
+            key="isUnclaimed"
+            label="unclaimed"
+          />
+          <ControlledCheckbox control={control} errors={errors} key="is visible" label="visible" />
         </div>
       </div>
       <div className="min-h-1/2 flex w-full items-center justify-center">
         <Fieldset className="flex w-full max-w-lg flex-col items-center justify-center space-y-2">
           <Legend className="mb-4 me-auto text-xl">health & behavior:</Legend>
           <div className="ms-4 space-y-2">
-            {renderCheckbox('vaccinated', 'vaccinated')}
-            {renderCheckbox('sterilized', 'sterilized')}
-            {renderCheckbox('treatedForParasites', 'treated for parasites')}
-            {renderCheckbox('litterBoxTrained', 'litter box trained')}
-            {renderCheckbox('usesScratchingPost', 'uses scratching post')}
-            {renderCheckbox('socialized', 'socialized')}
-            {renderCheckbox('friendlyWithCats', 'friendly with cats')}
-            {renderCheckbox('friendlyWithDogs', 'friendly with dogs')}
-            {renderCheckbox('friendlyWithAnimals', 'friendly with animals')}
+            <ControlledCheckbox
+              control={control}
+              errors={errors}
+              key="vaccinated"
+              label="vaccinated"
+            />
+            <ControlledCheckbox
+              control={control}
+              errors={errors}
+              key="sterilized"
+              label="sterilized"
+            />
+            <ControlledCheckbox
+              control={control}
+              errors={errors}
+              key="treatedForParasites"
+              label="treated for parasites"
+            />
+            <ControlledCheckbox
+              control={control}
+              errors={errors}
+              key="litterBoxTrained"
+              label="litter box trained"
+            />
+            <ControlledCheckbox
+              control={control}
+              errors={errors}
+              key="usesScratchingPost"
+              label="uses scratching post"
+            />
+            <ControlledCheckbox
+              control={control}
+              errors={errors}
+              key="sociolized"
+              label="sociolized"
+            />
+            <ControlledCheckbox
+              control={control}
+              errors={errors}
+              key="friendlyWithCats"
+              label="friendly with cats"
+            />
+            <ControlledCheckbox
+              control={control}
+              errors={errors}
+              key="friendlyWithDogs"
+              label="friendly with dogs"
+            />
+            <ControlledCheckbox
+              control={control}
+              errors={errors}
+              key="friendlyWithAnimals"
+              label="friendly with other animals"
+            />
           </div>
         </Fieldset>
       </div>
@@ -442,7 +440,7 @@ export const PetEditor = ({
       >
         Save!
       </Button>
-      <Button onClick={closeEditor} className="fixed bottom-5 right-5 z-90">
+      <Button onClick={redirectToEditorMain} className="fixed bottom-5 right-5 z-90">
         <IoClose size={24} />
       </Button>
     </form>

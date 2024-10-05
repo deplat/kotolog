@@ -1,9 +1,6 @@
 import { Color } from '@/types'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { createColor, updateColor } from '../(data-access)/color'
-
-
-
+import { createColor, updateColor } from '../editor/[id]/(data-access)/color'
 
 export const ColorEditor = ({ closeEditor }: { closeEditor: () => void }) => {
   const {
@@ -18,7 +15,7 @@ export const ColorEditor = ({ closeEditor }: { closeEditor: () => void }) => {
         console.log('Color updated:', updatedColor)
       } else {
         const createdColor = await createColor(data.name)
-      console.log('Color created:', createdColor)
+        console.log('Color created:', createdColor)
       }
       closeEditor()
     } catch (error) {
