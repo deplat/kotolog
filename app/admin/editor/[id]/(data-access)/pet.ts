@@ -1,7 +1,7 @@
 'use server'
 
 import prisma from '@/lib/prisma'
-import { prismaErrorHandler } from '@/lib/errorHandlers'
+import { prismaErrorHandler } from '@/lib/error-handlers'
 import { Prisma } from '@prisma/client'
 import { revalidateTag } from 'next/cache'
 import { PetData } from '@/types'

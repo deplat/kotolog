@@ -8,20 +8,20 @@ import { PetData } from '@/types'
 export const ControlledCheckbox = ({
   control,
   errors,
-  key,
+  fieldKey,
   label,
 }: {
   control: Control<PetData>
   errors: Partial<FieldErrorsImpl<DeepRequired<PetData>>> & {
     root?: Record<string, GlobalError> & GlobalError
   }
-  key: any
+  fieldKey: any
   label: string
 }) => {
   return (
     <Controller
       control={control}
-      name={key}
+      name={fieldKey}
       render={({ field }) => (
         <Field className="flex w-full items-center space-x-4">
           <Checkbox
@@ -35,7 +35,7 @@ export const ControlledCheckbox = ({
             <IoCheckmark className="hidden size-5 group-data-[checked]:block" />
           </Checkbox>
           <Label className="dark:text-stone-300">{label}</Label>
-          {errors[key as keyof PetData] && <p>{errors[key as keyof PetData]?.message}</p>}
+          {errors[fieldKey as keyof PetData] && <p>{errors[fieldKey as keyof PetData]?.message}</p>}
         </Field>
       )}
     />

@@ -18,7 +18,6 @@ import { ColorsSelector } from '../(components)/'
 import { Pet, createPet, updatePet } from '../(data-access)'
 import { Color, ImageWithDimensions, ImageFileWithDimensions, PetData } from '@/types'
 import { Colors } from '../(data-access)'
-import { IoClose, IoListCircle } from 'react-icons/io5'
 import clsx from 'clsx'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -26,8 +25,8 @@ import { PhotosSelector } from '../(components)'
 import { AvatarSelector } from '../(components)'
 import { uploadFileAndGetURL } from '@/lib/file-uploading'
 import { ControlledCheckbox } from '../(components)'
-import { router } from 'next/client'
 import { getPetBySlug } from '@/app/admin/editor/[id]/(data-access)/pet'
+import { useRouter } from 'next/navigation'
 
 export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) => {
   const {
@@ -102,6 +101,8 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
   const [imageFilesWithDimensions, setImageFilesWithDimensions] = useState<
     ImageFileWithDimensions[]
   >([])
+
+  const router = useRouter()
 
   const redirectToEditorMain = () => router.push(`/admin/editor`)
 
@@ -181,242 +182,196 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
       const updatedPet = await updatePet(pet.id, data)
       console.log(updatedPet)
     }
+    router.push('/admin/editor')
   }
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       className={clsx(
-        'mb-10 flex h-full w-full flex-wrap items-center justify-center overflow-y-auto overflow-x-hidden bg-gray-200 px-4',
-        'from-gray-800 to-black dark:bg-gray-800 dark:bg-gradient-to-br dark:text-stone-200'
+        'flex w-full max-w-xl flex-col items-center justify-center overflow-y-auto overflow-x-hidden px-4'
       )}
     >
-      <div className="flex h-full w-full flex-col items-center justify-center">
-        <Fieldset className="mb-20 flex w-full flex-col items-center justify-center gap-y-2">
-          <Field className="flex w-full items-center justify-center">
-            <Label className="me-6 w-full text-end">Name</Label>
-            <Input
-              type="text"
-              {...register('name', { required: 'Name is required' })}
-              className={clsx(
-                'ms-auto w-3/4 shrink-0 border-0 bg-transparent md:w-1/2',
-                'data-[focus]:ring-2 data-[focus]:ring-orange-600'
-              )}
-            />
-            {errors.name && (
-              <div
-                className={clsx(
-                  'absolute rounded-xl bg-black px-8 py-4 text-red-500',
-                  'bottom-5 left-5'
-                )}
-              >
-                {errors.name.message}
-              </div>
+      <Fieldset className="mb-20 flex w-full flex-col items-center justify-center gap-y-2">
+        <Field className="flex w-full items-center justify-center">
+          <Label className="me-6 w-full text-end">Name</Label>
+          <Input
+            type="text"
+            {...register('name', { required: 'Name is required' })}
+            className={clsx(
+              'ms-auto w-3/4 shrink-0 border-0 bg-transparent md:w-1/2',
+              'data-[focus]:ring-2 data-[focus]:ring-orange-600'
             )}
-          </Field>
-          <Field className="flex w-full items-center justify-center">
-            <Label className="me-6 w-full text-end">Slug</Label>
-            <Input
-              type="text"
-              {...register('slug', { required: 'Slug is required' })}
+          />
+          {errors.name && (
+            <div
               className={clsx(
-                'ms-auto w-3/4 shrink-0 border-0 bg-transparent md:w-1/2',
-                'data-[focus]:ring-2 data-[focus]:ring-orange-600'
+                'absolute rounded-xl bg-black px-8 py-4 text-red-500',
+                'bottom-5 left-5'
               )}
-            />
-            {errors.slug && (
-              <span className={clsx('absolute text-red-500', 'bottom-0 left-0')}>
-                {errors.slug.message}
-              </span>
+            >
+              {errors.name.message}
+            </div>
+          )}
+        </Field>
+        <Field className="flex w-full items-center justify-center">
+          <Label className="me-6 w-full text-end">Slug</Label>
+          <Input
+            type="text"
+            {...register('slug', { required: 'Slug is required' })}
+            className={clsx(
+              'ms-auto w-3/4 shrink-0 border-0 bg-transparent md:w-1/2',
+              'data-[focus]:ring-2 data-[focus]:ring-orange-600'
             )}
-          </Field>
-          <Field className="flex w-full items-center justify-center">
-            <Label htmlFor="birthDate" className="me-6 w-full text-end">
-              Birth Date
-            </Label>
-            <Input as="div" className="flex w-3/4 shrink-0 md:w-1/2">
-              {({ focus, hover }) => (
-                <Controller
-                  control={control}
-                  name="birthDate"
-                  render={({ field }) => (
-                    <DatePicker
-                      id="birthDate"
-                      selected={field.value ? new Date(field.value) : null}
-                      onChange={(date) => field.onChange(date)}
-                      dateFormat="yyyy-MM-dd"
-                      placeholderText="yyyy-MM-dd"
-                      className={clsx(
-                        'flex w-full shrink-0 border-0 bg-transparent focus:ring-2 focus:ring-orange-600'
-                      )}
-                    />
+          />
+          {errors.slug && (
+            <span className={clsx('absolute text-red-500', 'bottom-0 left-0')}>
+              {errors.slug.message}
+            </span>
+          )}
+        </Field>
+        <Field className="flex w-full items-center justify-center">
+          <Label htmlFor="birthDate" className="me-6 w-full text-end">
+            Birth Date
+          </Label>
+          <Input as="div" className="flex w-3/4 shrink-0 md:w-1/2">
+            <Controller
+              control={control}
+              name="birthDate"
+              render={({ field }) => (
+                <DatePicker
+                  id="birthDate"
+                  selected={field.value ? new Date(field.value) : null}
+                  onChange={(date) => field.onChange(date)}
+                  dateFormat="yyyy-MM-dd"
+                  placeholderText="yyyy-MM-dd"
+                  className={clsx(
+                    'flex w-full shrink-0 border-0 bg-transparent focus:ring-2 focus:ring-orange-600'
                   )}
                 />
               )}
-            </Input>
-          </Field>
-        </Fieldset>
-        <Fieldset className="flex w-full max-w-lg items-center">
-          <Legend className="flex w-1/4 justify-self-start text-nowrap text-xl">pet type:</Legend>
-          <Controller
-            control={control}
-            name="petType"
-            render={({ field }) => (
-              <RadioGroup {...field} className="flex w-1/2 justify-center">
-                <Field className="flex w-1/2 justify-end">
+            />
+          </Input>
+        </Field>
+      </Fieldset>
+      <Fieldset className="flex w-full max-w-lg items-center">
+        <Legend className="flex w-1/4 justify-self-start text-nowrap text-xl">pet type:</Legend>
+        <Controller
+          control={control}
+          name="petType"
+          render={({ field }) => (
+            <RadioGroup {...field} className="flex w-1/2 justify-center">
+              <Field className="flex w-1/2 justify-end">
+                <Radio
+                  value="CAT"
+                  className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
+                >
+                  CAT
+                </Radio>
+              </Field>
+              <Field className="flex w-1/2 justify-start">
+                <Radio
+                  value="DOG"
+                  className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
+                >
+                  DOG
+                </Radio>
+              </Field>
+            </RadioGroup>
+          )}
+        />
+      </Fieldset>
+      <Fieldset className="flex w-full max-w-lg items-center">
+        <Legend className="w-1/4 text-xl">gender:</Legend>
+        <Controller
+          control={control}
+          name="gender"
+          render={({ field }) => (
+            <RadioGroup {...field} className="flex w-1/2 justify-center">
+              <Field className="flex w-1/2 justify-end">
+                <Radio
+                  value="FEMALE"
+                  className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
+                >
+                  FEMALE
+                </Radio>
+              </Field>
+              <Field className="flex w-1/2 justify-start">
+                <Radio
+                  value="MALE"
+                  className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
+                >
+                  MALE
+                </Radio>
+              </Field>
+            </RadioGroup>
+          )}
+        />
+      </Fieldset>
+      <Fieldset className="mb-20 flex w-full max-w-lg flex-wrap items-center">
+        <Legend className="w-1/4 text-xl">fur type:</Legend>
+        <Controller
+          control={control}
+          name="furType"
+          render={({ field }) => (
+            <RadioGroup
+              {...field}
+              className="scrollbar-hide mx-auto flex w-1/2 min-w-fit max-w-full overflow-x-scroll"
+            >
+              {[null, 'SHORT', 'MEDIUM', 'LONG', 'HAIRLESS'].map((value) => (
+                <Field key={value}>
                   <Radio
-                    value="CAT"
+                    value={value}
                     className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
                   >
-                    CAT
+                    {value ? value : 'NO'}
                   </Radio>
                 </Field>
-                <Field className="flex w-1/2 justify-start">
-                  <Radio
-                    value="DOG"
-                    className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
-                  >
-                    DOG
-                  </Radio>
-                </Field>
-              </RadioGroup>
-            )}
-          />
-        </Fieldset>
-        <Fieldset className="flex w-full max-w-lg items-center">
-          <Legend className="w-1/4 text-xl">gender:</Legend>
-          <Controller
-            control={control}
-            name="gender"
-            render={({ field }) => (
-              <RadioGroup {...field} className="flex w-1/2 justify-center">
-                <Field className="flex w-1/2 justify-end">
-                  <Radio
-                    value="FEMALE"
-                    className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
-                  >
-                    FEMALE
-                  </Radio>
-                </Field>
-                <Field className="flex w-1/2 justify-start">
-                  <Radio
-                    value="MALE"
-                    className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
-                  >
-                    MALE
-                  </Radio>
-                </Field>
-              </RadioGroup>
-            )}
-          />
-        </Fieldset>
-        <Fieldset className="mb-20 flex w-full max-w-lg flex-wrap items-center">
-          <Legend className="w-1/4 text-xl">fur type:</Legend>
-          <Controller
-            control={control}
-            name="furType"
-            render={({ field }) => (
-              <RadioGroup
-                {...field}
-                className="scrollbar-hide mx-auto flex w-1/2 min-w-fit max-w-full overflow-x-scroll"
-              >
-                {[null, 'SHORT', 'MEDIUM', 'LONG', 'HAIRLESS'].map((value) => (
-                  <Field key={value}>
-                    <Radio
-                      value={value}
-                      className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
-                    >
-                      {value ? value : 'NO'}
-                    </Radio>
-                  </Field>
-                ))}
-              </RadioGroup>
-            )}
-          />
-        </Fieldset>
-        <div className="flex flex-col space-y-2">
-          <ControlledCheckbox control={control} errors={errors} key="isAdopted" label="adopted" />
-          <ControlledCheckbox control={control} errors={errors} key="isFeatured" label="featured" />
+              ))}
+            </RadioGroup>
+          )}
+        />
+      </Fieldset>
+      {[
+        { fieldKey: 'isFeatured', label: 'featured' },
+        { fieldKey: 'isUnclaimed', label: 'unclaimed' },
+        { fieldKey: 'isAdopted', label: 'adopted' },
+        { fieldKey: 'isAvailable', label: 'available' },
+        { fieldKey: 'isVisible', label: 'visible' },
+      ].map((item, index) => (
+        <ControlledCheckbox
+          key={index}
+          control={control}
+          errors={errors}
+          fieldKey={item.fieldKey}
+          label={item.label}
+        />
+      ))}
+      <Fieldset className="flex w-full max-w-lg flex-col items-center justify-center space-y-2">
+        <Legend className="mb-4 me-auto text-xl">health & behavior:</Legend>
+        {[
+          { fieldKey: 'vaccinated', label: 'vaccinated' },
+          { fieldKey: 'sterilized', label: 'sterilized' },
+          { fieldKey: 'treatedForParasites', label: 'treated for parasites' },
+          { fieldKey: 'litterBoxTrained', label: 'litter box trained' },
+          { fieldKey: 'usesScratchingPost', label: 'uses scratching post' },
+          { fieldKey: 'socialized', label: 'socialized' },
+          { fieldKey: 'friendlyWithCats', label: 'friendly with cats' },
+          { fieldKey: 'friendlyWithDogs', label: 'friendly with dogs' },
+          { fieldKey: 'friendlyWithAnimals', label: 'friendly with other animals' },
+        ].map((item, index) => (
           <ControlledCheckbox
+            key={index}
             control={control}
             errors={errors}
-            key="isAvailable"
-            label="available"
+            fieldKey={item.fieldKey}
+            label={item.label}
           />
-          <ControlledCheckbox
-            control={control}
-            errors={errors}
-            key="isUnclaimed"
-            label="unclaimed"
-          />
-          <ControlledCheckbox control={control} errors={errors} key="is visible" label="visible" />
-        </div>
-      </div>
-      <div className="min-h-1/2 flex w-full items-center justify-center">
-        <Fieldset className="flex w-full max-w-lg flex-col items-center justify-center space-y-2">
-          <Legend className="mb-4 me-auto text-xl">health & behavior:</Legend>
-          <div className="ms-4 space-y-2">
-            <ControlledCheckbox
-              control={control}
-              errors={errors}
-              key="vaccinated"
-              label="vaccinated"
-            />
-            <ControlledCheckbox
-              control={control}
-              errors={errors}
-              key="sterilized"
-              label="sterilized"
-            />
-            <ControlledCheckbox
-              control={control}
-              errors={errors}
-              key="treatedForParasites"
-              label="treated for parasites"
-            />
-            <ControlledCheckbox
-              control={control}
-              errors={errors}
-              key="litterBoxTrained"
-              label="litter box trained"
-            />
-            <ControlledCheckbox
-              control={control}
-              errors={errors}
-              key="usesScratchingPost"
-              label="uses scratching post"
-            />
-            <ControlledCheckbox
-              control={control}
-              errors={errors}
-              key="sociolized"
-              label="sociolized"
-            />
-            <ControlledCheckbox
-              control={control}
-              errors={errors}
-              key="friendlyWithCats"
-              label="friendly with cats"
-            />
-            <ControlledCheckbox
-              control={control}
-              errors={errors}
-              key="friendlyWithDogs"
-              label="friendly with dogs"
-            />
-            <ControlledCheckbox
-              control={control}
-              errors={errors}
-              key="friendlyWithAnimals"
-              label="friendly with other animals"
-            />
-          </div>
-        </Fieldset>
-      </div>
-      <Fieldset className="mx-auto flex h-full w-full max-w-lg flex-col items-center justify-center">
+        ))}
+      </Fieldset>
+      <Fieldset className="flex w-full flex-col items-center justify-center">
         <Field className="flex h-1/2 min-h-64 w-full flex-col">
-          <Label className="relative right-12 mb-2 flex items-center space-x-4 text-2xl text-gray-100">
-            <IoListCircle size={32} />
+          <Label className="mb-2 flex items-center space-x-4 text-2xl text-gray-100">
             <span>biography</span>
           </Label>
           <Description className="mb-4 text-gray-600 dark:text-gray-300">
@@ -429,22 +384,21 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
             )}
           />
         </Field>
-        <ColorsSelector colors={colors} control={control} />
+        <ColorsSelector control={control} colors={colors} />
         <AvatarSelector control={control} setAvatar={setAvatar} setAvatarFile={setAvatarFile} />
         <PhotosSelector
           control={control}
           setImageFilesWithDimensions={setImageFilesWithDimensions}
         />
       </Fieldset>
-      <Button
-        type="submit"
-        className="fixed bottom-5 rounded-full bg-gray-700/45 px-8 py-4 text-lg"
-      >
-        Save!
-      </Button>
-      <Button onClick={redirectToEditorMain} className="fixed bottom-5 right-5 z-90">
-        <IoClose size={24} />
-      </Button>
+      <div className="flex gap-x-4">
+        <Button type="submit" className="px-8 py-4 hover:text-green-400">
+          Save
+        </Button>
+        <Button onClick={redirectToEditorMain} className="px-8 py-4 hover:text-red-500">
+          Close
+        </Button>
+      </div>
     </form>
   )
 }

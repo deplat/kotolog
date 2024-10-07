@@ -3,7 +3,7 @@
 import { Prisma } from '@prisma/client'
 import prisma from '@/lib/prisma'
 import { unstable_cache } from 'next/cache'
-import { prismaErrorHandler } from '@/lib/errorHandlers'
+import { prismaErrorHandler } from '@/lib/error-handlers'
 
 export type Pets = Prisma.PromiseReturnType<typeof getPets>
 
