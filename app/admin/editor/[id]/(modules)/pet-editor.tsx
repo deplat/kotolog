@@ -1,32 +1,21 @@
 'use client'
 
-import {
-  Button,
-  Description,
-  Field,
-  Fieldset,
-  Input,
-  Label,
-  Legend,
-  Radio,
-  RadioGroup,
-  Textarea,
-} from '@headlessui/react'
+import { Button, Field, Fieldset, Input, Label, Legend, Radio, RadioGroup } from '@headlessui/react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
-import { ColorsSelector } from '../(components)/'
-import { Pet, createPet, updatePet } from '../(data-access)'
+import { Pet, Colors, createPet, getPetBySlug, updatePet } from '../(data-access)'
 import { Color, ImageWithDimensions, ImageFileWithDimensions, PetData } from '@/types'
-import { Colors } from '../(data-access)'
-import clsx from 'clsx'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import { PhotosSelector } from '../(components)'
-import { AvatarSelector } from '../(components)'
 import { uploadFileAndGetURL } from '@/lib/file-uploading'
-import { ControlledCheckbox } from '../(components)'
-import { getPetBySlug } from '@/app/admin/editor/[id]/(data-access)/pet'
 import { useRouter } from 'next/navigation'
+import {
+  ColorsSelector,
+  ControlledCheckbox,
+  DateField,
+  AvatarSelector,
+  PhotosSelector,
+  TextField,
+  TextareaField,
+} from '../(components)'
 
 export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) => {
   const {
@@ -188,71 +177,20 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className={clsx(
-        'flex w-full max-w-xl flex-col items-center justify-center overflow-y-auto overflow-x-hidden px-4'
-      )}
+      className="flex w-full max-w-xl flex-col items-center justify-center overflow-y-auto overflow-x-hidden px-4"
     >
       <Fieldset className="mb-20 flex w-full flex-col items-center justify-center gap-y-2">
-        <Field className="flex w-full items-center justify-center">
-          <Label className="me-6 w-full text-end">Name</Label>
-          <Input
-            type="text"
-            {...register('name', { required: 'Name is required' })}
-            className={clsx(
-              'ms-auto w-3/4 shrink-0 border-0 bg-transparent md:w-1/2',
-              'data-[focus]:ring-2 data-[focus]:ring-orange-600'
-            )}
-          />
-          {errors.name && (
-            <div
-              className={clsx(
-                'absolute rounded-xl bg-black px-8 py-4 text-red-500',
-                'bottom-5 left-5'
-              )}
-            >
-              {errors.name.message}
-            </div>
-          )}
-        </Field>
-        <Field className="flex w-full items-center justify-center">
-          <Label className="me-6 w-full text-end">Slug</Label>
-          <Input
-            type="text"
-            {...register('slug', { required: 'Slug is required' })}
-            className={clsx(
-              'ms-auto w-3/4 shrink-0 border-0 bg-transparent md:w-1/2',
-              'data-[focus]:ring-2 data-[focus]:ring-orange-600'
-            )}
-          />
-          {errors.slug && (
-            <span className={clsx('absolute text-red-500', 'bottom-0 left-0')}>
-              {errors.slug.message}
-            </span>
-          )}
-        </Field>
-        <Field className="flex w-full items-center justify-center">
-          <Label htmlFor="birthDate" className="me-6 w-full text-end">
-            Birth Date
-          </Label>
-          <Input as="div" className="flex w-3/4 shrink-0 md:w-1/2">
-            <Controller
-              control={control}
-              name="birthDate"
-              render={({ field }) => (
-                <DatePicker
-                  id="birthDate"
-                  selected={field.value ? new Date(field.value) : null}
-                  onChange={(date) => field.onChange(date)}
-                  dateFormat="yyyy-MM-dd"
-                  placeholderText="yyyy-MM-dd"
-                  className={clsx(
-                    'flex w-full shrink-0 border-0 bg-transparent focus:ring-2 focus:ring-orange-600'
-                  )}
-                />
-              )}
-            />
-          </Input>
-        </Field>
+        <TextField
+          label="Name"
+          register={register('name', { required: 'Name is required' })}
+          errors={errors.name}
+        />
+        <TextField
+          label="Slug"
+          register={register('slug', { required: 'Slug is required' })}
+          errors={errors.slug}
+        />
+        <DateField label="Birth Date" control={control} />
       </Fieldset>
       <Fieldset className="flex w-full max-w-lg items-center">
         <Legend className="flex w-1/4 justify-self-start text-nowrap text-xl">pet type:</Legend>
@@ -338,13 +276,13 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
         { fieldKey: 'isAdopted', label: 'adopted' },
         { fieldKey: 'isAvailable', label: 'available' },
         { fieldKey: 'isVisible', label: 'visible' },
-      ].map((item, index) => (
+      ].map((field, index) => (
         <ControlledCheckbox
           key={index}
           control={control}
           errors={errors}
-          fieldKey={item.fieldKey}
-          label={item.label}
+          fieldKey={field.fieldKey}
+          label={field.label}
         />
       ))}
       <Fieldset className="flex w-full max-w-lg flex-col items-center justify-center space-y-2">
@@ -359,31 +297,18 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
           { fieldKey: 'friendlyWithCats', label: 'friendly with cats' },
           { fieldKey: 'friendlyWithDogs', label: 'friendly with dogs' },
           { fieldKey: 'friendlyWithAnimals', label: 'friendly with other animals' },
-        ].map((item, index) => (
+        ].map((field, index) => (
           <ControlledCheckbox
             key={index}
             control={control}
             errors={errors}
-            fieldKey={item.fieldKey}
-            label={item.label}
+            fieldKey={field.fieldKey}
+            label={field.label}
           />
         ))}
       </Fieldset>
       <Fieldset className="flex w-full flex-col items-center justify-center">
-        <Field className="flex h-1/2 min-h-64 w-full flex-col">
-          <Label className="mb-2 flex items-center space-x-4 text-2xl text-gray-100">
-            <span>biography</span>
-          </Label>
-          <Description className="mb-4 text-gray-600 dark:text-gray-300">
-            Add an extra information about pet
-          </Description>
-          <Textarea
-            {...register('biography')}
-            className={clsx(
-              'h-full flex-1 border-0 bg-transparent ring-inset data-[focus]:bg-black/75 data-[focus]:ring-1 data-[focus]:ring-orange-700'
-            )}
-          />
-        </Field>
+        <TextareaField register={register('biography')} />
         <ColorsSelector control={control} colors={colors} />
         <AvatarSelector control={control} setAvatar={setAvatar} setAvatarFile={setAvatarFile} />
         <PhotosSelector

@@ -1,3 +1,6 @@
+export { TextField } from './text-field'
+export { TextareaField } from './textarea-field'
+export { DateField } from './date-field'
 export { AvatarSelector } from './avatar-selector'
 export { PhotosSelector } from './photos-selector'
 export { ColorsSelector } from './colors-selector'
