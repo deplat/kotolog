@@ -1,7 +1,7 @@
 'use client'
 
-import { Button, Field, Fieldset, Input, Label, Legend, Radio, RadioGroup } from '@headlessui/react'
-import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { Button, Fieldset, Legend } from '@headlessui/react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 import { Pet, Colors, createPet, getPetBySlug, updatePet } from '../(data-access)'
 import { Color, ImageWithDimensions, ImageFileWithDimensions, PetData } from '@/types'
@@ -211,45 +211,36 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
         ]}
         control={control}
       />
-      <Fieldset className="mb-20 flex w-full max-w-lg flex-wrap items-center">
-        <Legend className="w-1/4 text-xl">fur type:</Legend>
-        <Controller
-          control={control}
-          name="furType"
-          render={({ field }) => (
-            <RadioGroup
-              {...field}
-              className="scrollbar-hide mx-auto flex w-1/2 min-w-fit max-w-full overflow-x-scroll"
-            >
-              {[null, 'SHORT', 'MEDIUM', 'LONG', 'HAIRLESS'].map((value) => (
-                <Field key={value}>
-                  <Radio
-                    value={value}
-                    className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
-                  >
-                    {value ? value : 'NO'}
-                  </Radio>
-                </Field>
-              ))}
-            </RadioGroup>
-          )}
-        />
+      <ControlledRadioGroup
+        legend="Fur type"
+        fieldKey="furType"
+        options={[
+          { value: null, label: 'NO' },
+          { value: 'SHORT', label: 'SHORT' },
+          { value: 'MEDIUM', label: 'MEDIUM' },
+          { value: 'LONG', label: 'LONG' },
+          { value: 'HAIRLESS', label: 'HAIRLESS' },
+        ]}
+        control={control}
+      />
+      <Fieldset className="flex w-full max-w-lg flex-col items-center justify-center space-y-2">
+        {[
+          { fieldKey: 'isFeatured', label: 'featured' },
+          { fieldKey: 'isUnclaimed', label: 'unclaimed' },
+          { fieldKey: 'isAdopted', label: 'adopted' },
+          { fieldKey: 'isAvailable', label: 'available' },
+          { fieldKey: 'isVisible', label: 'visible' },
+        ].map((field, index) => (
+          <ControlledCheckbox
+            key={index}
+            control={control}
+            errors={errors}
+            fieldKey={field.fieldKey}
+            label={field.label}
+          />
+        ))}
       </Fieldset>
-      {[
-        { fieldKey: 'isFeatured', label: 'featured' },
-        { fieldKey: 'isUnclaimed', label: 'unclaimed' },
-        { fieldKey: 'isAdopted', label: 'adopted' },
-        { fieldKey: 'isAvailable', label: 'available' },
-        { fieldKey: 'isVisible', label: 'visible' },
-      ].map((field, index) => (
-        <ControlledCheckbox
-          key={index}
-          control={control}
-          errors={errors}
-          fieldKey={field.fieldKey}
-          label={field.label}
-        />
-      ))}
+
       <Fieldset className="flex w-full max-w-lg flex-col items-center justify-center space-y-2">
         <Legend className="mb-4 me-auto text-xl">health & behavior:</Legend>
         {[

@@ -66,7 +66,7 @@ export const PhotosSelector = ({
       render={({ field }) => (
         <div>
           <Field className="flex flex-col gap-2">
-            <Label htmlFor="avatars">Avatars:</Label>
+            <Label htmlFor="avatars">Photos</Label>
             <Input
               id="avatars"
               type="file"
