@@ -4,14 +4,22 @@ import DatePicker from 'react-datepicker'
 import { PetData } from '@/types'
 import 'react-datepicker/dist/react-datepicker.css'
 
-export const DateField = ({ label, control }: { label: string; control: Control<PetData> }) => {
+export const ControlledDateField = ({
+  label,
+  fieldKey,
+  control,
+}: {
+  label: string
+  fieldKey: any
+  control: Control<PetData>
+}) => {
   return (
     <Field className="flex w-full items-center justify-center">
       <Label>{label}</Label>
       <Input as="div">
         <Controller
           control={control}
-          name="birthDate"
+          name={fieldKey}
           render={({ field }) => (
             <DatePicker
               selected={field.value ? new Date(field.value) : null}

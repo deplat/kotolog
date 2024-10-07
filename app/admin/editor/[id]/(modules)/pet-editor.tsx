@@ -10,11 +10,12 @@ import { useRouter } from 'next/navigation'
 import {
   ColorsSelector,
   ControlledCheckbox,
-  DateField,
+  ControlledDateField,
   AvatarSelector,
   PhotosSelector,
   TextField,
   TextareaField,
+  ControlledRadioGroup,
 } from '../(components)'
 
 export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) => {
@@ -190,62 +191,26 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
           register={register('slug', { required: 'Slug is required' })}
           errors={errors.slug}
         />
-        <DateField label="Birth Date" control={control} />
+        <ControlledDateField label="Birth Date" fieldKey="birthdate" control={control} />
       </Fieldset>
-      <Fieldset className="flex w-full max-w-lg items-center">
-        <Legend className="flex w-1/4 justify-self-start text-nowrap text-xl">pet type:</Legend>
-        <Controller
-          control={control}
-          name="petType"
-          render={({ field }) => (
-            <RadioGroup {...field} className="flex w-1/2 justify-center">
-              <Field className="flex w-1/2 justify-end">
-                <Radio
-                  value="CAT"
-                  className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
-                >
-                  CAT
-                </Radio>
-              </Field>
-              <Field className="flex w-1/2 justify-start">
-                <Radio
-                  value="DOG"
-                  className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
-                >
-                  DOG
-                </Radio>
-              </Field>
-            </RadioGroup>
-          )}
-        />
-      </Fieldset>
-      <Fieldset className="flex w-full max-w-lg items-center">
-        <Legend className="w-1/4 text-xl">gender:</Legend>
-        <Controller
-          control={control}
-          name="gender"
-          render={({ field }) => (
-            <RadioGroup {...field} className="flex w-1/2 justify-center">
-              <Field className="flex w-1/2 justify-end">
-                <Radio
-                  value="FEMALE"
-                  className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
-                >
-                  FEMALE
-                </Radio>
-              </Field>
-              <Field className="flex w-1/2 justify-start">
-                <Radio
-                  value="MALE"
-                  className="group relative flex cursor-pointer p-2 text-xl text-gray-300 transition focus:outline-none data-[checked]:text-orange-600 data-[focus]:outline-1 data-[focus]:outline-white"
-                >
-                  MALE
-                </Radio>
-              </Field>
-            </RadioGroup>
-          )}
-        />
-      </Fieldset>
+      <ControlledRadioGroup
+        legend="Pet type"
+        fieldKey="petType"
+        options={[
+          { value: 'CAT', label: 'CAT' },
+          { value: 'DOG', label: 'DOG' },
+        ]}
+        control={control}
+      />
+      <ControlledRadioGroup
+        legend="Gender"
+        fieldKey="gender"
+        options={[
+          { value: 'MALE', label: 'MALE' },
+          { value: 'FEMALE', label: 'FEMALE' },
+        ]}
+        control={control}
+      />
       <Fieldset className="mb-20 flex w-full max-w-lg flex-wrap items-center">
         <Legend className="w-1/4 text-xl">fur type:</Legend>
         <Controller
