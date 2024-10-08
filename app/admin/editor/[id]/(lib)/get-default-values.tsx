@@ -1,7 +1,7 @@
 import { Pet } from '../(data-access)'
-import { Color, Gender } from '@/types'
+import { Color, Gender, PetData } from '@/types'
 
-export const getDefaultValues = (pet: Pet | null) => {
+export const getDefaultValues = (pet: Pet | null): PetData => {
   return pet
     ? {
         id: pet.id,
