@@ -26,17 +26,12 @@ export interface Specialty {
   description: string
 }
 
-export enum Gender {
-  male = 'MALE',
-  female = 'FEMALE',
-}
-
 export interface PetData {
   id: number | null
   name: string
   slug: string
   birthDate: Date | null
-  gender: Gender | null | undefined
+  gender: $Enums.Gender | null
   petType: 'CAT' | 'DOG'
   furType: null | 'SHORT' | 'MEDIUM' | 'LONG' | 'HAIRLESS'
   isUnclaimed: boolean

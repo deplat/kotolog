@@ -4,7 +4,7 @@ import { Button, Fieldset, Legend } from '@headlessui/react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 import { Pet, Colors, createPet, getPetBySlug, updatePet } from '../(data-access)'
-import { Color, ImageWithDimensions, ImageFileWithDimensions, PetData, Gender } from '@/types'
+import { Color, ImageWithDimensions, ImageFileWithDimensions, PetData } from '@/types'
 import { uploadFileAndGetURL } from '@/lib/file-uploading'
 import { useRouter } from 'next/navigation'
 import {
@@ -152,8 +152,8 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
         legend="Gender"
         fieldKey="gender"
         options={[
-          { value: Gender.male, label: 'MALE' },
-          { value: Gender.female, label: 'FEMALE' },
+          { value: 'MALE', label: 'MALE' },
+          { value: 'FEMALE', label: 'FEMALE' },
           { value: undefined, label: 'NO' },
         ]}
         control={control}
