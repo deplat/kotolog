@@ -4,7 +4,7 @@ import { Button, Fieldset, Legend } from '@headlessui/react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 import { Pet, Colors, createPet, getPetBySlug, updatePet } from '../(data-access)'
-import { Color, ImageWithDimensions, ImageFileWithDimensions, PetData } from '@/types'
+import { ImageWithDimensions, ImageFileWithDimensions, PetData } from '@/types'
 import { uploadFileAndGetURL } from '@/lib/file-uploading'
 import { useRouter } from 'next/navigation'
 import {

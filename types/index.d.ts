@@ -32,8 +32,8 @@ export interface PetData {
   slug: string
   birthDate: Date | null
   gender: $Enums.Gender | null
-  petType: 'CAT' | 'DOG'
-  furType: null | 'SHORT' | 'MEDIUM' | 'LONG' | 'HAIRLESS'
+  petType: $Enums.PetType
+  furType: $Enums.FurType | null
   isUnclaimed: boolean
   isFeatured: boolean
   isAvailable: boolean
@@ -48,7 +48,7 @@ export interface PetData {
   sterilized: boolean
   vaccinated: boolean
   treatedForParasites: boolean
-  healthStatus: 'HEALTHY' | 'UNDER_TREATMENT' | 'RECOVERING' | 'CHRONIC_CONDITION' | 'UNKNOWN'
+  healthStatus: $Enums.HealthStatus
   healthNotes: HealthNote[]
   specialties: Specialty[]
   biography: string | null
