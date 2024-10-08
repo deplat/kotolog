@@ -26,12 +26,17 @@ export interface Specialty {
   description: string
 }
 
+export enum Gender {
+  male = 'MALE',
+  female = 'FEMALE',
+}
+
 export interface PetData {
   id: number | null
   name: string
   slug: string
   birthDate: Date | null
-  gender: 'MALE' | 'FEMALE' | undefined
+  gender: Gender | null | undefined
   petType: 'CAT' | 'DOG'
   furType: null | 'SHORT' | 'MEDIUM' | 'LONG' | 'HAIRLESS'
   isUnclaimed: boolean

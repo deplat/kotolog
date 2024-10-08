@@ -1,5 +1,5 @@
 import { Pet } from '../(data-access)'
-import { Color } from '@/types'
+import { Color, Gender } from '@/types'
 
 export const getDefaultValues = (pet: Pet | null) => {
   return pet
@@ -35,7 +35,7 @@ export const getDefaultValues = (pet: Pet | null) => {
       }
     : {
         birthDate: null,
-        gender: 'FEMALE',
+        gender: Gender.male,
         petType: 'CAT',
         furType: null,
         isUnclaimed: false,

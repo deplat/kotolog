@@ -10,7 +10,7 @@ export const ControlledRadioGroup = ({
 }: {
   legend: string
   fieldKey: any
-  options: { value: string | null; label: string }[]
+  options: { value: any; label: string }[]
   control: Control<PetData>
 }) => {
   return (
