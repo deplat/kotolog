@@ -7,7 +7,7 @@ export const Footer = () => {
     <footer>
       <div className="flex flex-col items-center space-y-4">
         <div className="flex w-36 justify-center space-x-4">
-          <Link className="hover:text-orange-600" href={'/'}>
+          <Link className="hover:text-orange-600" href={'/public'}>
             <FaPhone size={21} />
           </Link>
           <Link className="hover:text-orange-600" href={siteMetadata.telegram}>
@@ -20,7 +20,7 @@ export const Footer = () => {
         <div className="flex space-x-2 text-sm text-gray-500 dark:text-gray-400">
           <div>{`© ${new Date().getFullYear()}`}</div>
           <div>{` • `}</div>
-          <Link href="/">{siteMetadata.title}</Link>
+          <Link href="/public">{siteMetadata.title}</Link>
           <div>{` • `}</div>
           <div>Все права защищены</div>
         </div>

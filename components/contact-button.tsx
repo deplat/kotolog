@@ -3,7 +3,7 @@
 
 import { Button, type ButtonProps } from '@headlessui/react'
 import { useState } from 'react'
-import { ContactOverlay } from '@/app/(components)/contact-overlay'
+import { ContactOverlay } from '@/components/contact-overlay'
 import clsx from 'clsx'
 
 const ContactButton = ({ children }: ButtonProps) => {

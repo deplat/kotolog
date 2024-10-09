@@ -2,9 +2,7 @@ import type { Metadata } from 'next'
 import { Source_Serif_4 } from 'next/font/google'
 import './globals.css'
 import { siteMetadata } from '@/data/siteMetadata'
-import { ThemeProvider } from '@/app/(components)/theme-provider'
-import { Header } from '@/app/(components)/header'
-import { Footer } from '@/app/(components)/footer'
+import { ThemeProvider } from '@/components/theme-provider'
 import clsx from 'clsx'
 
 const source_serif = Source_Serif_4({
@@ -54,7 +52,7 @@ export default function RootLayout({
             <Header />
           </div>
           */}
-          <main className="flex flex-1">{children}</main>
+          <div className="flex flex-1">{children}</div>
           {/*
           <div className="mx-auto w-full max-w-7xl p-4 sm:px-6">
             <Footer />

@@ -2,13 +2,13 @@
 
 import { useState } from 'react'
 import { Button } from '@headlessui/react'
-import { Colors } from '../editor/[id]/(data-access)/color'
-import { Pets } from '../(data-access)/pet'
-import { ColorList } from '@/app/admin/(components)/color-list'
-import { ColorEditor } from '@/app/admin/(components)/color-editor'
-import { PetList } from '@/app/admin/(components)/pet-list'
+import { Colors } from '@/app/admin/editor/(data-access)/color'
+import { ColorList } from '@/app/admin/editor/(components)/color-list'
+import { ColorEditor } from '@/app/admin/editor/(components)/color-editor'
+import { PetList } from '@/app/admin/editor/(components)/pet-list'
+import { Pet } from '@/app/admin/editor/(data-access)'
 
-export const Dashboard = ({ colors, pets }: { colors: Colors; pets: Pets }) => {
+export const Dashboard = ({ colors, pets }: { colors: Colors; pets: Pet[] }) => {
   const [showPetEditor, setShowPetEditor] = useState(false)
   const [showColorEditor, setShowColorEditor] = useState(false)
 
