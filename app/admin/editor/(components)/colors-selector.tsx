@@ -14,8 +14,8 @@ export const ColorsSelector = ({
     control={control}
     name="colors"
     render={({ field }) => (
-      <Fieldset className="form-group mb-4">
-        <Legend>Colors:</Legend>
+      <Fieldset className="form-group mb-6 flex flex-col items-center justify-center">
+        <Legend className="text-2xl">Colors:</Legend>
         <div className="flex space-x-4">
           {colors.map((color) => (
             <Label key={color.id} className="flex items-center">

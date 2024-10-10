@@ -64,9 +64,9 @@ export const PhotosSelector = ({
       name="photos"
       control={control}
       render={({ field }) => (
-        <div>
-          <Field className="flex flex-col gap-2">
-            <Label htmlFor="avatars">Photos</Label>
+        <div className="mb-6">
+          <Field className="flex flex-col items-center justify-center gap-2">
+            <Label className="text-2xl">Photos:</Label>
             <Input
               id="avatars"
               type="file"
