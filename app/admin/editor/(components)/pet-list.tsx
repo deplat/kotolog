@@ -1,16 +1,18 @@
 import Image from 'next/image'
 import { IoDocument, IoTrashBin } from 'react-icons/io5'
-import { Pets } from '../(data-access)'
+import { deletePet, Pets } from '../(data-access)'
+import { useRouter } from 'next/navigation'
 
-export const PetList = ({
-  pets,
-  onEditPet,
-  onDeletePet,
-}: {
-  pets: Pets
-  onEditPet: (petId: number) => void
-  onDeletePet: (petId: number) => void
-}) => {
+export const PetList = ({ pets }: { pets: Pets }) => {
+  const router = useRouter()
+  const onDeletePet = async (id: number) => {
+    try {
+      await deletePet(id)
+      console.log('Pet deleted successfully')
+    } catch (error) {
+      console.error(error)
+    }
+  }
   return (
     <>
       <div>
@@ -37,7 +39,7 @@ export const PetList = ({
               <div className="ms-auto">
                 <button
                   className="rounded bg-blue-100 px-2 py-1 text-white"
-                  onClick={() => onEditPet(pet.id)}
+                  onClick={() => router.push(`/admin/editor/${pet.id}`)}
                 >
                   <IoDocument size={24} />
                 </button>
