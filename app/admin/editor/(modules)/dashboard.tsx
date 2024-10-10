@@ -3,9 +3,9 @@
 import { useState } from 'react'
 import { Button } from '@headlessui/react'
 import { Colors } from '@/app/admin/editor/(data-access)/color'
-import { ColorList } from '@/app/admin/editor/(components)/color-list'
-import { ColorEditor } from '@/app/admin/editor/(components)/color-editor'
-import { PetList } from '@/app/admin/editor/(components)/pet-list'
+import { ColorList } from '@/app/admin/editor/(components)'
+import { ColorEditor } from '@/app/admin/editor/(components)'
+import { PetList } from '@/app/admin/editor/(components)'
 import { Pets } from '../(data-access)'
 
 export const Dashboard = ({ colors, pets }: { colors: Colors; pets: Pets }) => {

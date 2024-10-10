@@ -3,7 +3,7 @@
 import prisma from '@/lib/prisma'
 import { prismaErrorHandler } from '@/lib/error-handlers'
 import { Prisma } from '@prisma/client'
-import { revalidateTag } from 'next/cache'
+import { revalidateTag, unstable_cache } from 'next/cache'
 import { PetData } from '@/types'
 
 const petInclude = Prisma.validator<Prisma.PetInclude>()({
@@ -273,6 +273,8 @@ export const deletePet = async (id: number) => {
     throw prismaErrorHandler(error)
   }
 }
+
+export const getCachedPets = unstable_cache(getPets, ['pets'], { tags: ['pets'] })
 
 export type Pet = Prisma.PromiseReturnType<typeof getPet>
 export type Pets = Prisma.PromiseReturnType<typeof getPets>
