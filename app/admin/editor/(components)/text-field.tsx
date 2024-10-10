@@ -13,7 +13,7 @@ export const TextField = ({
 }) => {
   return (
     <Field className="flex w-full items-center">
-      <Label>{label}</Label>
+      <Label>{label}:</Label>
       <Input
         type="text"
         {...register}

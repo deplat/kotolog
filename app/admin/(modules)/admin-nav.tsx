@@ -2,6 +2,7 @@
 
 import { Button } from '@headlessui/react'
 import { useRouter } from 'next/navigation'
+import { ThemeSwitch } from '@/components/theme-switcher'
 
 export const AdminNav = () => {
   const router = useRouter()
@@ -24,6 +25,9 @@ export const AdminNav = () => {
           <span className="text-[1.5rem]">{item.text}</span>
         </Button>
       ))}
+      <div>
+        <ThemeSwitch />
+      </div>
     </div>
   )
 }

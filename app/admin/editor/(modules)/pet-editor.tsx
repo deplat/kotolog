@@ -59,7 +59,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
       }
     }
     if (watchSlug) {
-      checkSlug(watchSlug, pet?.id)
+      checkSlug(watchSlug, pet?.id).then()
     }
   }, [clearErrors, setError, watchSlug])
 
@@ -124,9 +124,9 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex w-full max-w-xl flex-col items-center justify-center overflow-y-auto overflow-x-hidden px-4"
+      className="flex w-full max-w-xl flex-col items-center justify-center px-4"
     >
-      <Fieldset className="mb-20 flex w-full flex-col items-center justify-center gap-y-2">
+      <Fieldset className="mb-6 flex w-full flex-col items-center justify-center gap-y-2">
         <TextField
           label="Name"
           register={register('name', { required: 'Name is required' })}
@@ -137,7 +137,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
           register={register('slug', { required: 'Slug is required' })}
           errors={errors.slug}
         />
-        <ControlledDateField label="Birth Date" fieldKey="birthdate" control={control} />
+        <ControlledDateField label="Birth Date" fieldKey="birthDate" control={control} />
       </Fieldset>
       <ControlledRadioGroup
         legend="Pet type"
@@ -170,7 +170,8 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
         ]}
         control={control}
       />
-      <Fieldset className="flex w-full max-w-lg flex-col items-center justify-center space-y-2">
+      <Fieldset className="mb-6 flex w-full max-w-lg flex-col items-center justify-center space-y-2">
+        <Legend className="text-2xl">Controls:</Legend>
         {[
           { fieldKey: 'isFeatured', label: 'featured' },
           { fieldKey: 'isUnclaimed', label: 'unclaimed' },
@@ -188,8 +189,8 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
         ))}
       </Fieldset>
 
-      <Fieldset className="flex w-full max-w-lg flex-col items-center justify-center space-y-2">
-        <Legend className="mb-4 me-auto text-xl">health & behavior:</Legend>
+      <Fieldset className="mb-6 flex w-full max-w-lg flex-col items-center justify-center space-y-2">
+        <Legend className="text-2xl">Health & Behavior:</Legend>
         {[
           { fieldKey: 'vaccinated', label: 'vaccinated' },
           { fieldKey: 'sterilized', label: 'sterilized' },

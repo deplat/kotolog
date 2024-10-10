@@ -14,9 +14,9 @@ export const ControlledDateField = ({
   control: Control<PetData>
 }) => {
   return (
-    <Field className="flex w-full items-center justify-center">
-      <Label>{label}</Label>
-      <Input as="div">
+    <Field className="flex w-full items-center">
+      <Label className="w-1/4">{label}</Label>
+      <Input as="div" className="w-3/4">
         <Controller
           control={control}
           name={fieldKey}

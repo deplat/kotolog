@@ -14,8 +14,8 @@ export const ControlledRadioGroup = ({
   control: Control<PetData>
 }) => {
   return (
-    <Fieldset>
-      <Legend>{legend}</Legend>
+    <Fieldset className="mb-6 flex flex-col items-center justify-center">
+      <Legend className="text-2xl">{legend}:</Legend>
       <Controller
         control={control}
         name={fieldKey}

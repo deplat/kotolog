@@ -22,7 +22,7 @@ export const ThemeSwitch = () => {
   useEffect(() => setMounted(true), [])
 
   const renderIcon = () => {
-    if (!mounted) return <div className="h-6 w-6" />
+    if (!mounted) return <div className="flex h-6 w-6" />
     return resolvedTheme === 'dark' ? <IoMoon size={24} /> : <IoSunny size={24} />
   }
 
