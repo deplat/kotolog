@@ -20,24 +20,21 @@ export const Dashboard = ({ colors, pets }: { colors: Colors; pets: Pets }) => {
   }
 
   return (
-    <div className="flex w-full flex-wrap items-center justify-center overflow-x-hidden px-4 md:px-6">
-      <div className="flex w-full gap-4">
-        <div className="flex h-fit flex-col rounded-md bg-white/75 p-4 backdrop-blur-lg dark:bg-gray-700/75">
-          <h2 className="mb-2 text-xl font-semibold">кошки</h2>
-          <hr className="hr primary mb-2 border-2" />
-          <div className="overflow-y-auto">
-            <PetList pets={pets} />
-          </div>
-        </div>
-        <div className="ms-auto flex h-fit w-fit flex-col rounded-md bg-white/75 p-4 backdrop-blur-lg dark:bg-gray-700/75">
-          <h2 className="mb-2 text-xl font-semibold">окрасы</h2>
-          <hr className="hr primary mb-2 border-2" />
-          <div className="overflow-y-auto">
-            <ColorList colors={colors} />
-          </div>
+    <div className="flex w-full flex-col gap-6 overflow-x-hidden px-4 md:flex-row md:px-6">
+      <div className="flex h-fit w-full flex-col rounded-md bg-white/75 p-4 backdrop-blur-lg dark:bg-gray-700/75">
+        <h2 className="mb-2 text-xl font-semibold">Pets</h2>
+        <hr className="hr primary mb-2 border-2" />
+        <div className="overflow-y-auto">
+          <PetList pets={pets} />
         </div>
       </div>
-
+      <div className="flex h-fit w-full flex-col rounded-md bg-white/75 p-4 backdrop-blur-lg dark:bg-gray-700/75 md:max-w-[33%]">
+        <h2 className="mb-2 text-xl font-semibold">Colors</h2>
+        <hr className="hr primary mb-2 border-2" />
+        <div className="overflow-y-auto">
+          <ColorList colors={colors} />
+        </div>
+      </div>
       <div className="fixed bottom-5 right-5 z-50 flex gap-x-1">
         <Button
           onClick={toggleColorEditor}

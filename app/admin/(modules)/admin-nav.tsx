@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 export const AdminNav = () => {
   const router = useRouter()
   return (
-    <div className="flex h-24 w-full flex-col items-center justify-center lg:flex-row">
+    <div className="flex w-full items-center justify-center gap-6 p-4">
       {[
         { text: 'Home', url: '/' },
         { text: 'Editor', url: '/admin/editor' },
@@ -16,12 +16,12 @@ export const AdminNav = () => {
           key={index}
           onClick={() => router.push(item.url)}
           className={
-            'h-24 w-auto min-w-[200px] max-w-[500px] rounded-md border' +
+            'w-auto min-w-fit max-w-[500px] rounded-md border' +
             '' +
             'transition-all duration-[1s] ease-out data-[hover]:scale-125 data-[hover]:underline data-[hover]:underline-offset-2'
           }
         >
-          <span className="text-[2rem]">{item.text}</span>
+          <span className="text-[1.5rem]">{item.text}</span>
         </Button>
       ))}
     </div>
