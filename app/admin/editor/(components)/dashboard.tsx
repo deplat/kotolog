@@ -6,9 +6,9 @@ import { Colors } from '@/app/admin/editor/(data-access)/color'
 import { ColorList } from '@/app/admin/editor/(components)/color-list'
 import { ColorEditor } from '@/app/admin/editor/(components)/color-editor'
 import { PetList } from '@/app/admin/editor/(components)/pet-list'
-import { Pet } from '@/app/admin/editor/(data-access)'
+import { Pets } from '../(data-access)'
 
-export const Dashboard = ({ colors, pets }: { colors: Colors; pets: Pet[] }) => {
+export const Dashboard = ({ colors, pets }: { colors: Colors; pets: Pets }) => {
   const [showPetEditor, setShowPetEditor] = useState(false)
   const [showColorEditor, setShowColorEditor] = useState(false)
 
