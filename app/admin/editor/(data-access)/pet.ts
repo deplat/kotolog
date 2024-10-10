@@ -142,6 +142,17 @@ export const getPetBySlug = async (slug: string) => {
   }
 }
 
+export const getPets = async () => {
+  try {
+    const pets = await prisma.pet.findMany({
+      include: petInclude,
+    })
+    return pets
+  } catch (error) {
+    throw prismaErrorHandler(error)
+  }
+}
+
 /*  UPDATE  */
 export const updatePet = async (id: number, data: PetData) => {
   try {
@@ -264,3 +275,4 @@ export const deletePet = async (id: number) => {
 }
 
 export type Pet = Prisma.PromiseReturnType<typeof getPet>
+export type Pets = Prisma.PromiseReturnType<typeof getPets>
