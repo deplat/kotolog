@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { IoDocument, IoTrashBin } from 'react-icons/io5'
 import { deletePet, Pets } from '../(data-access)'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export const PetList = ({ pets }: { pets: Pets }) => {
   const router = useRouter()
@@ -29,9 +30,12 @@ export const PetList = ({ pets }: { pets: Pets }) => {
                     className="object-cover"
                   />
                 ) : (
-                  <span className="absolute inset-0 flex items-center justify-center text-gray-500">
+                  <Link
+                    href={`/koshki/${pet.slug}`}
+                    className="absolute inset-0 flex items-center justify-center text-gray-500"
+                  >
                     {pet.name}
-                  </span>
+                  </Link>
                 )}
               </div>
               <span>{pet.name}</span>
