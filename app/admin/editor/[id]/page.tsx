@@ -1,19 +1,21 @@
-import { getPet, Pet } from '@/app/admin/editor/(data-access)/pet'
-import { PetEditor } from '@/app/admin/editor/(modules)/pet-editor'
+import { getPet, Pet } from '../(data-access)/pet'
+import { PetEditor } from '../(modules)/pet-editor'
 import { cachedColors } from '../(data-access)'
-import { Colors } from '@/app/admin/editor/(data-access)/color'
+import { Colors } from '../(data-access)'
 
 export default async function Page({ params }: { params: { id: number } }) {
-  const pet: Pet = await getPet(Number(params.id))
-  console.log(pet)
-  const colors: Colors = await cachedColors()
-  console.log(colors)
-  if (!pet) {
-    return <div>There's nothing here.</div>
+  const id = Number(params.id)
+  if (isNaN(id) || id <= 0) {
+    return <div>Invalid pet ID.</div>
   }
-  return (
-    <div className="flex w-full justify-center">
-      <PetEditor pet={pet} colors={colors} />
-    </div>
-  )
+  try {
+    const pet: Pet = await getPet(id)
+    if (!pet) return <div>There's no pet with id: {id}</div>
+    const colors: Colors = await cachedColors()
+    if (!colors) console.log('Error fetching colors.')
+    return <PetEditor pet={pet} colors={colors} />
+  } catch (error) {
+    console.error('An error occurred while fetching data.', error)
+    return <div>Something went wrong while fetching data. Please try again later.</div>
+  }
 }
