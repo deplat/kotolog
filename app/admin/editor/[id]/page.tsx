@@ -1,4 +1,4 @@
-import { getPet, cachedColors, Pet, Colors } from '../(data-access)'
+import { getPet, getCachedColors, Pet, Colors } from '../(data-access)'
 import { PetEditor } from '../(modules)'
 
 export default async function Page({ params }: { params: { id: number } }) {
@@ -9,7 +9,7 @@ export default async function Page({ params }: { params: { id: number } }) {
   try {
     const pet: Pet = await getPet(id)
     if (!pet) return <div>There's no pet with id: {id}</div>
-    const colors: Colors = await cachedColors()
+    const colors: Colors = await getCachedColors()
     if (!colors) console.log('Error fetching colors.')
     return <PetEditor pet={pet} colors={colors} />
   } catch (error) {

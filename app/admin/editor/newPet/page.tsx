@@ -1,9 +1,9 @@
-import { cachedColors } from '../(data-access)'
+import { getCachedColors } from '../(data-access)'
 import { PetEditor } from '../(modules)/pet-editor'
 
 export default async function Page() {
   try {
-    const colors = await cachedColors()
+    const colors = await getCachedColors()
     if (!colors) console.log('Error fetching colors.')
     return <PetEditor pet={null} colors={colors} />
   } catch (error) {
