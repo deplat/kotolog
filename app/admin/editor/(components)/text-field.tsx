@@ -1,6 +1,7 @@
 import { FieldError, UseFormRegister } from 'react-hook-form'
 import { PetData } from '@/types'
 import { Field, Input, Label } from '@headlessui/react'
+import clsx from 'clsx'
 
 export const TextField = ({
   label,
@@ -17,10 +18,10 @@ export const TextField = ({
       <Input
         type="text"
         {...register}
-        className={
-          'ms-auto w-3/4 shrink-0 border-0 bg-transparent md:w-1/2' +
+        className={clsx(
+          'ms-auto w-3/4 shrink-0 border-0 bg-transparent',
           'data-[focus]:ring-2 data-[focus]:ring-orange-600'
-        }
+        )}
       />
       {errors && <span className="text-red-500">{errors.message}</span>}
     </Field>
