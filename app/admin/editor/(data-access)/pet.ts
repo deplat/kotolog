@@ -1,6 +1,6 @@
 'use server'
 
-import prisma from '@/lib/prisma'
+import { prisma } from '@/prisma'
 import { prismaErrorHandler } from '@/lib/error-handlers'
 import { Prisma } from '@prisma/client'
 import { revalidateTag, unstable_cache } from 'next/cache'

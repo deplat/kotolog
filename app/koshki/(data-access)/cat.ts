@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma'
+import { prisma } from '@/prisma'
 import { unstable_cache } from 'next/cache'
 import { getAge } from '@/lib/get-age'
 import { Prisma } from '@prisma/client'

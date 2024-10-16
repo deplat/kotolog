@@ -28,7 +28,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "types/next-auth.d.ts",
-    "eslint.config.js"
+    "eslint.config.js",
+    "auth.ts"
   ],
   "exclude": ["node_modules"]
 }

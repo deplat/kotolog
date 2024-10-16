@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma'
+import { prisma } from '@/prisma'
 import NotFound from 'next/dist/client/components/not-found-error'
 import Image from 'next/image'
 import { IoCheckmark } from 'react-icons/io5'
