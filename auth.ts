@@ -5,14 +5,13 @@ import NextAuth from 'next-auth'
 
 import { prisma } from '@/prisma'
 
-// Extend the NextAuth Session and AdapterUser types
 declare module 'next-auth' {
   interface Session {
     user: {
-      /** Indicates if the user is an admin */
       isAdmin: boolean
     } & DefaultSession['user']
   }
+
   interface User {
     isAdmin: boolean
   }
