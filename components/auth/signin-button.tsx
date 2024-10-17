@@ -1,6 +1,6 @@
 import { signIn } from '@/auth'
 
-export function SignIn({ label }: { label: string }) {
+export async function SignIn({ label }: { label: string }) {
   return (
     <form
       action={async () => {

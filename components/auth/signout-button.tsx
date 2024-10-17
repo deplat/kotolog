@@ -1,6 +1,6 @@
 import { signOut } from '@/auth'
 
-export function SignOut({ label }: { label: string }) {
+export async function SignOut({ label }: { label: string }) {
   return (
     <form
       action={async () => {
