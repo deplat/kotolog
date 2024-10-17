@@ -1,6 +1,6 @@
 import { signIn } from '@/auth'
 
-export function SignIn() {
+export function SignIn({ label }: { label: string }) {
   return (
     <form
       action={async () => {
@@ -9,7 +9,7 @@ export function SignIn() {
       }}
     >
       <button type="submit" className="underline">
-        Sign in
+        {label}
       </button>
     </form>
   )

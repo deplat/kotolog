@@ -5,6 +5,7 @@ const config: Config = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './stories/**/*.{js,ts,jsx,tsx}',
   ],
   darkMode: 'class',
   theme: {
@@ -18,7 +19,7 @@ const config: Config = {
       colors: {},
     },
   },
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
+
   plugins: [require('@tailwindcss/forms'), require('@tailwindcss/aspect-ratio')],
 }
 export default config

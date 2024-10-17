@@ -3,8 +3,12 @@
 import { Button } from '@headlessui/react'
 import { useRouter } from 'next/navigation'
 import { ThemeSwitch } from '@/components/theme-switcher'
+import { SignOutButtonClient } from '@/components/auth/signout-button-client'
+import { useSession } from 'next-auth/react'
+import { SignInButtonClient } from '@/components/auth/signin-button-client'
 
 export const AdminNav = () => {
+  const { data: session } = useSession()
   const router = useRouter()
   return (
     <div className="flex w-full items-center justify-center gap-6 p-4">
@@ -28,6 +32,7 @@ export const AdminNav = () => {
       <div>
         <ThemeSwitch />
       </div>
+      {session ? <SignOutButtonClient /> : <SignInButtonClient />}
     </div>
   )
 }

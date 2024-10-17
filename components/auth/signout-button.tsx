@@ -1,6 +1,6 @@
 import { signOut } from '@/auth'
 
-export function SignOut() {
+export function SignOut({ label }: { label: string }) {
   return (
     <form
       action={async () => {
@@ -9,7 +9,7 @@ export function SignOut() {
       }}
     >
       <button type="submit" className="underline">
-        Sign Out
+        {label}
       </button>
     </form>
   )
