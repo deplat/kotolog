@@ -1,5 +1,5 @@
 import { Control, Controller } from 'react-hook-form'
-import { Field, Input, Label } from '@headlessui/react'
+import { Field, Input } from '@headlessui/react'
 import { ImageWithDimensions, PetData } from '@/types'
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import NextImage from 'next/image'
@@ -80,25 +80,20 @@ export const AvatarSelector = ({
       name="avatar"
       control={control}
       render={({ field }) => (
-        <div className="mb-6">
-          <Field className="flex flex-col items-center justify-center gap-2">
-            <Label className="text-2xl">Avatar:</Label>
-            <Input
-              id="avatar"
-              type="file"
-              accept="image/jpeg, image/jpg"
-              ref={field.ref}
-              onChange={handleImageChange}
-            />
-            {error && <p className="text-red-600">{error}</p>}
-            {loading && <p>Processing image...</p>}
-          </Field>
-          {imagePreviewSrc && !loading && (
-            <div className="mt-4">
-              <NextImage src={imagePreviewSrc} width={300} height={300} alt="Avatar Preview" />
-            </div>
-          )}
-        </div>
+        <Field className="flex flex-col items-center justify-center gap-2">
+          <div className="relative h-72 w-72 overflow-hidden rounded-lg ring-1 ring-inset ring-white">
+            <NextImage src={imagePreviewSrc || ''} alt="Select avatar" fill />
+          </div>
+          <Input
+            id="avatar"
+            type="file"
+            accept="image/jpeg, image/jpg"
+            ref={field.ref}
+            onChange={handleImageChange}
+          />
+          {error && <p className="text-red-600">{error}</p>}
+          {loading && <p>Processing image...</p>}
+        </Field>
       )}
     />
   )
