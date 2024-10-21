@@ -1,8 +1,8 @@
-import { AdminNav } from '@/app/admin/(modules)/admin-nav'
+import { Navbar } from '@/app/admin/(modules)/navbar'
 import { auth } from '@/auth'
 import { SignIn } from '@/components/auth/signin-button'
 import { SignOut } from '@/components/auth/signout-button'
-import { SessionProvider } from 'next-auth/react'
+import { Controls } from '@/app/admin/(modules)/controls'
 
 export default async function Layout({
   children,
@@ -29,11 +29,12 @@ export default async function Layout({
     )
   }
   return (
-    <SessionProvider>
-      <div className="flex w-full flex-col">
-        <AdminNav />
-        <main className="flex flex-1 justify-center">{children}</main>
+    <div className="flex w-full flex-col">
+      <Navbar />
+      <main className="flex justify-center">{children}</main>
+      <div className="fixed bottom-0 flex w-full">
+        <Controls />
       </div>
-    </SessionProvider>
+    </div>
   )
 }

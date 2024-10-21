@@ -47,17 +47,7 @@ export default function RootLayout({
         )}
       >
         <ThemeProvider attribute="class" defaultTheme={siteMetadata.theme} enableSystem>
-          {/*
-          <div className="mx-auto w-full max-w-7xl p-4 sm:px-6">
-            <Header />
-          </div>
-          */}
-          <div className="flex flex-1">{children}</div>
-          {/*
-          <div className="mx-auto w-full max-w-7xl p-4 sm:px-6">
-            <Footer />
-          </div>
-           */}
+          {children}
         </ThemeProvider>
       </body>
     </html>
