@@ -1,18 +1,26 @@
+'use client'
 import { Button } from '@headlessui/react'
 import clsx from 'clsx'
+import { useRouter } from 'next/navigation'
 
 export const Controls = () => {
+  const router = useRouter()
   return (
-    <div className="flex w-full items-center border-t border-black px-4">
-      {[{ label: 'Add Pet' }, { label: 'Add Color' }].map((item, index) => (
+    <div className="flex w-full items-center gap-x-2 border-t border-stone-950 px-2 py-2">
+      {[
+        { label: 'Dashboard', onClick: () => router.push('/admin') },
+        { label: 'New Pet', onClick: () => router.push('/admin/editor/newPet') },
+        { label: 'New Color', onClick: () => router.push('/admin/editor/newColor') },
+      ].map((item, index) => (
         <Button
+          onClick={item.onClick || undefined}
           key={index}
           className={clsx(
-            'bg-stone-950 px-4 py-2.5 text-stone-100 underline-offset-4 transition-all duration-100',
-            'data-[hover]:bg-transparent data-[hover]:text-stone-950 data-[hover]:underline'
+            'flex items-center border border-stone-950 bg-stone-100 px-4 py-2.5 text-stone-950 underline-offset-4 transition-all duration-100 first:me-auto',
+            'data-[hover]:bg-stone-950 data-[hover]:text-stone-100 data-[hover]:underline'
           )}
         >
-          {item.label}
+          <span>{item.label}</span>
         </Button>
       ))}
     </div>

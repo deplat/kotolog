@@ -31,7 +31,7 @@ export default async function Layout({
   return (
     <div className="flex w-full flex-col">
       <Navbar />
-      <main className="flex justify-center">{children}</main>
+      {children}
       <div className="fixed bottom-0 flex w-full">
         <Controls />
       </div>

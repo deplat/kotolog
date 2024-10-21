@@ -124,7 +124,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex w-full max-w-xl flex-col items-center justify-center px-4"
+      className="flex w-full max-w-xl flex-col items-center justify-center px-4 pb-10"
     >
       <Fieldset className="mb-6 flex w-full flex-col items-center justify-center gap-y-2">
         <TextField
