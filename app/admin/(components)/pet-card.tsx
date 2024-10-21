@@ -22,8 +22,10 @@ export const PetCard = ({
   return (
     <div className="flex w-full border border-stone-950 p-3">
       <Image src={avatarSrc || ''} alt={name} width={100} height={100} />
-      <span>{name}</span>
-      <span className="me-auto">{slug}</span>
+      <div className="flex flex-col">
+        <span>{name}</span>
+        <span>/{slug}</span>
+      </div>
       <Button onClick={() => router.push(`/admin/editor/${id}`)} className="hover:text-blue-600">
         <IoPencil size={24} />
       </Button>

@@ -4,7 +4,7 @@ import { PetCard } from '@/app/admin/(components)/pet-card'
 export const PetList = async () => {
   const pets = await getPets()
   return (
-    <div className="flex h-fit flex-col border border-stone-950 p-3">
+    <div className="flex h-fit w-fit min-w-64 max-w-xl flex-col border border-stone-950 p-3">
       <h3 className="mb-2.5 text-2xl">Pets</h3>
       {pets ? (
         <ul className="flex flex-col gap-y-3">
