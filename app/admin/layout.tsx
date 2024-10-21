@@ -1,8 +1,8 @@
-import { Navbar } from '@/app/admin/(modules)/navbar'
+import { Navbar } from '@/app/admin/modules/navbar'
 import { auth } from '@/auth'
 import { SignIn } from '@/components/auth/signin-button'
 import { SignOut } from '@/components/auth/signout-button'
-import { Controls } from '@/app/admin/(modules)/controls'
+import { Controls } from '@/app/admin/modules/controls'
 
 export default async function Layout({
   children,

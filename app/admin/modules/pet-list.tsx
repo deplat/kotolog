@@ -1,5 +1,5 @@
 import { getPets } from '@/app/admin/editor/(data-access)/pet'
-import { PetCard } from '@/app/admin/(components)/pet-card'
+import { PetCard } from '@/app/admin/components/pet-card'
 
 export const PetList = async () => {
   const pets = await getPets()
