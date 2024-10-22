@@ -24,7 +24,8 @@ async function getPetWithProfile(slug: string) {
   })
 }
 
-export default async function CatPage({ params }: { params: { slug: string } }) {
+export default async function CatPage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const cat = await getPetWithProfile(params.slug)
   if (!cat) {
     return <NotFound />

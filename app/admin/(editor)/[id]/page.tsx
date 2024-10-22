@@ -1,7 +1,8 @@
 import { getPet, getCachedColors, Pet, Colors } from '../../_data-access'
 import { PetEditor } from '@/app/admin/_modules/pet-editor'
 
-export default async function Page({ params }: { params: { id: number } }) {
+export default async function Page(props: { params: Promise<{ id: number }> }) {
+  const params = await props.params;
   const id = Number(params.id)
   if (isNaN(id) || id <= 0) {
     return <div>Invalid pet ID.</div>

@@ -3,7 +3,8 @@ import { prisma } from '@/prisma'
 import { revalidateTag } from 'next/cache'
 import { del } from '@vercel/blob'
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: number } }) {
+export async function DELETE(req: NextRequest, props: { params: Promise<{ id: number }> }) {
+  const params = await props.params;
   const id = Number(params.id)
 
   try {
