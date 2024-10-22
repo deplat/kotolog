@@ -9,6 +9,7 @@ export default async function Layout({
   children: React.ReactNode
 }>) {
   const session = await auth()
+  const isAdmin = session?.user
   if (!session) {
     return (
       <main className="flex w-full items-center justify-center">
@@ -18,7 +19,7 @@ export default async function Layout({
       </main>
     )
   }
-  if (!session.user.isAdmin) {
+  if (!isAdmin) {
     return (
       <main className="flex w-full items-center justify-center">
         <div>
