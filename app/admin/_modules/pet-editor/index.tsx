@@ -1,23 +1,22 @@
 'use client'
-
-import { Button, Fieldset, Legend } from '@headlessui/react'
-import { SubmitHandler, useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
-import { Pet, Colors, createPet, getPetBySlug, updatePet } from '../_data-access'
-import { ImageWithDimensions, ImageFileWithDimensions, PetData } from '@/types'
-import { uploadFileAndGetURL } from '@/lib/file-uploading'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { Colors, createPet, getPetBySlug, Pet, updatePet } from '../../_data-access'
+import { ImageFileWithDimensions, ImageWithDimensions, PetData } from '@/types'
+import { getDefaultValues } from '../../_lib'
 import { useRouter } from 'next/navigation'
+import { uploadFileAndGetURL } from '@/lib/file-uploading'
+import { Button, Fieldset, Legend } from '@headlessui/react'
 import {
+  AvatarSelector,
   ColorsSelector,
   ControlledCheckbox,
   ControlledDateField,
-  AvatarSelector,
-  PhotosSelector,
-  TextField,
-  TextareaField,
   ControlledRadioGroup,
-} from '../_components'
-import { getDefaultValues } from '../_lib'
+  PhotosSelector,
+  TextareaField,
+  TextField,
+} from '@/app/admin/_modules/pet-editor/components'
 
 export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) => {
   const {
