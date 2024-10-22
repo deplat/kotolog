@@ -1,7 +1,13 @@
 {
   "compilerOptions": {
-    "typeRoots": ["types"],
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "typeRoots": [
+      "types"
+    ],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -19,8 +25,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
-    }
+      "@/*": [
+        "./*"
+      ]
+    },
+    "target": "ES2017"
   },
   "include": [
     "next-env.d.ts",
@@ -31,5 +40,7 @@
     "eslint.config.js",
     "auth.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

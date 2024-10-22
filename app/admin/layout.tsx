@@ -6,7 +6,6 @@ import { SignOut } from '@/components/auth/signout-button'
 export default async function Layout({
   children,
 }: Readonly<{
-  editor: React.ReactNode
   children: React.ReactNode
 }>) {
   const session = await auth()
