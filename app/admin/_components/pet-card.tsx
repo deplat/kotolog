@@ -26,7 +26,7 @@ export const PetCard = ({
         <span>{name}</span>
         <span>/{slug}</span>
       </div>
-      <Button onClick={() => router.push(`/admin/editor/${id}`)} className="hover:text-blue-600">
+      <Button onClick={() => router.push(`/admin/${id}`)} className="hover:text-blue-600">
         <IoPencil size={24} />
       </Button>
       <>

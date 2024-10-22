@@ -2,11 +2,11 @@
 
 import { useState } from 'react'
 import { Button } from '@headlessui/react'
-import { Colors } from '@/app/admin/editor/(data-access)/color'
-import { ColorList } from '@/app/admin/editor/(components)'
-import { ColorEditor } from '@/app/admin/editor/(components)'
-import { PetList } from '@/app/admin/editor/(components)'
-import { Pets } from '../(data-access)'
+import { Colors } from '@/app/admin/(editor)/_data-access/color'
+import { ColorList } from '../_components'
+import { ColorEditor } from '../_components'
+import { PetList } from '../_components'
+import { Pets } from '../_data-access'
 
 export const Dashboard = ({ colors, pets }: { colors: Colors; pets: Pets }) => {
   const [showColorEditor, setShowColorEditor] = useState(false)

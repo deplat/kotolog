@@ -1,5 +1,5 @@
-import { getCachedColors } from '../(data-access)'
-import { PetEditor } from '../(modules)/pet-editor'
+import { getCachedColors } from '@/app/admin/(editor)/_data-access'
+import { PetEditor } from '@/app/admin/(editor)/_modules/pet-editor'
 
 export default async function Page() {
   try {

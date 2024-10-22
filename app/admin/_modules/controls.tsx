@@ -9,7 +9,7 @@ export const Controls = () => {
     <div className="flex w-full items-center gap-x-2 border-t border-stone-950 bg-stone-100 px-2 py-2">
       {[
         { label: 'Dashboard', onClick: () => router.push('/admin') },
-        { label: 'New Pet', onClick: () => router.push('/admin/editor/newPet') },
+        { label: 'New Pet', onClick: () => router.push('/admin/newPet') },
         { label: 'New Color', onClick: () => router.push('/admin/editor/newColor') },
       ].map((item, index) => (
         <Button

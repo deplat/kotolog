@@ -1,6 +1,6 @@
 import { Color } from '@/types'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { createColor, updateColor } from '@/app/admin/editor/(data-access)/color'
+import { createColor, updateColor } from '@/app/admin/(editor)/_data-access/color'
 
 export const ColorEditor = ({ closeEditor }: { closeEditor: () => void }) => {
   const {

@@ -1,5 +1,5 @@
-import { getPet, getCachedColors, Pet, Colors } from '../(data-access)'
-import { PetEditor } from '../(modules)'
+import { getPet, getCachedColors, Pet, Colors } from '@/app/admin/(editor)/_data-access'
+import { PetEditor } from '@/app/admin/(editor)/_modules'
 
 export default async function Page({ params }: { params: { id: number } }) {
   const id = Number(params.id)

@@ -3,7 +3,7 @@
 import { Button, Fieldset, Legend } from '@headlessui/react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
-import { Pet, Colors, createPet, getPetBySlug, updatePet } from '../(data-access)'
+import { Pet, Colors, createPet, getPetBySlug, updatePet } from '../_data-access'
 import { ImageWithDimensions, ImageFileWithDimensions, PetData } from '@/types'
 import { uploadFileAndGetURL } from '@/lib/file-uploading'
 import { useRouter } from 'next/navigation'
@@ -16,8 +16,8 @@ import {
   TextField,
   TextareaField,
   ControlledRadioGroup,
-} from '../(components)'
-import { getDefaultValues } from '../(lib)'
+} from '../_components'
+import { getDefaultValues } from '../_lib'
 
 export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) => {
   const {

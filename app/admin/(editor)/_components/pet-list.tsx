@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { IoDocument, IoTrashBin } from 'react-icons/io5'
-import { deletePet, Pets } from '../(data-access)'
+import { deletePet, Pets } from '../_data-access'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 

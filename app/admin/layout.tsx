@@ -1,12 +1,14 @@
-import { Navbar } from '@/app/admin/modules/navbar'
+import { Navbar } from '@/app/admin/_modules/navbar'
 import { auth } from '@/auth'
 import { SignIn } from '@/components/auth/signin-button'
 import { SignOut } from '@/components/auth/signout-button'
-import { Controls } from '@/app/admin/modules/controls'
+import { Controls } from '@/app/admin/_modules/controls'
 
 export default async function Layout({
+  editor,
   children,
 }: Readonly<{
+  editor: React.ReactNode
   children: React.ReactNode
 }>) {
   const session = await auth()
@@ -31,6 +33,7 @@ export default async function Layout({
   return (
     <div className="flex w-full flex-col">
       <Navbar />
+      <div>{editor}</div>
       {children}
       <div className="fixed bottom-0 flex w-full">
         <Controls />
