@@ -1,8 +1,7 @@
-import { Navbar } from '@/app/admin/_modules/nav'
+import { Nav } from '@/app/admin/_modules/nav'
 import { auth } from '@/auth'
 import { SignIn } from '@/components/auth/signin-button'
 import { SignOut } from '@/components/auth/signout-button'
-import { Controls } from '@/app/admin/_modules/controls'
 
 export default async function Layout({
   children,
@@ -31,10 +30,9 @@ export default async function Layout({
   }
   return (
     <div className="flex w-full flex-col">
-      <Navbar />
       {children}
       <div className="fixed bottom-0 flex w-full">
-        <Controls />
+        <Nav />
       </div>
     </div>
   )
