@@ -5,10 +5,11 @@ import { usePathname } from 'next/navigation'
 import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { useState } from 'react'
 import { ColorEditor } from '@/app/admin/_modules/color-editor'
+import { Color } from '@/types'
 
 export const Nav = () => {
   const [isColorEditorOpen, setIsColorEditorOpen] = useState(false)
-  const [colorId, setColorId] = useState<number | null>(null)
+  const [selectedColor, setSelectedColor] = useState<Color | null>(null)
   const closeEditor = () => setIsColorEditorOpen(false)
   const pathname = usePathname()
   return (
@@ -48,9 +49,9 @@ export const Nav = () => {
           <div className="fixed inset-0 flex w-screen items-center justify-center bg-stone-300/75">
             <DialogPanel className="flex max-w-lg flex-col items-center gap-y-3 border border-stone-950 bg-stone-100 p-4">
               <DialogTitle className="flex w-full text-xl font-semibold">
-                {colorId ? 'Edit Color' : 'New Color'}
+                {selectedColor ? 'Edit Color' : 'New Color'}
               </DialogTitle>
-              <ColorEditor color={null} close={closeEditor} />
+              <ColorEditor color={selectedColor} closeEditor={closeEditor} />
             </DialogPanel>
           </div>
         </Dialog>

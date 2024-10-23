@@ -40,6 +40,24 @@ const getColors = async () => {
   }
 }
 
+export const getColor = async (id: number) => {
+  try {
+    return await prisma.color.findUnique({ where: { id }, select: colorSelect })
+  } catch (error) {
+    console.error('Error getting color:', error)
+    throw prismaErrorHandler(error)
+  }
+}
+
+export const getColorByName = async (name: string) => {
+  try {
+    return await prisma.color.findUnique({ where: { name }, select: colorSelect })
+  } catch (error) {
+    console.error('Error getting color by name:', error)
+    throw prismaErrorHandler(error)
+  }
+}
+
 export const updateColor = async (id: number, name: string) => {
   try {
     const updatedColor = await prisma.color.update({

@@ -8,4 +8,4 @@ export {
   updatePet,
   deletePet,
 } from './pet'
-export { type Colors, getCachedColors } from './color'
+export { type Colors, getCachedColors, getColor, getColorByName } from './color'
