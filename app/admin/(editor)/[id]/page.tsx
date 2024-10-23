@@ -6,7 +6,7 @@ import { SignOut } from '@/components/auth/signout-button'
 
 export default async function Page(props: { params: Promise<{ id: number }> }) {
   const session = await auth()
-  const isAdmin = session?.user
+  const isAdmin = session?.user.isAdmin
   if (!session) {
     return (
       <main className="flex w-full items-center justify-center">
