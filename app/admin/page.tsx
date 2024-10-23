@@ -2,6 +2,7 @@ import { PetList } from '@/app/admin/_modules/pet-list'
 import { auth } from '@/auth'
 import { SignIn } from '@/components/auth/signin-button'
 import { SignOut } from '@/components/auth/signout-button'
+import { ColorList } from '@/app/admin/_modules/color-list'
 
 export default async function Admin() {
   const session = await auth()
@@ -26,8 +27,9 @@ export default async function Admin() {
   }
   return (
     <main className="flex flex-1 p-3">
-      <div className="flex w-full">
+      <div className="flex w-full gap-x-3">
         <PetList />
+        <ColorList />
       </div>
     </main>
   )

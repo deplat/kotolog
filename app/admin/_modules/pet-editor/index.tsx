@@ -39,7 +39,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
 
   const router = useRouter()
 
-  const redirectToEditorMain = () => router.push(`/admin/editor`)
+  const redirectToAdminMain = () => router.push(`/admin/`)
 
   const watchSlug = watch('slug')
 
@@ -117,7 +117,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
       const updatedPet = await updatePet(pet.id, data)
       console.log(updatedPet)
     }
-    router.push('/admin/editor')
+    redirectToAdminMain()
   }
 
   return (
@@ -223,7 +223,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
         <Button type="submit" className="px-8 py-4 hover:text-green-400">
           Save
         </Button>
-        <Button onClick={redirectToEditorMain} className="px-8 py-4 hover:text-red-500">
+        <Button onClick={redirectToAdminMain} className="px-8 py-4 hover:text-red-500">
           Close
         </Button>
       </div>
