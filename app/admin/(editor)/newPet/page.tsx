@@ -29,7 +29,11 @@ export default async function Page() {
   try {
     const colors = await getCachedColors()
     if (!colors) console.log('Error fetching colors.')
-    return <PetEditor pet={null} colors={colors} />
+    return (
+      <main className="flex w-full justify-center">
+        <PetEditor pet={null} colors={colors} />
+      </main>
+    )
   } catch (error) {
     console.error('An error occurred while fetching data.', error)
     return <div>Something went wrong while fetching data. Please try again later.</div>

@@ -28,8 +28,8 @@ export const ControlledCheckbox = ({
             checked={field.value}
             onChange={field.onChange}
             className={clsx(
-              'group size-6 rounded-md bg-gray-800/15 p-0.5 ring-1 ring-inset ring-white/15',
-              'date-[checked]:bg-orange-500 data-[checked]:text-white dark:data-[checked]:bg-orange-600'
+              'group size-6 p-0.5 ring-1 ring-inset ring-stone-950',
+              'data-[checked]:bg-orange-500 data-[checked]:text-white data-[checked]:ring-orange-500 dark:data-[checked]:bg-orange-600'
             )}
           >
             <IoCheckmark className="hidden size-5 group-data-[checked]:block" />

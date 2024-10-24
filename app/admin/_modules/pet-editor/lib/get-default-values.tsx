@@ -1,4 +1,4 @@
-import { Pet } from '../_data-access'
+import { Pet } from '../../../_data-access'
 import { Color } from '@/types'
 
 export const getDefaultValues = (pet: Pet | null) => {

@@ -35,7 +35,11 @@ export default async function Page(props: { params: Promise<{ id: number }> }) {
     if (!pet) return <div>There's no pet with id: {id}</div>
     const colors: Colors = await getCachedColors()
     if (!colors) console.log('Error fetching colors.')
-    return <PetEditor pet={pet} colors={colors} />
+    return (
+      <main className="flex w-full justify-center">
+        <PetEditor pet={pet} colors={colors} />
+      </main>
+    )
   } catch (error) {
     console.error('An error occurred while fetching data.', error)
     return <div>Something went wrong while fetching data. Please try again later.</div>
