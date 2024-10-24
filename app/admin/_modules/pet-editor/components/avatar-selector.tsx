@@ -81,7 +81,7 @@ export const AvatarSelector = ({
       control={control}
       render={({ field }) => (
         <Field className="flex flex-col items-center justify-center gap-2">
-          <div className="relative h-72 w-72 overflow-hidden rounded-lg ring-1 ring-inset ring-white">
+          <div className="relative h-72 w-72 overflow-hidden ring-1 ring-inset ring-stone-950">
             {imagePreviewSrc ? <NextImage src={imagePreviewSrc} alt="Select avatar" fill /> : null}
           </div>
           <Input

@@ -12,7 +12,7 @@ import {
   ColorsSelector,
   ControlledCheckbox,
   ControlledDateField,
-  ControlledRadioGroup,
+  ControlledListbox,
   PhotosSelector,
   TextareaField,
   TextField,
@@ -126,8 +126,10 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
       onSubmit={handleSubmit(onSubmit)}
       className="flex w-full max-w-xl flex-col items-center justify-center pb-28 pt-3"
     >
-      <Fieldset className="flex w-full flex-col border border-stone-950 p-3">
-        <AvatarSelector control={control} setAvatar={setAvatar} setAvatarFile={setAvatarFile} />
+      <Fieldset className="mb-6 flex w-full flex-col border border-stone-950 p-3">
+        <div className="mb-3">
+          <AvatarSelector control={control} setAvatar={setAvatar} setAvatarFile={setAvatarFile} />
+        </div>
         <TextField
           label="Name"
           register={register('name', { required: 'Name is required' })}
@@ -138,39 +140,40 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
           register={register('slug', { required: 'Slug is required' })}
           errors={errors.slug}
         />
-        <ControlledDateField label="Birth Date" fieldKey="birthDate" control={control} />
+        <ControlledDateField label="Birth Date:" fieldKey="birthDate" control={control} />
+        <ControlledListbox
+          fieldLabel="Pet type:"
+          fieldKey="petType"
+          options={[
+            { value: 'CAT', label: 'CAT' },
+            { value: 'DOG', label: 'DOG' },
+          ]}
+          control={control}
+        />
+        <ControlledListbox
+          fieldLabel="Gender"
+          fieldKey="gender"
+          options={[
+            { value: 'MALE', label: 'MALE' },
+            { value: 'FEMALE', label: 'FEMALE' },
+            { value: undefined, label: 'NO' },
+          ]}
+          control={control}
+        />
+        <ControlledListbox
+          fieldLabel="Fur type"
+          fieldKey="furType"
+          options={[
+            { value: null, label: 'NO' },
+            { value: 'SHORT', label: 'SHORT' },
+            { value: 'MEDIUM', label: 'MEDIUM' },
+            { value: 'LONG', label: 'LONG' },
+            { value: 'HAIRLESS', label: 'HAIRLESS' },
+          ]}
+          control={control}
+        />
       </Fieldset>
-      <ControlledRadioGroup
-        legend="Pet type"
-        fieldKey="petType"
-        options={[
-          { value: 'CAT', label: 'CAT' },
-          { value: 'DOG', label: 'DOG' },
-        ]}
-        control={control}
-      />
-      <ControlledRadioGroup
-        legend="Gender"
-        fieldKey="gender"
-        options={[
-          { value: 'MALE', label: 'MALE' },
-          { value: 'FEMALE', label: 'FEMALE' },
-          { value: undefined, label: 'NO' },
-        ]}
-        control={control}
-      />
-      <ControlledRadioGroup
-        legend="Fur type"
-        fieldKey="furType"
-        options={[
-          { value: null, label: 'NO' },
-          { value: 'SHORT', label: 'SHORT' },
-          { value: 'MEDIUM', label: 'MEDIUM' },
-          { value: 'LONG', label: 'LONG' },
-          { value: 'HAIRLESS', label: 'HAIRLESS' },
-        ]}
-        control={control}
-      />
+
       <Fieldset className="mb-6 flex w-full flex-col gap-y-2 border border-stone-950 p-3 sm:p-6">
         <Legend className="mb-3 text-2xl">Controls:</Legend>
         {[
@@ -220,7 +223,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
           setImageFilesWithDimensions={setImageFilesWithDimensions}
         />
       </Fieldset>
-      <div className="fixed bottom-20 flex justify-center gap-x-2 border border-stone-950 bg-stone-100 p-2">
+      <div className="fixed bottom-20 flex justify-center gap-x-2 border border-stone-950 bg-stone-100">
         <Button
           type="submit"
           className={clsx(
