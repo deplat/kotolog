@@ -30,7 +30,7 @@ export default async function Page() {
     const colors = await getCachedColors()
     if (!colors) console.log('Error fetching colors.')
     return (
-      <main className="flex w-full justify-center">
+      <main className="flex w-full justify-center px-3">
         <PetEditor pet={null} colors={colors} />
       </main>
     )

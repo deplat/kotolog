@@ -36,7 +36,7 @@ export default async function Page(props: { params: Promise<{ id: number }> }) {
     const colors: Colors = await getCachedColors()
     if (!colors) console.log('Error fetching colors.')
     return (
-      <main className="flex w-full justify-center">
+      <main className="flex w-full justify-center px-3">
         <PetEditor pet={pet} colors={colors} />
       </main>
     )
