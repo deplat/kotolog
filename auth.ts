@@ -3,17 +3,18 @@ import { PrismaAdapter } from '@auth/prisma-adapter'
 import type { DefaultSession } from 'next-auth'
 import NextAuth from 'next-auth'
 
+import type { UserRole } from '@/types/UserRole'
 import { prisma } from '@/prisma'
 
 declare module 'next-auth' {
   interface Session {
     user: {
-      isAdmin: boolean
+      role: UserRole
     } & DefaultSession['user']
   }
 
   interface User {
-    isAdmin: boolean
+    role: UserRole
   }
 }
 
@@ -32,7 +33,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         user: {
           ...session.user,
           id: user.id,
-          isAdmin: user.isAdmin ?? false, // Provide a default value if isAdmin is undefined
+          role: user.role,
         },
       }
     },

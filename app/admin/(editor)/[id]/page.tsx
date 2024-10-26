@@ -3,10 +3,11 @@ import { PetEditor } from '@/app/admin/_modules/pet-editor'
 import { auth } from '@/auth'
 import { SignIn } from '@/components/auth/signin-button'
 import { SignOut } from '@/components/auth/signout-button'
+import { UserRole } from '@/types/UserRole'
 
 export default async function Page(props: { params: Promise<{ id: number }> }) {
   const session = await auth()
-  const isAdmin = session?.user.isAdmin
+  const userRole = session?.user.role
   if (!session) {
     return (
       <main className="flex w-full items-center justify-center">
@@ -16,7 +17,7 @@ export default async function Page(props: { params: Promise<{ id: number }> }) {
       </main>
     )
   }
-  if (!isAdmin) {
+  if (userRole == UserRole.USER) {
     return (
       <main className="flex w-full items-center justify-center">
         <div>

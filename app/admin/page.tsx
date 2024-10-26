@@ -3,10 +3,11 @@ import { auth } from '@/auth'
 import { SignIn } from '@/components/auth/signin-button'
 import { SignOut } from '@/components/auth/signout-button'
 import { ColorList } from '@/app/admin/_modules/color-list'
+import { UserRole } from '@/types/UserRole'
 
 export default async function Admin() {
   const session = await auth()
-  const isAdmin = session?.user.isAdmin
+  const userRole = session?.user.role
   if (!session) {
     return (
       <main className="flex w-full items-center justify-center">
@@ -16,7 +17,7 @@ export default async function Admin() {
       </main>
     )
   }
-  if (!isAdmin) {
+  if (userRole == UserRole.USER) {
     return (
       <main className="flex w-full items-center justify-center">
         <div>

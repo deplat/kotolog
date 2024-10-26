@@ -37,6 +37,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "types/next-auth.d.ts",
+    "types/index.d.ts",
     "eslint.config.js",
     "auth.ts"
   ],
