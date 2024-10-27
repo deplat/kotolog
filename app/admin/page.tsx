@@ -28,7 +28,7 @@ export default async function Admin() {
   }
   return (
     <main className="flex flex-1 p-3">
-      <div className="flex w-full gap-x-3">
+      <div className="flex w-full flex-col items-center justify-center gap-3 md:flex-row">
         <PetList />
         <ColorList />
       </div>
