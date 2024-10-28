@@ -1,10 +1,21 @@
 'use client'
 import { Color } from '@/types'
-import { Button, Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
-import { IoPencil, IoTrashBin } from 'react-icons/io5'
+import {
+  Button,
+  Description,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from '@headlessui/react'
 import { deleteColor } from '@/app/admin/_data-access'
 import clsx from 'clsx'
 import { useState } from 'react'
+import { LuMoreVertical } from 'react-icons/lu'
+import { IButton } from '@/components/IButton'
 
 export const ColorCard = ({ id, name }: Color) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -13,14 +24,25 @@ export const ColorCard = ({ id, name }: Color) => {
     console.log(id)
   }
   return (
-    <div className="flex w-full border border-stone-950 p-3">
+    <div className="flex w-full justify-between border border-stone-950 p-3 shadow-md">
       <span>{name}</span>
-      <Button onClick={() => onEditColor(id)} className="ms-auto">
-        <IoPencil size={24} />
-      </Button>
-      <Button onClick={() => setIsDeleteDialogOpen(true)}>
-        <IoTrashBin size={24} />
-      </Button>
+      <Menu>
+        <MenuButton>
+          <LuMoreVertical size={24} />
+          <MenuItems
+            anchor="bottom end"
+            className="flex gap-x-1 border border-stone-950 bg-stone-100 p-3 shadow-2xl"
+          >
+            <MenuItem>
+              <IButton label="Edit" onClick={() => onEditColor} primary />
+            </MenuItem>
+            <MenuItem>
+              <IButton label="Delete" onClick={() => setIsDeleteDialogOpen(true)} warning />
+            </MenuItem>
+          </MenuItems>
+        </MenuButton>
+      </Menu>
+
       <Dialog
         open={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
