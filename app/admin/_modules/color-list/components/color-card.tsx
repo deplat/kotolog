@@ -10,6 +10,7 @@ import {
   MenuButton,
   MenuItem,
   MenuItems,
+  MenuSeparator,
 } from '@headlessui/react'
 import { deleteColor } from '@/app/admin/_data-access'
 import clsx from 'clsx'
@@ -30,13 +31,11 @@ export const ColorCard = ({ id, name }: Color) => {
         <MenuButton>
           <LuMoreVertical size={24} />
         </MenuButton>
-        <MenuItems
-          anchor="bottom end"
-          className="flex flex-col border border-stone-950 bg-stone-100 shadow-2xl"
-        >
+        <MenuItems anchor="bottom end" className="border border-stone-950 bg-stone-100 shadow-2xl">
           <MenuItem>
             <IMenuItemButton label="Edit" onClick={() => onEditColor} variant="primary" />
           </MenuItem>
+          <MenuSeparator className="h-px bg-stone-950" />
           <MenuItem>
             <IMenuItemButton
               label="Delete"

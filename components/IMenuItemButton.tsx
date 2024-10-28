@@ -17,7 +17,7 @@ export const IMenuItemButton = ({
   variant: 'primary' | 'secondary' | 'warning'
 }) => {
   const baseStyle = clsx(
-    'group px-4 py-1.5 underline-offset-4  flex items-center justify-center',
+    'flex w-full group px-4 py-1.5 underline-offset-4  items-center justify-center',
     'data-[hover]:underline',
     'data-[focus]:bg-stone-950'
   )
