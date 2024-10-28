@@ -15,7 +15,7 @@ import { deleteColor } from '@/app/admin/_data-access'
 import clsx from 'clsx'
 import { useState } from 'react'
 import { LuMoreVertical } from 'react-icons/lu'
-import { IButton } from '@/components/IButton'
+import { IMenuItemButton } from '@/components/IMenuItemButton'
 
 export const ColorCard = ({ id, name }: Color) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -29,18 +29,22 @@ export const ColorCard = ({ id, name }: Color) => {
       <Menu>
         <MenuButton>
           <LuMoreVertical size={24} />
-          <MenuItems
-            anchor="bottom end"
-            className="flex gap-x-1 border border-stone-950 bg-stone-100 p-3 shadow-2xl"
-          >
-            <MenuItem>
-              <IButton label="Edit" onClick={() => onEditColor} primary />
-            </MenuItem>
-            <MenuItem>
-              <IButton label="Delete" onClick={() => setIsDeleteDialogOpen(true)} warning />
-            </MenuItem>
-          </MenuItems>
         </MenuButton>
+        <MenuItems
+          anchor="bottom end"
+          className="flex flex-col border border-stone-950 bg-stone-100 shadow-2xl"
+        >
+          <MenuItem>
+            <IMenuItemButton label="Edit" onClick={() => onEditColor} variant="primary" />
+          </MenuItem>
+          <MenuItem>
+            <IMenuItemButton
+              label="Delete"
+              onClick={() => setIsDeleteDialogOpen(true)}
+              variant="warning"
+            />
+          </MenuItem>
+        </MenuItems>
       </Menu>
 
       <Dialog
