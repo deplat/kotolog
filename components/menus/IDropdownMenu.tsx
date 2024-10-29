@@ -1,5 +1,6 @@
-import { Menu, MenuButton, MenuItems } from '@headlessui/react'
+import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react'
 import { LuMoreHorizontal, LuMoreVertical } from 'react-icons/lu'
+import Link from 'next/link' // Assuming Next.js Link component is used
 
 const icons = {
   dotsVertical: LuMoreVertical,
@@ -13,7 +14,11 @@ interface MenuButtonProps {
 }
 
 interface MenuItemProps extends MenuButtonProps {
-  link?: boolean
+  id: string
+  label: string
+  link?: boolean // renders as <Link> if true, <button> if false
+  href?: string // required if link is true
+  onClick?: () => void // only if link is false
 }
 
 interface IDropdownMenuProps {
@@ -40,10 +45,38 @@ export const IDropdownMenu: React.FC<IDropdownMenuProps> = ({ menuButton, menuIt
         {menuButton.label && <span>{menuButton.label}</span>}
         {RightIcon && <RightIcon size={24} />}
       </MenuButton>
+
       <MenuItems
         transition
-        className="absolute right-0 z-10 mt-2 min-w-36 origin-top-right rounded-md bg-white ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-      ></MenuItems>
+        className="absolute right-0 z-10 mt-2 min-w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition-all focus:outline-none"
+      >
+        {menuItems.map((item) => (
+          <MenuItem key={item.id}>
+            {({ focus }) =>
+              item.link && item.href ? (
+                <Link
+                  href={item.href}
+                  className={`${
+                    focus ? 'bg-gray-100' : ''
+                  } block w-full px-4 py-2 text-left text-sm`}
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={item.onClick}
+                  className={`${
+                    focus ? 'bg-gray-100' : ''
+                  } block w-full px-4 py-2 text-left text-sm`}
+                >
+                  {item.label}
+                </button>
+              )
+            }
+          </MenuItem>
+        ))}
+      </MenuItems>
     </Menu>
   )
 }
