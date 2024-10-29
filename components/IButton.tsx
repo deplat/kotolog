@@ -11,7 +11,7 @@ export const IButton = ({
   secondary,
   warning,
 }: {
-  onClick: () => void
+  onClick?: () => void
   label?: string
   rightIcon?: React.ReactNode
   leftIcon?: React.ReactNode

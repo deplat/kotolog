@@ -9,7 +9,7 @@ export const IMenuItemButton = ({
   size,
   variant,
 }: {
-  onClick: () => void
+  onClick?: () => void
   label?: string
   rightIcon?: React.ReactNode
   leftIcon?: React.ReactNode
