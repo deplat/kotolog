@@ -39,7 +39,7 @@ export const IDropdownMenu: React.FC<IDropdownMenuProps> = ({
 
   // MenuButton styles
   const menuButtonBaseStyle = clsx(
-    'underline-offset-4 flex items-center justify-center transition ring-inset',
+    'underline-offset-4 flex shadow-sm items-center justify-center transition ring-inset',
     createStateStyles({
       hover: ['underline'],
     })
@@ -72,16 +72,15 @@ export const IDropdownMenu: React.FC<IDropdownMenuProps> = ({
   )
 
   // MenuItem styles
-  const menuItemBaseStyle = clsx(
-    'block w-full text-left transition duration-150',
-    createStateStyles({
-      focus: ['bg-gray-100'],
-    })
-  )
+  const menuItemBaseStyle = clsx('group block w-full transition')
+
   const menuItemVariantStyles = {
-    primary: 'text-stone-900 hover:bg-stone-100',
-    secondary: 'text-gray-800 hover:bg-gray-200',
-    warning: 'text-red-600 hover:bg-red-100',
+    primary: clsx(
+      'bg-stone-100 focus:bg-red-300 hover:bg-red-300',
+      createStateStyles({ focus: ['bg-red-300'], hover: ['bg-red-300'] })
+    ),
+    secondary: clsx('bg-stone-300', createStateStyles({ hover: ['bg-gray-200'] })),
+    warning: 'text-red-600',
   }
 
   const menuItemSizeStyles = clsx({
@@ -89,6 +88,14 @@ export const IDropdownMenu: React.FC<IDropdownMenuProps> = ({
     'px-4 py-2 text-base': size === 'md',
     'px-5 py-2.5 text-lg': size === 'lg',
   })
+
+  const menuItemStyles = (variant: 'primary' | 'secondary' | 'warning'): string => {
+    return clsx(
+      menuItemBaseStyle,
+      menuItemVariantStyles[variant ? variant : 'primary'],
+      menuItemSizeStyles
+    )
+  }
 
   return (
     <Menu as="div" className="relative inline-block">
@@ -104,42 +111,27 @@ export const IDropdownMenu: React.FC<IDropdownMenuProps> = ({
 
       <MenuItems
         transition
-        className="absolute right-0 z-10 mt-2 min-w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition-all focus:outline-none"
+        className="absolute right-0 z-10 mt-2 min-w-36 origin-top-right bg-white shadow-lg ring-1 ring-black transition"
       >
         {menuItems.map((item) => {
           const ItemLeftIcon = item.leftIcon
           const ItemRightIcon = item.rightIcon
-
-          const menuItemStyles = clsx(
-            menuItemBaseStyle,
-            menuItemVariantStyles[variant],
-            menuItemSizeStyles
-          )
-
+          const variant = item.variant || 'primary'
           return (
             <MenuItem key={item.id}>
-              {({ active }) =>
-                item.link && item.href ? (
-                  <Link
-                    href={item.href}
-                    className={clsx(menuItemStyles, { 'bg-gray-100': active })}
-                  >
-                    {ItemLeftIcon && <ItemLeftIcon size={iconSize[size]} className="mr-2" />}
-                    {item.label}
-                    {ItemRightIcon && <ItemRightIcon size={iconSize[size]} className="ml-2" />}
-                  </Link>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={item.onClick}
-                    className={clsx(menuItemStyles, { 'bg-gray-100': active })}
-                  >
-                    {ItemLeftIcon && <ItemLeftIcon size={iconSize[size]} className="mr-2" />}
-                    {item.label}
-                    {ItemRightIcon && <ItemRightIcon size={iconSize[size]} className="ml-2" />}
-                  </button>
-                )
-              }
+              {item.link && item.href ? (
+                <Link href={item.href} className={menuItemStyles(variant)}>
+                  {ItemLeftIcon && <ItemLeftIcon size={iconSize[size]} className="mr-2" />}
+                  {item.label}
+                  {ItemRightIcon && <ItemRightIcon size={iconSize[size]} className="ml-2" />}
+                </Link>
+              ) : (
+                <button type="button" onClick={item.onClick} className={menuItemStyles(variant)}>
+                  {ItemLeftIcon && <ItemLeftIcon size={iconSize[size]} className="mr-2" />}
+                  {item.label}
+                  {ItemRightIcon && <ItemRightIcon size={iconSize[size]} className="ml-2" />}
+                </button>
+              )}
             </MenuItem>
           )
         })}

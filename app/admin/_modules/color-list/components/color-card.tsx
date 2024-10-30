@@ -1,22 +1,11 @@
 'use client'
 import { Color } from '@/types'
-import {
-  Button,
-  Description,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  MenuSeparator,
-} from '@headlessui/react'
+import { Button, Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { deleteColor } from '@/app/admin/_data-access'
 import clsx from 'clsx'
 import { useState } from 'react'
-import { LuMoreVertical } from 'react-icons/lu'
-import { IMenuItemButton } from '@/components/IMenuItemButton'
+import { IDropdownMenu } from '@/components/menus/IDropdownMenu'
+import { icons } from '@/lib/styling/icons'
 
 export const ColorCard = ({ id, name }: Color) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -27,25 +16,19 @@ export const ColorCard = ({ id, name }: Color) => {
   return (
     <div className="flex w-full justify-between border border-stone-950 p-3 shadow-md">
       <span>{name}</span>
-      <Menu>
-        <MenuButton>
-          <LuMoreVertical size={24} />
-        </MenuButton>
-        <MenuItems anchor="bottom end" className="border border-stone-950 bg-stone-100 shadow-2xl">
-          <MenuItem>
-            <IMenuItemButton label="Edit" onClick={() => onEditColor} variant="primary" />
-          </MenuItem>
-          <MenuSeparator className="h-px bg-stone-950" />
-          <MenuItem>
-            <IMenuItemButton
-              label="Delete"
-              onClick={() => setIsDeleteDialogOpen(true)}
-              variant="warning"
-            />
-          </MenuItem>
-        </MenuItems>
-      </Menu>
-
+      <IDropdownMenu
+        menuButton={{ leftIcon: icons.dotsVertical }}
+        menuItems={[
+          { id: '1', label: 'Edit', onClick: () => onEditColor(id), variant: 'primary' },
+          { id: '2', label: 'Duplicate', onClick: () => onEditColor(id), variant: 'secondary' },
+          {
+            id: '3',
+            label: 'Delete',
+            onClick: () => setIsDeleteDialogOpen(true),
+            variant: 'warning',
+          },
+        ]}
+      />
       <Dialog
         open={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
