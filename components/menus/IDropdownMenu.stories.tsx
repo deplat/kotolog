@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
 import { IDropdownMenu } from './IDropdownMenu'
+import { icons } from '@/lib/styling/icons'
 
 const meta: Meta<typeof IDropdownMenu> = {
   component: IDropdownMenu,
@@ -26,24 +27,36 @@ export const Default: Story = {
   },
 }
 
-export const WithVertDotsIcon = {
+export const WithLeftIcon = {
   args: {
-    menuButton: { leftIcon: 'dots-v' },
-    menuItems: [],
+    menuButton: { label: 'Menu', leftIcon: icons.chevronDown },
+    menuItems: [
+      { id: '1', label: 'Item 1' },
+      { id: '2', label: 'Item 2' },
+      { id: '3', label: 'Item 3' },
+    ],
   },
 }
 
-export const WithHorizDotsIcon = {
+export const WithRightIcon = {
   args: {
-    menuButton: { leftIcon: 'dots-h' },
-    menuItems: [],
+    menuButton: { label: 'Menu', rightIcon: icons.chevronDown },
+    menuItems: [
+      { id: '1', label: 'Item 1' },
+      { id: '2', label: 'Item 2' },
+      { id: '3', label: 'Item 3' },
+    ],
   },
 }
 
-export const WithLabelAndRightIcon = {
+export const IconOnly = {
   args: {
-    menuButton: { label: 'Menu', rightIcon: 'dots-v' },
-    menuItems: [],
+    menuButton: { leftIcon: icons.chevronDown },
+    menuItems: [
+      { id: '1', label: 'Item 1' },
+      { id: '2', label: 'Item 2' },
+      { id: '3', label: 'Item 3' },
+    ],
   },
 }
 
@@ -51,9 +64,9 @@ export const WithMenuLinks = {
   args: {
     menuButton: { label: 'Menu' },
     menuItems: [
-      { id: '1', label: 'Item 1', link: true },
-      { id: '2', label: 'Item 2', link: true },
-      { id: '3', label: 'Item 3', link: true },
+      { id: '1', label: 'Link 1', link: true },
+      { id: '2', label: 'Link 2', link: true },
+      { id: '3', label: 'Link 3', link: true },
     ],
   },
 }

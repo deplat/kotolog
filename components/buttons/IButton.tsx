@@ -1,13 +1,13 @@
 import { Button } from '@headlessui/react'
 import clsx from 'clsx'
-import { stateClasses } from '@/lib/styling/stateClasses'
+import { createStateStyles } from '@/lib/styling/createStateStyles'
 import { icons } from '@/lib/styling/icons'
 
 interface IButtonProps {
   onClick?: () => void
   label?: string
-  LeftIcon?: (typeof icons)[keyof typeof icons]
-  RightIcon?: (typeof icons)[keyof typeof icons]
+  leftIcon?: (typeof icons)[keyof typeof icons]
+  rightIcon?: (typeof icons)[keyof typeof icons]
   variant?: 'primary' | 'secondary' | 'warning'
   size?: 'sm' | 'md' | 'lg'
 }
@@ -15,37 +15,67 @@ interface IButtonProps {
 export const IButton: React.FC<IButtonProps> = ({
   onClick,
   label,
-  LeftIcon,
-  RightIcon,
-  variant,
-  size,
+  leftIcon,
+  rightIcon,
+  variant = 'primary', // default
+  size = 'md', // default
 }) => {
-  const baseStyle = 'px-4 py-2.5 underline-offset-4 flex items-center justify-center'
+  const LeftIcon = leftIcon
+  const RightIcon = rightIcon
+  const iconSize = {
+    sm: 20,
+    md: 24,
+    lg: 28,
+  }
 
-  const variantStyle = clsx({
-    'bg-stone-100 ring-1 ring-inset ring-stone-950': variant === 'primary',
-    'bg-gray-100 text-gray-800 ring-1 ring-gray-300': variant === 'secondary',
-    'text-red-600': variant === 'warning',
-  })
+  const baseStyle = clsx(
+    'underline-offset-4 flex items-center justify-center transition ring-inset',
+    createStateStyles({
+      hover: ['underline'],
+    })
+  )
+
+  const primaryStyle = clsx(
+    'bg-stone-100 ring-1 ring-stone-950',
+    createStateStyles({
+      hover: ['bg-stone-950', 'text-stone-100'],
+    })
+  )
+  const secondaryStyle = clsx(
+    'bg-stone-100 ring-1 ring-stone-600',
+    createStateStyles({
+      hover: ['bg-gray-200'],
+    })
+  )
+  const warningStyle = clsx(
+    'text-red-600',
+    createStateStyles({
+      hover: ['bg-red-600', 'text-stone-100'],
+    })
+  )
+
+  const variantStyles = {
+    primary: primaryStyle,
+    secondary: secondaryStyle,
+    warning: warningStyle,
+  }
 
   const sizeStyle = clsx({
-    'text-sm px-3 py-2': size === 'sm',
-    'text-base px-4 py-2.5': size === 'md',
-    'text-lg px-5 py-3': size === 'lg',
+    'p-2': size === 'sm',
+    'text-sm px-3 py-2': size === 'sm' && label,
+    'p-2.5': size === 'md',
+    'text-lg px-4 py-2.5': size === 'md' && label,
+    'p-3': size === 'lg',
+    'text-lg px-5 py-3': size === 'lg' && label,
   })
 
-  const stateStyles = stateClasses({
-    hover: ['bg-stone-950', 'text-stone-100', 'underline'],
-    focus: ['ring-2', 'ring-offset-2', 'ring-indigo-500'],
-  })
-
-  const styles = clsx(baseStyle, variantStyle, sizeStyle, stateStyles)
+  const styles = clsx(baseStyle, variantStyles[variant], sizeStyle)
 
   return (
     <Button onClick={onClick} className={styles}>
-      {LeftIcon && <LeftIcon size={24} />}
-      {label && <span>{label}</span>}
-      {RightIcon && <RightIcon size={24} />}
+      {LeftIcon && <LeftIcon size={iconSize[size]} />}
+      {label && <span className={clsx({ 'mx-2': LeftIcon || RightIcon })}>{label}</span>}
+      {RightIcon && <RightIcon size={iconSize[size]} />}
     </Button>
   )
 }
