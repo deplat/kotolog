@@ -1,11 +1,6 @@
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react'
-import { LuMoreHorizontal, LuMoreVertical } from 'react-icons/lu'
-import Link from 'next/link' // Assuming Next.js Link component is used
-
-const icons = {
-  dotsVertical: LuMoreVertical,
-  dotsHorizontal: LuMoreHorizontal,
-}
+import Link from 'next/link'
+import { icons } from '@/lib/styling/icons'
 
 interface MenuButtonProps {
   label?: string
