@@ -39,15 +39,15 @@ export const IDropdownMenu: React.FC<IDropdownMenuProps> = ({
 
   // MenuButton styles
   const menuButtonBaseStyle = clsx(
-    'underline-offset-4 flex shadow-sm items-center justify-center transition ring-inset',
+    'underline-offset-4 flex items-center justify-center transition ring-inset ',
     createStateStyles({
-      hover: ['underline'],
+      hover: ['underline', 'shadow'],
     })
   )
   const menuButtonVariantStyles = {
     primary: clsx(
-      'bg-stone-100 ring-1 ring-stone-950',
-      createStateStyles({ hover: ['bg-stone-950', 'text-stone-100'] })
+      'bg-white  ring-stone-500 hover:ring-stone-950',
+      createStateStyles({ hover: ['text-stone-100', 'bg-stone-950'] })
     ),
     secondary: clsx(
       'bg-stone-100 ring-1 ring-stone-600',
@@ -72,30 +72,22 @@ export const IDropdownMenu: React.FC<IDropdownMenuProps> = ({
   )
 
   // MenuItem styles
-  const menuItemBaseStyle = clsx('group block w-full transition')
-
-  const menuItemVariantStyles = {
-    primary: clsx(
-      'bg-stone-100 focus:bg-red-300 hover:bg-red-300',
-      createStateStyles({ focus: ['bg-red-300'], hover: ['bg-red-300'] })
-    ),
-    secondary: clsx('bg-stone-300', createStateStyles({ hover: ['bg-gray-200'] })),
-    warning: 'text-red-600',
+  const menuItemBaseStyle = 'group block w-full transition duration-75'
+  const menuItemVariantStyles = (variant: 'primary' | 'secondary' | 'warning', focus: boolean) => {
+    switch (variant) {
+      case 'primary':
+        return clsx(focus && 'bg-stone-950 text-stone-100')
+      case 'secondary':
+        return clsx(focus && 'bg-stone-700 text-stone-100')
+      case 'warning':
+        return clsx('text-red-600', focus && 'bg-red-600 text-stone-100')
+    }
   }
-
   const menuItemSizeStyles = clsx({
-    'px-3 py-1.5 text-sm': size === 'sm',
-    'px-4 py-2 text-base': size === 'md',
+    'px-3 py-1.5': size === 'sm',
+    'px-4 py-2': size === 'md',
     'px-5 py-2.5 text-lg': size === 'lg',
   })
-
-  const menuItemStyles = (variant: 'primary' | 'secondary' | 'warning'): string => {
-    return clsx(
-      menuItemBaseStyle,
-      menuItemVariantStyles[variant ? variant : 'primary'],
-      menuItemSizeStyles
-    )
-  }
 
   return (
     <Menu as="div" className="relative inline-block">
@@ -110,8 +102,8 @@ export const IDropdownMenu: React.FC<IDropdownMenuProps> = ({
       </MenuButton>
 
       <MenuItems
+        className="absolute right-0 z-10 mt-2 min-w-36 origin-top-right bg-white shadow-lg ring-1 ring-black transition duration-100 data-[closed]:opacity-0"
         transition
-        className="absolute right-0 z-10 mt-2 min-w-36 origin-top-right bg-white shadow-lg ring-1 ring-black transition"
       >
         {menuItems.map((item) => {
           const ItemLeftIcon = item.leftIcon
@@ -119,19 +111,36 @@ export const IDropdownMenu: React.FC<IDropdownMenuProps> = ({
           const variant = item.variant || 'primary'
           return (
             <MenuItem key={item.id}>
-              {item.link && item.href ? (
-                <Link href={item.href} className={menuItemStyles(variant)}>
-                  {ItemLeftIcon && <ItemLeftIcon size={iconSize[size]} className="mr-2" />}
-                  {item.label}
-                  {ItemRightIcon && <ItemRightIcon size={iconSize[size]} className="ml-2" />}
-                </Link>
-              ) : (
-                <button type="button" onClick={item.onClick} className={menuItemStyles(variant)}>
-                  {ItemLeftIcon && <ItemLeftIcon size={iconSize[size]} className="mr-2" />}
-                  {item.label}
-                  {ItemRightIcon && <ItemRightIcon size={iconSize[size]} className="ml-2" />}
-                </button>
-              )}
+              {({ focus }) =>
+                item.link && item.href ? (
+                  <Link
+                    href={item.href}
+                    className={clsx(
+                      menuItemBaseStyle,
+                      menuItemVariantStyles(variant, focus),
+                      menuItemSizeStyles
+                    )}
+                  >
+                    {ItemLeftIcon && <ItemLeftIcon size={iconSize[size]} className="mr-2" />}
+                    {item.label}
+                    {ItemRightIcon && <ItemRightIcon size={iconSize[size]} className="ml-2" />}
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={item.onClick}
+                    className={clsx(
+                      menuItemBaseStyle,
+                      menuItemVariantStyles(variant, focus),
+                      menuItemSizeStyles
+                    )}
+                  >
+                    {ItemLeftIcon && <ItemLeftIcon size={iconSize[size]} className="mr-2" />}
+                    {item.label}
+                    {ItemRightIcon && <ItemRightIcon size={iconSize[size]} className="ml-2" />}
+                  </button>
+                )
+              }
             </MenuItem>
           )
         })}

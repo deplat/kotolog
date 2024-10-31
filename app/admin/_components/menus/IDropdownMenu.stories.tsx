@@ -70,3 +70,14 @@ export const WithMenuLinks = {
     ],
   },
 }
+
+export const Small: Story = {
+  args: {
+    menuButton: { label: 'Menu', size: 'sm' },
+    menuItems: [
+      { id: '1', label: 'Item 1' },
+      { id: '2', label: 'Item 2' },
+      { id: '3', label: 'Item 3' },
+    ],
+  },
+}

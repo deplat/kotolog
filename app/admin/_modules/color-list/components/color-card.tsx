@@ -4,7 +4,7 @@ import { Button, Description, Dialog, DialogPanel, DialogTitle } from '@headless
 import { deleteColor } from '@/app/admin/_data-access'
 import clsx from 'clsx'
 import { useState } from 'react'
-import { IDropdownMenu } from '@/components/menus/IDropdownMenu'
+import { IDropdownMenu } from '@/app/admin/_components/menus/IDropdownMenu'
 import { icons } from '@/lib/styling/icons'
 
 export const ColorCard = ({ id, name }: Color) => {
@@ -14,15 +14,19 @@ export const ColorCard = ({ id, name }: Color) => {
     console.log(id)
   }
   return (
-    <div className="flex w-full justify-between border border-stone-950 p-3 shadow-md">
+    <div className="flex w-full items-center justify-between border border-stone-950 bg-white p-3 shadow-md">
       <span>{name}</span>
       <IDropdownMenu
-        menuButton={{ leftIcon: icons.dotsVertical }}
+        menuButton={{ leftIcon: icons.dotsVertical, size: 'sm' }}
         menuItems={[
-          { id: '1', label: 'Edit', onClick: () => onEditColor(id), variant: 'primary' },
-          { id: '2', label: 'Duplicate', onClick: () => onEditColor(id), variant: 'secondary' },
           {
-            id: '3',
+            id: '1',
+            label: 'Edit',
+            onClick: () => onEditColor(id),
+            variant: 'primary',
+          },
+          {
+            id: '2',
             label: 'Delete',
             onClick: () => setIsDeleteDialogOpen(true),
             variant: 'warning',
