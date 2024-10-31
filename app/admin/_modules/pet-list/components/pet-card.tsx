@@ -23,7 +23,7 @@ export const PetCard = ({
   const onEditPet = () => router.push(`/admin/${id}`)
   return (
     <div className="flex w-full min-w-80 border border-stone-950 bg-white p-3 shadow-md">
-      <div className="relative mr-3 aspect-1">
+      <div className="relative mr-3 aspect-1 h-24 w-24">
         {avatarSrc ? <Image src={avatarSrc} alt={name} fill /> : null}
       </div>
       <div className="flex w-full flex-col gap-y-2">
