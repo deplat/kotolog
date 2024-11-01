@@ -1,5 +1,6 @@
 import { PetCard } from '@/app/admin/_modules/pet-card/PetCard'
 import { Meta, StoryObj } from '@storybook/react'
+import kittens from '@/public/cats-kittens.png'
 
 const meta: Meta<typeof PetCard> = {
   component: PetCard,
@@ -18,8 +19,19 @@ type Story = StoryObj<typeof PetCard>
 export const Default: Story = {
   args: {
     id: 1,
-    name: 'Some Pet',
-    slug: 'some-pet',
-    avatarSrc: 'https://s3.timeweb.cloud/31c3d159-kotolog/0db11fb8-e833-43af-942b-840143fe903b',
+    name: 'Daniel',
+    slug: 'Daniel',
+    avatarSrc: kittens,
+    showAvatar: true,
+  },
+}
+
+export const WithoutAvatar: Story = {
+  args: {
+    id: 2,
+    name: 'Daniel',
+    slug: 'Daniel',
+    avatarSrc: kittens,
+    showAvatar: false,
   },
 }

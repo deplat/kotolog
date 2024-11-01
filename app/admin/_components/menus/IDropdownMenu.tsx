@@ -39,16 +39,13 @@ export const IDropdownMenu: React.FC<IDropdownMenuProps> = ({
 
   // MenuButton styles
   const menuButtonBaseStyle = clsx(
-    'underline-offset-4 flex items-center justify-center transition ring-inset ',
+    'underline-offset-4 flex items-center justify-center transition',
     createStateStyles({
       hover: ['underline', 'shadow'],
     })
   )
   const menuButtonVariantStyles = {
-    primary: clsx(
-      'bg-white  ring-stone-500 hover:ring-stone-950',
-      createStateStyles({ hover: ['text-stone-100', 'bg-stone-950'] })
-    ),
+    primary: clsx('bg-white', createStateStyles({ hover: ['text-stone-100', 'bg-stone-950'] })),
     secondary: clsx(
       'bg-stone-100 ring-1 ring-stone-600',
       createStateStyles({ hover: ['bg-gray-200'] })
