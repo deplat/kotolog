@@ -1,7 +1,7 @@
 import { getCachedPets } from '@/app/admin/_data-access/pet'
 import { PetCard } from '@/app/admin/_modules/pet-card'
 
-export const PetList = async () => {
+export const PetList = async ({ showAvatars }: { showAvatars: boolean }) => {
   const pets = await getCachedPets()
   return (
     <div className="flex h-fit w-full max-w-xl flex-col border border-stone-950 bg-stone-50 p-3 shadow-md">
@@ -15,7 +15,7 @@ export const PetList = async () => {
                 name={pet.name}
                 slug={pet.slug}
                 avatarSrc={pet.avatar?.src}
-                showAvatar
+                showAvatar={showAvatars}
               />
             </li>
           ))}

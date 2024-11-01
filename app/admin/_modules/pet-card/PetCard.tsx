@@ -23,7 +23,7 @@ export const PetCard = ({ id, name, slug, avatarSrc, showAvatar }: PetCardProps)
   const onDeletePet = async () => await deletePet(id)
   const showDeleteDialog = () => setIsDeleteDialogOpen(true)
   return (
-    <div className="flex w-full min-w-80 bg-white ring-1 ring-stone-950">
+    <div className="flex w-full min-w-80 border border-stone-700 bg-white shadow">
       <Link href={`/koshki/${slug}`} className="flex w-full">
         {showAvatar ? (
           <div className="relative aspect-1 h-32 w-32">

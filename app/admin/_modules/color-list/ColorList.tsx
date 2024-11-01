@@ -1,6 +1,6 @@
 import { getCachedColors } from '@/app/admin/_data-access'
+import { ColorCard } from '@/app/admin/_modules/color-card'
 import { NoColors } from '@/app/admin/_modules/color-list/components/no-colors'
-import { ColorCard } from '@/app/admin/_modules/color-list/components/color-card'
 
 export const ColorList = async () => {
   const colors = await getCachedColors()
