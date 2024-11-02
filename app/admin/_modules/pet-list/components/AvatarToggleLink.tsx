@@ -7,7 +7,7 @@ import { Image as ImageOn, ImageOff } from 'lucide-react'
 export default function AvatarToggleLink() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const withAvatar = searchParams.get('withAvatar') === 'true'
+  const withAvatar = searchParams.get('withAvatar') !== 'false'
 
   const newSearchParams = new URLSearchParams(searchParams.toString())
   newSearchParams.set('withAvatar', withAvatar ? 'false' : 'true')
