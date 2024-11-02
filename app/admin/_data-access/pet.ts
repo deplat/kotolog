@@ -167,6 +167,9 @@ export const updatePet = async (id: number, data: PetData) => {
       isFeatured: data.isFeatured,
       isAdopted: data.isAdopted,
       isVisible: data.isVisible,
+      colors: {
+        set: data.colors.map((id) => ({ id })),
+      },
       profile: {
         update: {
           socialized: data.socialized,
@@ -180,10 +183,50 @@ export const updatePet = async (id: number, data: PetData) => {
           treatedForParasites: data.treatedForParasites,
           healthStatus: data.healthStatus,
           biography: data.biography,
+          healthNotes: data.healthNotes?.length
+            ? {
+                updateMany: {
+                  where: { id: { in: data.healthNotes.map((note) => note.id) } },
+                  data: data.healthNotes,
+                },
+              }
+            : undefined,
+          specialties: data.specialties?.length
+            ? {
+                updateMany: {
+                  where: { id: { in: data.specialties.map((spec) => spec.id) } },
+                  data: data.specialties,
+                },
+              }
+            : undefined,
         },
       },
     }
-    const updatedPet = await prisma.pet.update({ where: { id }, data: updateInput })
+
+    if (data.avatar) {
+      updateInput.avatar = {
+        update: {
+          src: data.avatar.src,
+          width: data.avatar.width,
+          height: data.avatar.height,
+        },
+      }
+    }
+
+    if (data.photos) {
+      updateInput.photos = {
+        createMany: {
+          data: data.photos,
+        },
+      }
+    }
+
+    const updatedPet = await prisma.pet.update({
+      where: { id },
+      data: updateInput,
+      include: petInclude,
+    })
+
     try {
       revalidateTag('pets')
       revalidateTag('cats')
