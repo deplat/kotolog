@@ -22,7 +22,6 @@ export const Default: Story = {
     name: 'Daniel',
     slug: 'Daniel',
     avatarSrc: kittens,
-    showAvatar: true,
   },
 }
 
@@ -32,6 +31,5 @@ export const WithoutAvatar: Story = {
     name: 'Daniel',
     slug: 'Daniel',
     avatarSrc: kittens,
-    showAvatar: false,
   },
 }
