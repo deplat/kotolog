@@ -1,30 +1,18 @@
 import { getPet, getCachedColors, Pet, Colors } from '../../_data-access'
 import { PetEditor } from '@/app/admin/_modules/pet-editor'
 import { auth } from '@/auth'
-import { SignIn } from '@/components/auth/signin-button'
-import { SignOut } from '@/components/auth/signout-button'
 import { UserRole } from '@/types/UserRole'
+import { NotAuthenticated } from '@/app/admin/_components/NotAuthenticated'
+import { NotAuthorized } from '@/app/admin/_components/NotAuthorized'
 
 export default async function Page(props: { params: Promise<{ id: number }> }) {
   const session = await auth()
   const userRole = session?.user.role
   if (!session) {
-    return (
-      <main className="flex w-full items-center justify-center">
-        <div>
-          Not authenticated :( <SignIn label="Sign In" />
-        </div>
-      </main>
-    )
+    return <NotAuthenticated />
   }
   if (userRole == UserRole.USER) {
-    return (
-      <main className="flex w-full items-center justify-center">
-        <div>
-          Not authorized :( <SignOut label="Sign Out" />
-        </div>
-      </main>
-    )
+    return <NotAuthorized />
   }
   const params = await props.params
   const id = Number(params.id)

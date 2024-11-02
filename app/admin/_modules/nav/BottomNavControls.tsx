@@ -1,13 +1,14 @@
 'use client'
-import clsx from 'clsx'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
-import { useState } from 'react'
-import { ColorEditor } from '@/app/admin/_modules/color-editor'
-import { Color } from '@/types'
 
-export const Nav = () => {
+import { useState } from 'react'
+import { Color } from '@/types'
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
+import clsx from 'clsx'
+import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
+import { ColorEditor } from '@/app/admin/_modules/color-editor'
+
+export const BottomNavControls = () => {
   const [isColorEditorOpen, setIsColorEditorOpen] = useState(false)
   const [selectedColor, setSelectedColor] = useState<Color | null>(null)
   const closeEditor = () => setIsColorEditorOpen(false)

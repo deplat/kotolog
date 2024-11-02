@@ -1,16 +1,13 @@
-import { Nav } from '@/app/admin/_modules/nav'
+import { auth } from '@/auth'
+import { UserRole } from '@/types/UserRole'
+import { BottomNav } from '@/app/admin/_modules/nav/BottomNav'
 
-export default async function Layout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default async function Layout({ children }: { children: React.ReactNode }) {
+  const session = await auth()
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex h-screen w-full flex-col">
       {children}
-      <div className="fixed bottom-0 flex w-full">
-        <Nav />
-      </div>
+      {session?.user.role == UserRole.USER ? null : <BottomNav />}
     </div>
   )
 }
