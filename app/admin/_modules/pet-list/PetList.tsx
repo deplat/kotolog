@@ -1,6 +1,6 @@
 import { getCachedPets } from '@/app/admin/_data-access/pet'
 import { PetCard } from '@/app/admin/_modules/pet-card'
-import AvatarToggleLink from '@/app/admin/pets/AvatarToggleLink'
+import AvatarToggleLink from '@/app/admin/_modules/pet-list/components/AvatarToggleLink'
 
 export const PetList = async () => {
   const pets = await getCachedPets()
