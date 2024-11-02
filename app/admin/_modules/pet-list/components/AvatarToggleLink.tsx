@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
+import { Image as ImageOn, ImageOff } from 'lucide-react'
 
 export default function AvatarToggleLink() {
   const pathname = usePathname()
@@ -13,7 +14,11 @@ export default function AvatarToggleLink() {
 
   return (
     <Link href={`${pathname}?${newSearchParams.toString()}`}>
-      {withAvatar ? 'Hide Avatars' : 'Show Avatars'}
+      {withAvatar ? (
+        <ImageOn size={32} absoluteStrokeWidth />
+      ) : (
+        <ImageOff size={32} absoluteStrokeWidth />
+      )}
     </Link>
   )
 }

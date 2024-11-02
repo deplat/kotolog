@@ -6,8 +6,10 @@ export const PetList = async () => {
   const pets = await getCachedPets()
   return (
     <div className="flex h-fit w-full max-w-xl flex-col border border-stone-950 bg-stone-50 p-3 shadow-md">
-      <h3 className="mb-2.5 text-2xl">Pets</h3>
-      <AvatarToggleLink />
+      <div className="flex items-start justify-between">
+        <h3 className="mb-2.5 text-2xl">Pets</h3>
+        <AvatarToggleLink />
+      </div>
       {pets ? (
         <ul className="flex flex-col gap-y-3">
           {pets.map((pet, index) => (
