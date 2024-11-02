@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import Image, { StaticImageData } from 'next/image'
 import { useSearchParams } from 'next/navigation'
 
@@ -21,8 +21,10 @@ export const PetCardAvatar = ({ avatarSrc, name }: PetAvatarProps) => {
   if (!showAvatar) return null
 
   return (
-    <div className="relative aspect-1 h-32 w-32 bg-stone-200">
-      {avatarSrc ? <Image src={avatarSrc} alt={`${name}'s avatar`} fill sizes="128px" /> : null}
-    </div>
+    <Suspense fallback={null}>
+      <div className="relative aspect-1 h-32 w-32 bg-stone-200">
+        {avatarSrc ? <Image src={avatarSrc} alt={`${name}'s avatar`} fill sizes="128px" /> : null}
+      </div>
+    </Suspense>
   )
 }
