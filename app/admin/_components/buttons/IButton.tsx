@@ -31,26 +31,26 @@ export const IButton: React.FC<IButtonProps> = ({
   const baseStyle = clsx(
     'underline-offset-4 flex items-center justify-center transition ring-inset',
     createStateStyles({
-      hover: ['underline'],
+      'data-[hover]': ['underline'],
     })
   )
 
   const primaryStyle = clsx(
     'bg-stone-100 ring-1 ring-stone-950',
     createStateStyles({
-      hover: ['bg-stone-950', 'text-stone-100'],
+      'data-[hover]': ['bg-stone-950', 'text-stone-100'],
     })
   )
   const secondaryStyle = clsx(
     'bg-stone-100 ring-1 ring-stone-600',
     createStateStyles({
-      hover: ['bg-gray-200'],
+      'data-[hover]': ['bg-gray-200'],
     })
   )
   const warningStyle = clsx(
     'text-red-600',
     createStateStyles({
-      hover: ['bg-red-600', 'text-stone-100'],
+      'data-[hover]': ['bg-red-600', 'text-stone-100'],
     })
   )
 
