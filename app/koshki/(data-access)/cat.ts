@@ -60,6 +60,6 @@ const getCats = async () => {
   })
 }
 
-export const getCachedCats = unstable_cache(async () => getCats(), ['cats'], {
-  tags: ['cats'],
+export const getCachedCats = unstable_cache(async () => getCats(), ['pets'], {
+  tags: ['pets'],
 })

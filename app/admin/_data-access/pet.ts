@@ -230,6 +230,7 @@ export const updatePet = async (id: number, data: PetData) => {
     try {
       revalidateTag('pets')
       revalidateTag('cats')
+      revalidateTag('get_unique_colors_from_cats')
     } catch (revalidateError) {
       console.error('Tag revalidation failed:', revalidateError)
     }
@@ -308,6 +309,7 @@ export const deletePet = async (id: number) => {
     try {
       revalidateTag('pets')
       revalidateTag('cats')
+      revalidateTag('get_unique_colors_from_cats')
     } catch (revalidateError) {
       console.error('Tag revalidation failed:', revalidateError)
     }

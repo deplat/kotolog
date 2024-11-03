@@ -91,6 +91,7 @@ export const deleteColor = async (id: number) => {
       revalidateTag('colors')
       revalidateTag('pets')
       revalidateTag('cats')
+      revalidateTag('unique_colors_from_cats')
     } catch (revalidateError) {
       console.error('Tag revalidation failed:', revalidateError)
     }
