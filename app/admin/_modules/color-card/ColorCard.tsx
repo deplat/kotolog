@@ -14,8 +14,10 @@ export const ColorCard = ({ id, name }: Color) => {
     console.log(id)
   }
   return (
-    <div className="flex w-full items-center justify-between border border-stone-950 bg-white p-3 shadow-md">
-      <span>{name}</span>
+    <div className="flex w-full items-center justify-between border border-b-0 border-stone-950 bg-white shadow-md">
+      <div className="px-3">
+        <span>{name}</span>
+      </div>
       <IDropdownMenu
         menuButton={{ leftIcon: icons.dotsVertical, size: 'sm' }}
         menuItems={[
