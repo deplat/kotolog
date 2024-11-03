@@ -1,9 +1,7 @@
 import clsx from 'clsx'
 
-export const createStateStyles = (states: Record<string, string[]>) => {
+export const createStateStyles = (states: { state: string; classnames: string[] }[]) => {
   return clsx(
-    Object.entries(states).flatMap(([state, classes]) =>
-      classes.map((className) => `${state}:${className}`)
-    )
+    ...states.map(({ state, classnames }) => classnames.map((classname) => `${state}:${classname}`))
   )
 }
