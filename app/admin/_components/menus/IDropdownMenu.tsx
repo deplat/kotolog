@@ -24,10 +24,10 @@ interface IDropdownMenuProps {
   menuItems: MenuItemProps[]
 }
 
-export const IDropdownMenu: React.FC<IDropdownMenuProps> = ({
+export const IDropdownMenu = ({
   menuButton: { variant = 'primary', size = 'md', ...menuButton },
   menuItems,
-}) => {
+}: IDropdownMenuProps) => {
   const MenuButtonLeftIcon = menuButton.leftIcon
   const MenuButtonRightIcon = menuButton.rightIcon
 
@@ -40,17 +40,21 @@ export const IDropdownMenu: React.FC<IDropdownMenuProps> = ({
   // MenuButton styles
   const menuButtonBaseStyle = clsx(
     'underline-offset-4 flex items-center justify-center transition',
-    createStateStyles({
-      hover: ['underline', 'shadow'],
-    })
+    createStateStyles('hover', ['underline', 'shadow'])
   )
   const menuButtonVariantStyles = {
-    primary: clsx('bg-white', createStateStyles({ hover: ['text-stone-100', 'bg-stone-950'] })),
+    primary: clsx(
+      'bg-white',
+      createStateStyles('data-[hover]', ['text-stone-100', 'bg-stone-950'])
+    ),
     secondary: clsx(
       'bg-stone-100 ring-1 ring-stone-600',
-      createStateStyles({ hover: ['bg-gray-200'] })
+      createStateStyles('data-[hover]', ['bg-gray-200'])
     ),
-    warning: clsx('text-red-600', createStateStyles({ hover: ['bg-red-600', 'text-stone-100'] })),
+    warning: clsx(
+      'text-red-600',
+      createStateStyles('data-[hover]', ['bg-red-600', 'text-stone-100'])
+    ),
   }
 
   const menuButtonSizeStyles = clsx({

@@ -30,40 +30,20 @@ export const IButton: React.FC<IButtonProps> = ({
 
   const baseStyle = clsx(
     'underline-offset-4 flex items-center justify-center transition ring-inset',
-    createStateStyles([
-      {
-        state: 'data-[hover]',
-        classnames: ['underline', 'shadow'],
-      },
-    ])
+    createStateStyles('data-[hover]', ['underline', 'shadow'])
   )
 
   const primaryStyle = clsx(
     'bg-stone-100 ring-1 ring-stone-950',
-    createStateStyles([
-      {
-        state: 'data-[hover]',
-        classnames: ['bg-stone-950', 'text-stone-100'],
-      },
-    ])
+    createStateStyles('data-[hover]', ['bg-stone-950', 'text-stone-100'])
   )
   const secondaryStyle = clsx(
     'bg-stone-100 ring-1 ring-stone-600',
-    createStateStyles([
-      {
-        state: 'data-[hover]',
-        classnames: ['bg-gray-200'],
-      },
-    ])
+    createStateStyles('data-[hover]', ['bg-gray-200'])
   )
   const warningStyle = clsx(
     'text-red-600',
-    createStateStyles([
-      {
-        state: 'data-[hover]',
-        classnames: ['bg-red-600', 'text-stone-100'],
-      },
-    ])
+    createStateStyles('data-[hover]', ['bg-red-600', 'text-stone-100'])
   )
 
   const variantStyles = {
