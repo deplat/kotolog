@@ -7,6 +7,8 @@ import Link from 'next/link'
 import clsx from 'clsx'
 import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { ColorEditor } from '@/app/admin/_modules/color-editor'
+import { icons } from '@/components/icons'
+import { Plus, SquarePlus } from 'lucide-react'
 
 export const BottomNavControls = () => {
   const [isColorEditorOpen, setIsColorEditorOpen] = useState(false)
@@ -14,29 +16,39 @@ export const BottomNavControls = () => {
   const closeEditor = () => setIsColorEditorOpen(false)
   const pathname = usePathname()
   return (
-    <div className="flex w-full items-center gap-x-2 border-t border-stone-950 bg-stone-100 px-2 py-2">
-      {[
-        { label: 'Admin', href: '/admin' },
-        { label: 'New Pet', href: '/admin/newPet' },
-      ].map((link, index) => (
-        <Link
-          key={index}
-          href={link.href}
-          className={clsx(
-            'flex items-center border border-stone-950 px-4 py-2.5 underline-offset-4 transition-all duration-100 first:me-auto',
-            'hover:bg-stone-950 hover:text-stone-100 hover:underline',
-            pathname == link.href ? 'bg-stone-950 text-stone-100' : 'bg-stone-100 text-stone-950'
-          )}
-        >
-          <span>{link.label}</span>
-        </Link>
-      ))}
-      <>
+    <div className="fixed bottom-0 flex h-14 w-full items-center border-t border-stone-700 bg-stone-100">
+      {pathname !== '/admin' && (
+        <div className="flex h-full">
+          <Link
+            href="/admin"
+            className="inline-flex aspect-1 h-full items-center justify-center hover:bg-stone-700 hover:text-stone-100"
+          >
+            <icons.arrowLeft size={30} absoluteStrokeWidth />
+          </Link>
+          <div className="h-full w-[1px] bg-stone-700"></div>
+        </div>
+      )}
+
+      <div className="ms-auto flex h-full">
+        {[{ label: 'New Pet', href: '/admin/newPet' }].map((link, index) => (
+          <div key={index} className="flex h-full">
+            <div className="h-full w-[1px] bg-stone-700"></div>
+            <Link
+              href={link.href}
+              className={
+                'inline-flex h-full items-center px-4 underline-offset-4 transition duration-75 hover:bg-stone-700 hover:text-stone-100 hover:underline'
+              }
+            >
+              <span>{link.label}</span>
+            </Link>
+          </div>
+        ))}
+        <div className="h-full w-[1px] bg-stone-700"></div>
+
         <Button
           onClick={() => setIsColorEditorOpen(!isColorEditorOpen)}
           className={clsx(
-            'flex items-center border border-stone-950 px-4 py-2.5 underline-offset-4 transition-all duration-100 first:me-auto',
-            'data-[hover]:bg-stone-950 data-[hover]:text-stone-100 data-[hover]:underline',
+            'inline-flex h-full items-center px-4 underline-offset-4 transition duration-75 hover:bg-stone-700 hover:text-stone-100 hover:underline',
             isColorEditorOpen ? 'bg-stone-950 text-stone-100' : ''
           )}
         >
@@ -56,7 +68,7 @@ export const BottomNavControls = () => {
             </DialogPanel>
           </div>
         </Dialog>
-      </>
+      </div>
     </div>
   )
 }
