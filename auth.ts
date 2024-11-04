@@ -4,7 +4,8 @@ import type { DefaultSession } from 'next-auth'
 import NextAuth from 'next-auth'
 
 import type { UserRole } from '@/types/UserRole'
-import { prisma } from '@/prisma'
+// eslint-disable-next-line import/no-unresolved
+import { prisma } from '@/prisma/prisma'
 
 declare module 'next-auth' {
   interface Session {

@@ -1,4 +1,4 @@
-import { getCachedColors } from '../../_data-access'
+import { getCachedColors } from '@/data-access'
 import { PetEditor } from '@/app/admin/_modules/pet-editor'
 import { auth } from '@/auth'
 import { UserRole } from '@/types/UserRole'

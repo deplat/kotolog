@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
 import { IDropdownMenu } from './IDropdownMenu'
-import { icons } from '@/lib/styling/icons'
+import { icons } from '@/components/icons'
 
 const meta: Meta<typeof IDropdownMenu> = {
   component: IDropdownMenu,

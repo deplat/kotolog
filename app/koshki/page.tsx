@@ -1,13 +1,12 @@
-import { CatsListLayout } from '@/app/koshki/(components)/cats-list-layout'
-import { getCachedCats } from './(data-access)/cat'
-import { getCachedListOfUniqueColorsFromCats } from './(data-access)/color'
+import { CatListLayout } from '@/app/koshki/_components/CatListLayout'
+import { getCachedCats, getCachedListOfUniqueColorsFromCats } from '@/data-access'
 
 export default async function CatsPage() {
   const cats = await getCachedCats()
   const uniqueColors = await getCachedListOfUniqueColorsFromCats()
   return (
     <>
-      <CatsListLayout initialCats={cats} uniqueColors={uniqueColors} />
+      <CatListLayout initialCats={cats} uniqueColors={uniqueColors} />
     </>
   )
 }

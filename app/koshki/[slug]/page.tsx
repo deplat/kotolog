@@ -1,11 +1,11 @@
-import { prisma } from '@/prisma'
+import { prisma } from '@/prisma/prisma'
 import NotFound from 'next/dist/client/components/not-found-error'
 import Image from 'next/image'
 import { IoCheckmark } from 'react-icons/io5'
-import { getAge } from '@/lib/get-age'
-import ContactButton from '@/components/contact-button'
+import { getAgeFromDate } from '@/utils/getAgeFromDate'
+import ContactButton from '@/components/ContactButton'
 import clsx from 'clsx'
-import { PhotosCarousel } from './(components)/embla-carousel'
+import { PhotosCarousel } from '../_components/EmblaCarousel'
 import '@/app/globals.css'
 
 async function getPetWithProfile(slug: string) {
@@ -25,7 +25,7 @@ async function getPetWithProfile(slug: string) {
 }
 
 export default async function CatPage(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+  const params = await props.params
   const cat = await getPetWithProfile(params.slug)
   if (!cat) {
     return <NotFound />
@@ -35,7 +35,7 @@ export default async function CatPage(props: { params: Promise<{ slug: string }>
   const isFemale = cat.gender === 'FEMALE'
 
   if (cat.birthDate !== null) {
-    catAge = getAge(cat.birthDate)
+    catAge = getAgeFromDate(cat.birthDate)
   }
 
   const wordEnd = () => (isFemale ? 'a' : '')

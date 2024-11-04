@@ -3,8 +3,7 @@ import { Color } from '@/types'
 import { Button, Field, Input, Label } from '@headlessui/react'
 import clsx from 'clsx'
 import { useEffect } from 'react'
-import { getColorByName } from '@/app/admin/_data-access'
-import { createColor, updateColor } from '@/app/admin/_data-access/color'
+import { createColor, getColorByName, updateColor } from '@/data-access'
 
 export const ColorEditor = ({
   color,
@@ -19,7 +18,7 @@ export const ColorEditor = ({
     watch,
     setError,
     clearErrors,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<Color>({
     defaultValues: { name: color?.name },
   })

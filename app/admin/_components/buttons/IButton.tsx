@@ -1,7 +1,7 @@
 import { Button } from '@headlessui/react'
 import clsx from 'clsx'
-import { createStateStyles } from '@/lib/styling/createStateStyles'
-import { icons } from '@/lib/styling/icons'
+import { createStateStyles } from '@/utils/createStateStyles'
+import { icons } from '@/components/icons'
 
 interface IButtonProps {
   onClick?: () => void

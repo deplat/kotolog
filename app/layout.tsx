@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { Source_Serif_4 } from 'next/font/google'
 import './globals.css'
-import { siteMetadata } from '@/data/siteMetadata'
-import { ThemeProvider } from '@/components/theme-provider'
+import { siteMetadata } from '@/siteMetadata'
+import { ThemeProvider } from '@/components/ThemeProvider'
 import clsx from 'clsx'
 
 const source_serif = Source_Serif_4({
@@ -47,7 +47,7 @@ export default function RootLayout({
         )}
       >
         <ThemeProvider attribute="class" defaultTheme={siteMetadata.theme} enableSystem>
-          <div className="flex min-h-screen">{children}</div>
+          <div className="flex">{children}</div>
         </ThemeProvider>
       </body>
     </html>

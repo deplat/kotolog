@@ -1,6 +1,6 @@
 import { IButton } from '@/app/admin/_components/buttons/IButton'
 import { Meta, StoryObj } from '@storybook/react'
-import { icons } from '@/lib/styling/icons'
+import { icons } from '@/components/icons'
 
 const meta: Meta<typeof IButton> = {
   component: IButton,

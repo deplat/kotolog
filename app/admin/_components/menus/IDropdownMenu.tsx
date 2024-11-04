@@ -1,8 +1,8 @@
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react'
 import Link from 'next/link'
 import clsx from 'clsx'
-import { icons } from '@/lib/styling/icons'
-import { createStateStyles } from '@/lib/styling/createStateStyles'
+import { icons } from '@/components/icons'
+import { createStateStyles } from '@/utils/createStateStyles'
 
 interface MenuButtonProps {
   label?: string

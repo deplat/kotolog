@@ -1,13 +1,13 @@
 'use client'
 
 import { IDropdownMenu } from '@/app/admin/_components/menus/IDropdownMenu'
-import { icons } from '@/lib/styling/icons'
+import { icons } from '@/components/icons'
 import { Button, Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import Image, { StaticImageData } from 'next/image'
 import clsx from 'clsx'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { deletePet } from '@/app/admin/_data-access'
+import { deletePet } from '@/data-access'
 
 interface PetCardControlsProps {
   id: number

@@ -1,4 +1,4 @@
-import { getCachedColors } from '@/app/admin/_data-access'
+import { getCachedColors } from '@/data-access'
 import { ColorCard } from '@/app/admin/_modules/color-card'
 import { NoColors } from '@/app/admin/_modules/color-list/components/NoColors'
 import Link from 'next/link'

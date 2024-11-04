@@ -1,4 +1,4 @@
-import { getPet, getCachedColors, Pet, Colors } from '../../_data-access'
+import { getPet, getCachedColors, Pet, Colors } from '@/data-access'
 import { PetEditor } from '@/app/admin/_modules/pet-editor'
 import { auth } from '@/auth'
 import { UserRole } from '@/types/UserRole'

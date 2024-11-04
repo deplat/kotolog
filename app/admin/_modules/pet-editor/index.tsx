@@ -1,1 +1,1 @@
-export { PetEditor } from './ui/pet-editor'
+export { PetEditor } from './PetEditor'

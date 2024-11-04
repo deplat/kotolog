@@ -1,4 +1,4 @@
-import { getCachedPets } from '@/app/admin/_data-access/pet'
+import { getCachedPets } from '@/data-access/pet'
 import { PetCard } from '@/app/admin/_modules/pet-card'
 import AvatarToggleLink from '@/app/admin/_modules/pet-list/components/AvatarToggleLink'
 

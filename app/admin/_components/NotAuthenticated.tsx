@@ -1,4 +1,4 @@
-import { SignIn } from '@/components/auth/signin-button'
+import { SignIn } from '@/components/auth/SignInButtonServer'
 
 export const NotAuthenticated = () => {
   return (
