@@ -1,5 +1,4 @@
 import { auth } from '@/auth'
-import { UserRole } from '@/types/UserRole'
 import { NotAuthenticated } from '@/app/admin/_components/NotAuthenticated'
 import { NotAuthorized } from '@/app/admin/_components/NotAuthorized'
 import Link from 'next/link'
@@ -11,12 +10,13 @@ export default async function Admin() {
   if (!session) {
     return <NotAuthenticated />
   }
-  if (userRole == UserRole.USER) {
+  if (userRole === 'USER') {
     return <NotAuthorized />
   }
   return (
     <main className="flex flex-grow p-3">
       <div className="flex w-full flex-col items-center justify-center gap-3">
+        {userRole}
         {[
           { label: 'Pets', href: '/admin/pets' },
           { label: 'Colors', href: '/admin/colors' },

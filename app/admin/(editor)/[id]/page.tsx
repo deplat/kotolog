@@ -1,7 +1,6 @@
 import { getPet, getCachedColors, Pet, Colors } from '@/data-access'
 import { PetEditor } from '@/app/admin/_modules/pet-editor'
 import { auth } from '@/auth'
-import { UserRole } from '@/types/UserRole'
 import { NotAuthenticated } from '@/app/admin/_components/NotAuthenticated'
 import { NotAuthorized } from '@/app/admin/_components/NotAuthorized'
 
@@ -11,7 +10,7 @@ export default async function Page(props: { params: Promise<{ id: number }> }) {
   if (!session) {
     return <NotAuthenticated />
   }
-  if (userRole == UserRole.USER) {
+  if (userRole == 'USER') {
     return <NotAuthorized />
   }
   const params = await props.params
