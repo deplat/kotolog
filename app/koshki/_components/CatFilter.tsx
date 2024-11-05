@@ -69,7 +69,7 @@ export const CatFilter = ({ uniqueColors, onFilterChange, toggleFilter }: Filter
   return (
     <div
       className={clsx(
-        'flex h-screen flex-col p-4 shadow-lg md:h-fit md:max-h-screen md:rounded-bl-3xl md:rounded-tl-3xl',
+        'flex h-full flex-col p-4 shadow-lg md:h-fit md:max-h-screen md:rounded-bl-3xl md:rounded-tl-3xl',
         'bg-white backdrop-blur-xl dark:bg-gray-700/85 dark:ring-1 dark:ring-inset dark:ring-gray-50/15'
       )}
     >

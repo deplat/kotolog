@@ -66,7 +66,7 @@ export const CatListLayout = ({ initialCats, uniqueColors }: CatsListLayoutProps
         as="div"
         show={filterVisible}
         className={clsx(
-          'fixed -right-1 bottom-1/2 top-1/2 z-50 flex items-center',
+          'fixed -right-1 bottom-0 top-0 z-50 flex h-full items-center',
           'transition data-[closed]:translate-x-full data-[enter]:duration-500 data-[leave]:duration-500'
         )}
       >

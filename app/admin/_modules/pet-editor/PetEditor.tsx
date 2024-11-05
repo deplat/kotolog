@@ -40,7 +40,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
 
   const router = useRouter()
 
-  const redirectToAdminMain = () => router.push(`/admin/`)
+  const redirectToPets = () => router.push(`/admin/pets`)
 
   const watchSlug = watch('slug')
 
@@ -118,7 +118,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
       const updatedPet = await updatePet(pet.id, data)
       console.log(updatedPet)
     }
-    redirectToAdminMain()
+    redirectToPets()
   }
 
   return (
@@ -231,7 +231,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
           Save
         </Button>
         <Button
-          onClick={redirectToAdminMain}
+          onClick={redirectToPets}
           className={clsx(
             'px-4 py-2.5 underline-offset-4',
             'data-[hover]:text-red-500 data-[hover]:underline'
