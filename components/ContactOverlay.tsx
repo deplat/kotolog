@@ -24,17 +24,17 @@ const contactMethods = [
 export const ContactOverlay = ({ onClose }: { onClose: () => void }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="rounded-md bg-white p-4 shadow-lg dark:bg-gray-700">
+      <div className="flex flex-col items-center rounded-md bg-white p-4 shadow-lg dark:bg-gray-700">
         <h2 className="mb-2 text-2xl">Свяжитесь с нами:</h2>
-        <hr className="mb-4" style={{ border: '1px solid #F35627' }} />
-        <ul className="flex flex-col items-center justify-center gap-y-3 p-3">
+        <hr className="mb-4 w-full" style={{ border: '1px solid #F35627' }} />
+        <ul className="flex flex-col gap-y-3 p-3">
           {contactMethods.map((contact) => (
-            <li key={contact.name}>
+            <li key={contact.name} className="flex justify-center">
               <Link
                 href={contact.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn primary hover rounded-md px-2 py-1 text-xl hover:text-orange-600"
+                className="btn primary hover w-full rounded-md px-2 py-1 text-xl hover:text-orange-600"
               >
                 {contact.icon}
                 {contact.name}
@@ -42,9 +42,9 @@ export const ContactOverlay = ({ onClose }: { onClose: () => void }) => {
             </li>
           ))}
         </ul>
-        <div className="flex">
+        <div className="ms-auto flex">
           <Button onClick={onClose} className="ms-auto p-2 hover:underline">
-            <IoClose size={24} className="hover:text-orange-600" />
+            <IoClose size={30} className="hover:text-orange-600" />
           </Button>
         </div>
       </div>
