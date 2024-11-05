@@ -10,7 +10,7 @@ export const ColorField = ({ control, colors }: { control: Control<PetData>; col
     render={({ field }) => (
       <Fieldset className="form-group mb-6 flex flex-col items-center justify-center">
         <Legend className="text-2xl">Colors:</Legend>
-        <div className="flex space-x-4">
+        <div className="flex flex-col gap-y-3">
           {colors.map((color: Color) => (
             <Label key={color.id} className="flex items-center">
               <input
