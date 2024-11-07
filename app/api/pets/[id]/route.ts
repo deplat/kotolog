@@ -78,7 +78,7 @@ export async function DELETE(req: NextRequest, props: { params: Promise<{ id: nu
     await prisma.pet.delete({
       where: { id },
     })
-    revalidateTag('pets')
+    revalidateTag('(.)pets')
     return NextResponse.json('Cat deleted successfully.')
   } catch (error) {
     console.error('Error deleting cat:', error)

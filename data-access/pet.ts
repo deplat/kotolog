@@ -110,7 +110,7 @@ export const createPet = async (data: PetData) => {
     })
     console.log('Created Pet', createdPet)
     try {
-      revalidateTag('pets')
+      revalidateTag('(.)pets')
       revalidateTag('cats')
       revalidateTag('unique_colors_from_cats')
     } catch (revalidateError) {
@@ -156,7 +156,7 @@ export const getPets = async () => {
   }
 }
 
-export const getCachedPets = unstable_cache(getPets, ['pets'], { tags: ['pets'] })
+export const getCachedPets = unstable_cache(getPets, ['(.)pets'], { tags: ['(.)pets'] })
 
 /*  UPDATE  */
 export const updatePet = async (id: number, data: PetData) => {
@@ -233,7 +233,7 @@ export const updatePet = async (id: number, data: PetData) => {
     })
 
     try {
-      revalidateTag('pets')
+      revalidateTag('(.)pets')
       revalidateTag('cats')
       revalidateTag('get_unique_colors_from_cats')
     } catch (revalidateError) {
@@ -312,7 +312,7 @@ export const deletePet = async (id: number) => {
     }
     const deletedPet = await prisma.pet.delete({ where: { id } })
     try {
-      revalidateTag('pets')
+      revalidateTag('(.)pets')
       revalidateTag('cats')
       revalidateTag('get_unique_colors_from_cats')
     } catch (revalidateError) {

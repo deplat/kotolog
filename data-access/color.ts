@@ -36,7 +36,7 @@ const getColors = async () => {
       select: colorSelect,
     })
   } catch (error) {
-    console.error('Error getting colors:', error)
+    console.error('Error getting (.)colors:', error)
     throw prismaErrorHandler(error)
   }
 }
@@ -108,7 +108,7 @@ export const deleteColor = async (id: number) => {
     })
     try {
       revalidateTag('colors')
-      revalidateTag('pets')
+      revalidateTag('(.)pets')
       revalidateTag('cats')
       revalidateTag('unique_colors_from_cats')
     } catch (revalidateError) {
