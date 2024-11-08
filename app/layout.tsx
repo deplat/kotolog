@@ -42,12 +42,12 @@ export default function RootLayout({
     <html lang={siteMetadata.lang} className={source_serif.className} suppressHydrationWarning>
       <body
         className={clsx(
-          'flex flex-col scroll-smooth bg-gray-100 text-stone-900',
+          'scroll-smooth bg-gray-100 text-stone-900',
           'from-gray-800 to-black dark:bg-gray-800 dark:bg-gradient-to-br dark:text-stone-200'
         )}
       >
         <ThemeProvider attribute="class" defaultTheme={siteMetadata.theme} enableSystem>
-          <div className="flex">{children}</div>
+          {children}
         </ThemeProvider>
       </body>
     </html>

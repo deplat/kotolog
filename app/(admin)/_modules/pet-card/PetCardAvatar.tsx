@@ -22,7 +22,7 @@ export const PetCardAvatar = ({ avatarSrc, name }: PetAvatarProps) => {
 
   return (
     <div className="relative aspect-1 h-32 w-32 bg-stone-200">
-      {avatarSrc ? <Image src={avatarSrc} alt={`${name}'s avatar`} fill sizes="128px" /> : null}
+      {avatarSrc ? <Image src={avatarSrc} alt={`${name}'s avatar`} fill /> : null}
     </div>
   )
 }

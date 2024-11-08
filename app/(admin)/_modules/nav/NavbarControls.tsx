@@ -10,7 +10,7 @@ export const NavbarControls = () => {
   console.log(pathname)
   return (
     <div className="fixed bottom-0 left-0 right-0 flex justify-center sm:bottom-6">
-      <nav className="flex w-full justify-between bg-stone-100/35 px-4 py-3 backdrop-blur sm:max-w-xs sm:rounded-full sm:shadow sm:ring-2 sm:ring-stone-700/65">
+      <nav className="flex w-full justify-between bg-stone-50/35 px-4 py-3 backdrop-blur sm:max-w-xs sm:rounded-full sm:shadow-lg sm:ring-2 sm:ring-stone-700/50">
         {[
           {
             title: 'Pets',
@@ -43,7 +43,7 @@ export const NavbarControls = () => {
               size={30}
               absoluteStrokeWidth
               className={clsx(
-                'relative transition-all group-hover:text-orange-600 group-hover:drop-shadow sm:group-hover:-translate-y-0.5',
+                'relative drop-shadow transition-all group-hover:text-orange-600 sm:group-hover:-translate-y-0.5',
                 pathname == item.href ? 'text-orange-600' : 'text-stone-700'
               )}
             />

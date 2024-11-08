@@ -3,7 +3,7 @@ import { NotAuthenticated } from '@/app/(admin)/_components/NotAuthenticated'
 import { NotAuthorized } from '@/app/(admin)/_components/NotAuthorized'
 import { redirect } from 'next/navigation'
 
-export default async function Admin() {
+export default async function Page() {
   const session = await auth()
   if (!session) {
     return <NotAuthenticated />
