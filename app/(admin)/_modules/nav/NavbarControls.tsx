@@ -21,7 +21,7 @@ export const NavbarControls = () => {
   const pathname = usePathname()
   console.log(pathname)
   return (
-    <div className="fixed bottom-0 left-0 right-0 flex justify-center sm:bottom-6">
+    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 flex justify-center sm:bottom-6">
       <nav className="flex w-full justify-between bg-stone-50/55 px-4 py-3 backdrop-blur dark:bg-stone-700/55 sm:max-w-xs sm:rounded-lg sm:shadow-lg sm:ring-2 sm:ring-stone-700/50">
         <>
           {[
