@@ -10,7 +10,7 @@ export const NavbarControls = () => {
   console.log(pathname)
   return (
     <div className="fixed bottom-0 left-0 right-0 flex justify-center sm:bottom-6">
-      <nav className="flex w-full justify-between bg-stone-700/35 px-4 py-3 backdrop-blur sm:max-w-xs sm:rounded-full sm:shadow-lg sm:ring-2 sm:ring-stone-700/50">
+      <nav className="flex w-full justify-between bg-stone-50/55 dark:bg-stone-700/55 px-4 py-3 backdrop-blur sm:max-w-xs sm:rounded-full sm:shadow-lg sm:ring-2 sm:ring-stone-700/50">
         {[
           {
             title: 'Pets',
