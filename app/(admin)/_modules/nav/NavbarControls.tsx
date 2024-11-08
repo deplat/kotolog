@@ -4,7 +4,7 @@ import { PawPrint, Plus, Search, Menu, SwatchBook } from 'lucide-react'
 export const NavbarControls = () => {
   return (
     <div className="fixed bottom-0 left-0 right-0 flex justify-center sm:bottom-8">
-      <div className="flex w-full max-w-sm justify-evenly p-3">
+      <div className="flex w-full justify-evenly p-3 sm:max-w-sm">
         {[
           {
             title: 'Pets',
