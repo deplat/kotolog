@@ -1,19 +1,10 @@
-import { BottomNav } from '@/app/(admin)/_modules/nav/BottomNav'
+import { Navbar } from '@/app/(admin)/_modules/nav/Navbar'
 
-export default async function Layout({
-  children,
-  explorer,
-}: {
-  children: React.ReactNode
-  explorer: React.ReactNode
-}) {
+export default async function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      <main className="flex h-full w-full flex-col lg:flex-row">
-        {children}
-        {explorer}
-      </main>
-      <BottomNav />
-    </>
+    <div className="flex flex-col">
+      <main className="flex flex-grow flex-col lg:flex-row">{children}</main>
+      <Navbar />
+    </div>
   )
 }

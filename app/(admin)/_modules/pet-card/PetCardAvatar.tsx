@@ -14,7 +14,7 @@ export const PetCardAvatar = ({ avatarSrc, name }: PetAvatarProps) => {
   const [showAvatar, setShowAvatar] = useState(true) // Default to `true`
 
   useEffect(() => {
-    const withAvatarParam = searchParams.get('withAvatar')
+    const withAvatarParam = searchParams.get('showAvatar')
     setShowAvatar(withAvatarParam !== 'false')
   }, [searchParams])
 
