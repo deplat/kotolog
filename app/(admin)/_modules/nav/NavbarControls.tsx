@@ -1,10 +1,16 @@
+'use client'
+
 import Link from 'next/link'
 import { PawPrint, Plus, Search, Menu, SwatchBook } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import clsx from 'clsx'
 
 export const NavbarControls = () => {
+  const pathname = usePathname()
+  console.log(pathname)
   return (
     <div className="fixed bottom-0 left-0 right-0 flex justify-center sm:bottom-6">
-      <nav className="flex w-full justify-between bg-stone-100/35 px-4 py-3 backdrop-blur sm:max-w-xs sm:rounded-full sm:shadow sm:ring-1 sm:ring-stone-700/65">
+      <nav className="flex w-full justify-between bg-stone-100/35 px-4 py-3 backdrop-blur sm:max-w-xs sm:rounded-full sm:shadow sm:ring-2 sm:ring-stone-700/65">
         {[
           {
             title: 'Pets',
@@ -32,11 +38,14 @@ export const NavbarControls = () => {
             icon: Menu,
           },
         ].map((item, index) => (
-          <Link key={index} href={item.href} title={item.title} className="group relative">
+          <Link key={index} href={item.href} title={item.title} className="group">
             <item.icon
               size={30}
               absoluteStrokeWidth
-              className="relative transition group-hover:scale-125 group-hover:text-orange-600"
+              className={clsx(
+                'relative transition-all group-hover:text-orange-600 group-hover:drop-shadow sm:group-hover:-translate-y-0.5',
+                pathname == item.href ? 'text-orange-600' : 'text-stone-700'
+              )}
             />
           </Link>
         ))}
