@@ -4,7 +4,7 @@ import { PawPrint, Plus, Search, Menu, SwatchBook } from 'lucide-react'
 export const NavbarControls = () => {
   return (
     <div className="fixed bottom-0 left-0 right-0 flex justify-center sm:bottom-8">
-      <div className="flex w-full justify-evenly p-3 sm:max-w-sm">
+      <nav className="flex w-full justify-between p-3 sm:max-w-xs">
         {[
           {
             title: 'Pets',
@@ -40,7 +40,7 @@ export const NavbarControls = () => {
             />
           </Link>
         ))}
-      </div>
+      </nav>
     </div>
   )
 }
