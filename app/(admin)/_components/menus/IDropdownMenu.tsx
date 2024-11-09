@@ -39,12 +39,12 @@ export const IDropdownMenu = ({
 
   // MenuButton styles
   const menuButtonBaseStyle = clsx(
-    'group underline-offset-4 flex items-center justify-center transition rounded-bl-xl',
+    'group underline-offset-4 flex items-center justify-center transition rounded-bl-lg',
     createStateStyles('hover', ['underline', 'shadow'])
   )
   const menuButtonVariantStyles = {
     primary: clsx(
-      'dark:hover:bg-gray-400/15',
+      'dark:hover:bg-gray-400/15 ring-2 ring-stone-700/55',
       createStateStyles('data-[hover]', ['text-stone-100', 'bg-stone-950'])
     ),
     secondary: clsx(

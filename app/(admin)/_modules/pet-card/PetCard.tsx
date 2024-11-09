@@ -12,7 +12,7 @@ interface PetCardProps {
 
 export const PetCard = ({ id, name, slug, avatarSrc }: PetCardProps) => {
   return (
-    <div className="flex w-full min-w-80 overflow-hidden rounded-lg bg-white shadow ring-2 ring-stone-700/55 backdrop-blur dark:bg-gray-900/55">
+    <div className="flex w-full min-w-80 overflow-hidden rounded-lg bg-white ring-2 ring-stone-700/55 drop-shadow-xl backdrop-blur dark:bg-gray-900/55">
       <Link href={`/koshki/${slug}`} className="flex w-full">
         <PetCardAvatar avatarSrc={avatarSrc} name={name} />
         <div className="flex w-full flex-col justify-between p-3">
