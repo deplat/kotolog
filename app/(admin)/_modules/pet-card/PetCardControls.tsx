@@ -25,7 +25,7 @@ export const PetCardControls = ({ id, avatarSrc, name }: PetCardControlsProps) =
   return (
     <div>
       <IDropdownMenu
-        menuButton={{ leftIcon: icons.dotsVertical }}
+        menuButton={{ leftIcon: icons.dotsVertical, variant: 'primary' }}
         menuItems={[
           { id: '1', label: 'Edit', onClick: onEditPet },
           { id: '2', label: 'Delete', onClick: showDeleteDialog, variant: 'warning' },

@@ -39,12 +39,12 @@ export const IDropdownMenu = ({
 
   // MenuButton styles
   const menuButtonBaseStyle = clsx(
-    'underline-offset-4 flex items-center justify-center transition',
+    'group underline-offset-4 flex items-center justify-center transition rounded-bl-xl',
     createStateStyles('hover', ['underline', 'shadow'])
   )
   const menuButtonVariantStyles = {
     primary: clsx(
-      'bg-white',
+      'dark:hover:bg-gray-400/15',
       createStateStyles('data-[hover]', ['text-stone-100', 'bg-stone-950'])
     ),
     secondary: clsx(
@@ -77,7 +77,10 @@ export const IDropdownMenu = ({
   const menuItemVariantStyles = (variant: 'primary' | 'secondary' | 'warning', focus: boolean) => {
     switch (variant) {
       case 'primary':
-        return clsx(focus && 'bg-stone-950 text-stone-100')
+        return clsx(
+          'dark:bg-gray-800/55',
+          focus && 'bg-stone-950 text-stone-100 dark:bg-gray-400/55 dark:text-orange-600'
+        )
       case 'secondary':
         return clsx(focus && 'bg-stone-700 text-stone-100')
       case 'warning':
@@ -93,7 +96,12 @@ export const IDropdownMenu = ({
   return (
     <Menu as="div" className="relative inline-block">
       <MenuButton className={menuButtonStyles}>
-        {MenuButtonLeftIcon && <MenuButtonLeftIcon size={iconSize[size]} />}
+        {MenuButtonLeftIcon && (
+          <MenuButtonLeftIcon
+            size={iconSize[size]}
+            className="group-data-[hover]:text-orange-600"
+          />
+        )}
         {menuButton.label && (
           <span className={clsx({ 'mx-2': MenuButtonLeftIcon || MenuButtonRightIcon })}>
             {menuButton.label}
@@ -103,7 +111,7 @@ export const IDropdownMenu = ({
       </MenuButton>
 
       <MenuItems
-        className="absolute right-0 z-10 mt-2 min-w-36 origin-top-right bg-white shadow-lg ring-1 ring-black transition duration-100 data-[closed]:opacity-0"
+        className="absolute right-0 z-10 mt-2 min-w-36 origin-top-right shadow-lg ring-1 ring-black transition duration-100 data-[closed]:opacity-0"
         transition
       >
         {menuItems.map((item) => {
