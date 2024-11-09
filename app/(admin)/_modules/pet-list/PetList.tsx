@@ -11,7 +11,7 @@ export const PetList = async () => {
         <AvatarToggleLink />
       </div>
       {pets ? (
-        <ul className="flex flex-col gap-y-3">
+        <ul className="flex flex-col gap-y-6">
           {pets.map((pet, index) => (
             <li key={index} className="flex">
               <PetCard id={pet.id} name={pet.name} slug={pet.slug} avatarSrc={pet.avatar?.src} />
