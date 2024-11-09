@@ -44,7 +44,7 @@ export const IDropdownMenu = ({
   )
   const menuButtonVariantStyles = {
     primary: clsx(
-      'dark:hover:bg-gray-400/15 ring-2 ring-stone-700/55',
+      'dark:hover:bg-gray-400/15 ',
       createStateStyles('data-[hover]', ['text-stone-100', 'bg-stone-950'])
     ),
     secondary: clsx(

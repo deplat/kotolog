@@ -21,7 +21,7 @@ export const PetCardAvatar = ({ avatarSrc, name }: PetAvatarProps) => {
   if (!showAvatar) return null
 
   return (
-    <div className="relative aspect-1 w-48 overflow-hidden rounded-r-lg bg-stone-200 ring-2 ring-stone-700/55">
+    <div className="relative aspect-1 w-48 overflow-hidden rounded-r bg-stone-200">
       {avatarSrc ? (
         <Image src={avatarSrc} alt={`${name}'s avatar`} objectFit={'cover'} fill />
       ) : null}
