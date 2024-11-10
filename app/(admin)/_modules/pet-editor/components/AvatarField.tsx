@@ -81,16 +81,20 @@ export const AvatarField = ({
       control={control}
       render={({ field }) => (
         <Field className="flex flex-col items-center justify-center gap-2">
-          <div className="relative h-72 w-72 overflow-hidden ring-1 ring-inset ring-stone-950">
-            {imagePreviewSrc ? <NextImage src={imagePreviewSrc} alt="Select avatar" fill /> : null}
+          <div className="relative flex h-72 w-72 items-center justify-center overflow-hidden rounded ring-2 ring-stone-700/75 dark:ring-stone-400/75">
+            {imagePreviewSrc ? (
+              <NextImage src={imagePreviewSrc} alt="Select avatar" objectFit={'cover'} fill />
+            ) : null}
+            <Input
+              id="avatar"
+              type="file"
+              accept="image/jpeg, image/jpg"
+              ref={field.ref}
+              onChange={handleImageChange}
+              className="flex h-full w-full items-end bg-transparent fill-transparent text-center text-transparent"
+            ></Input>
           </div>
-          <Input
-            id="avatar"
-            type="file"
-            accept="image/jpeg, image/jpg"
-            ref={field.ref}
-            onChange={handleImageChange}
-          />
+
           {error && <p className="text-red-600">{error}</p>}
           {loading && <p>Processing image...</p>}
         </Field>
