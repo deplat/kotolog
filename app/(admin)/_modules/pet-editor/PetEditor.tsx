@@ -18,6 +18,7 @@ import {
   TextField,
 } from '@/app/(admin)/_modules/pet-editor/components'
 import clsx from 'clsx'
+import { Gender } from 'aws-sdk/clients/polly'
 
 export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) => {
   const {
@@ -34,6 +35,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
 
   const [avatarFile, setAvatarFile] = useState<File | null>(null)
   const [avatar, setAvatar] = useState<ImageWithDimensions | null>(null)
+  const [gender, setGender] = useState<Gender | null>(null)
   const [imageFilesWithDimensions, setImageFilesWithDimensions] = useState<
     ImageFileWithDimensions[]
   >([])
@@ -43,6 +45,10 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
   const redirectToPets = () => router.push(`/admin/pets`)
 
   const watchSlug = watch('slug')
+  const watchGender = watch('gender')
+
+  const isFemale = pet?.gender === 'FEMALE'
+  const wordEnd = () => (isFemale || gender == 'FEMALE' ? 'a' : '')
 
   useEffect(() => {
     const checkSlug = async (slug: string, id?: number) => {
@@ -50,18 +56,24 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
         const existingPet = await getPetBySlug(slug)
         if (existingPet && existingPet.id != id) {
           console.log(existingPet.slug)
-          setError('slug', { type: 'custom', message: 'Slug is already in use' })
+          setError('slug', { type: 'custom', message: 'Ссылка уже используется' })
         } else {
           clearErrors('slug')
         }
       } catch (error) {
-        setError('slug', { type: 'custom', message: 'Cannot check slug' })
+        setError('slug', {
+          type: 'custom',
+          message: 'Не удалось проверить слаг, попробуйте позднее',
+        })
       }
     }
     if (watchSlug) {
       checkSlug(watchSlug, pet?.id).then()
     }
-  }, [clearErrors, setError, watchSlug])
+    if (watchGender) {
+      setGender(watchGender)
+    }
+  }, [clearErrors, setError, watchSlug, watchGender, setGender])
 
   const onSubmit: SubmitHandler<PetData> = async (data) => {
     console.log(isSubmitting)
@@ -131,18 +143,18 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
           <AvatarField control={control} setAvatar={setAvatar} setAvatarFile={setAvatarFile} />
         </div>
         <TextField
-          label="Name"
-          register={register('name', { required: 'Name is required' })}
+          label="Имя"
+          register={register('name', { required: 'Имя обязательно' })}
           errors={errors.name}
         />
         <TextField
-          label="Slug"
-          register={register('slug', { required: 'Slug is required' })}
+          label="Слаг"
+          register={register('slug', { required: 'Слаг обязателен' })}
           errors={errors.slug}
         />
-        <ControlledDateField label="Birth Date:" fieldKey="birthDate" control={control} />
+        <ControlledDateField label="Дата рождения:" fieldKey="birthDate" control={control} />
         <ControlledListBox
-          fieldLabel="Pet type:"
+          fieldLabel="Тип:"
           fieldKey="petType"
           options={[
             { value: 'CAT', label: 'CAT' },
@@ -151,37 +163,37 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
           control={control}
         />
         <ControlledListBox
-          fieldLabel="Gender"
+          fieldLabel="Пол:"
           fieldKey="gender"
           options={[
-            { value: 'MALE', label: 'MALE' },
-            { value: 'FEMALE', label: 'FEMALE' },
-            { value: undefined, label: 'NO' },
+            { value: 'MALE', label: 'МУЖ' },
+            { value: 'FEMALE', label: 'ЖЕН' },
+            { value: undefined, label: 'НЕТ' },
           ]}
           control={control}
         />
         <ControlledListBox
-          fieldLabel="Fur type"
+          fieldLabel="Шерсть:"
           fieldKey="furType"
           options={[
-            { value: null, label: 'NO' },
-            { value: 'SHORT', label: 'SHORT' },
-            { value: 'MEDIUM', label: 'MEDIUM' },
-            { value: 'LONG', label: 'LONG' },
-            { value: 'HAIRLESS', label: 'HAIRLESS' },
+            { value: null, label: 'НЕ УКАЗАНО' },
+            { value: 'SHORT', label: 'КОРОТКАЯ' },
+            { value: 'MEDIUM', label: 'СРЕДНЯЯ' },
+            { value: 'LONG', label: 'ДЛИННАЯ' },
+            { value: 'HAIRLESS', label: 'ОТСУТСТВУЕТ' },
           ]}
           control={control}
         />
       </Fieldset>
 
-      <Fieldset className="mb-6 flex w-full flex-col gap-y-2 border border-stone-950 p-3 sm:p-6">
-        <Legend className="mb-3 text-2xl">Controls:</Legend>
+      <Fieldset className="mb-6 flex w-full flex-col gap-y-2 border border-stone-950 bg-stone-50/85 p-3 sm:p-6">
+        <Legend className="mb-3 text-2xl">Установки:</Legend>
         {[
-          { fieldKey: 'isFeatured', label: 'featured' },
-          { fieldKey: 'isUnclaimed', label: 'unclaimed' },
-          { fieldKey: 'isAdopted', label: 'adopted' },
-          { fieldKey: 'isAvailable', label: 'available' },
-          { fieldKey: 'isVisible', label: 'visible' },
+          { fieldKey: 'isVisible', label: 'отображать на сайте' },
+          { fieldKey: 'isAvailable', label: 'доступен к пристрою' },
+          { fieldKey: 'isFeatured', label: 'активный пристрой' },
+          { fieldKey: 'isAdopted', label: 'принят в семью' },
+          { fieldKey: 'isUnclaimed', label: 'не востребован' },
         ].map((field, index) => (
           <ControlledCheckbox
             key={index}
@@ -193,18 +205,18 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
         ))}
       </Fieldset>
 
-      <Fieldset className="mb-6 flex w-full flex-col gap-y-2 border border-stone-950 p-3 sm:p-6">
-        <Legend className="mb-3 text-2xl">Health & Behavior:</Legend>
+      <Fieldset className="mb-6 flex w-full flex-col gap-y-2 rounded bg-stone-50/85 p-3 ring-2 ring-stone-700/75 dark:ring-stone-400/75 sm:p-6">
+        <Legend className="mb-3 text-2xl">Здоровье и поведение:</Legend>
         {[
-          { fieldKey: 'vaccinated', label: 'vaccinated' },
-          { fieldKey: 'sterilized', label: 'sterilized' },
-          { fieldKey: 'treatedForParasites', label: 'treated for parasites' },
-          { fieldKey: 'litterBoxTrained', label: 'litter box trained' },
-          { fieldKey: 'usesScratchingPost', label: 'uses scratching post' },
-          { fieldKey: 'socialized', label: 'socialized' },
-          { fieldKey: 'friendlyWithCats', label: 'friendly with cats' },
-          { fieldKey: 'friendlyWithDogs', label: 'friendly with dogs' },
-          { fieldKey: 'friendlyWithAnimals', label: 'friendly with other animals' },
+          { fieldKey: 'vaccinated', label: `вакцинирован${wordEnd()}` },
+          { fieldKey: 'sterilized', label: `стерилизован${wordEnd()}` },
+          { fieldKey: 'treatedForParasites', label: `обработан${wordEnd()} от паразитов` },
+          { fieldKey: 'litterBoxTrained', label: `приучен${wordEnd()} к лотку` },
+          { fieldKey: 'usesScratchingPost', label: 'пользуется когтеточкой' },
+          { fieldKey: 'socialized', label: `социализирован${wordEnd()}` },
+          { fieldKey: 'friendlyWithCats', label: 'ладит с кошками' },
+          { fieldKey: 'friendlyWithDogs', label: 'ладит с собаками' },
+          { fieldKey: 'friendlyWithAnimals', label: 'ладит с другими животными' },
         ].map((field, index) => (
           <ControlledCheckbox
             key={index}
@@ -216,7 +228,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
         ))}
       </Fieldset>
       <Fieldset className="flex w-full flex-col items-center justify-center">
-        <TextAreaField label={'Biography'} register={register('biography')} />
+        <TextAreaField label={'Биография'} register={register('biography')} />
         <ColorField control={control} colors={colors} />
         <PhotosField control={control} setImageFilesWithDimensions={setImageFilesWithDimensions} />
       </Fieldset>
