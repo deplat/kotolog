@@ -30,8 +30,8 @@ export const ControlledListBox = ({
         name={fieldKey}
         render={({ field }) => (
           <Listbox value={field.value} onChange={field.onChange}>
-            <ListboxButton className={clsx('relative block w-3/4 text-left', '')}>
-              {field.value == null ? 'NO' : field.value}
+            <ListboxButton className={clsx('relative block w-3/4 p-3 text-left')}>
+              {field.value == null ? 'Указать...' : field.value}
               <IoChevronDown
                 className="group pointer-events-none absolute right-2.5 top-2.5 size-4"
                 aria-hidden="true"

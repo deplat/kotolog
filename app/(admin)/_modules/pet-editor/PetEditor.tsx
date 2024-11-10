@@ -138,7 +138,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
       onSubmit={handleSubmit(onSubmit)}
       className="flex w-full max-w-xl flex-col items-center justify-center pb-28 pt-3"
     >
-      <Fieldset className="mb-6 flex w-full flex-col border border-stone-950 p-3">
+      <Fieldset className="mb-6 flex w-full flex-col rounded bg-stone-100 p-3 ring-2 ring-stone-700/85 dark:ring-stone-400/85">
         <div className="mb-3">
           <AvatarField control={control} setAvatar={setAvatar} setAvatarFile={setAvatarFile} />
         </div>
@@ -148,7 +148,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
           errors={errors.name}
         />
         <TextField
-          label="Слаг"
+          label="Slug"
           register={register('slug', { required: 'Слаг обязателен' })}
           errors={errors.slug}
         />
@@ -157,8 +157,8 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
           fieldLabel="Тип:"
           fieldKey="petType"
           options={[
-            { value: 'CAT', label: 'CAT' },
-            { value: 'DOG', label: 'DOG' },
+            { value: 'CAT', label: 'КОШКА' },
+            { value: 'DOG', label: 'СОБАКА' },
           ]}
           control={control}
         />
@@ -168,7 +168,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
           options={[
             { value: 'MALE', label: 'МУЖ' },
             { value: 'FEMALE', label: 'ЖЕН' },
-            { value: undefined, label: 'НЕТ' },
+            { value: null, label: 'НЕТ' },
           ]}
           control={control}
         />
@@ -186,7 +186,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
         />
       </Fieldset>
 
-      <Fieldset className="mb-6 flex w-full flex-col gap-y-2 border border-stone-950 bg-stone-50/85 p-3 sm:p-6">
+      <Fieldset className="dark:ring-stone-40f0/85 mb-6 flex w-full flex-col gap-y-2 rounded bg-stone-50/85 p-3 ring-2 ring-stone-700/85 sm:p-6">
         <Legend className="mb-3 text-2xl">Установки:</Legend>
         {[
           { fieldKey: 'isVisible', label: 'отображать на сайте' },
@@ -228,7 +228,11 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
         ))}
       </Fieldset>
       <Fieldset className="flex w-full flex-col items-center justify-center">
-        <TextAreaField label={'Биография'} register={register('biography')} />
+        <TextAreaField
+          label={'Биография'}
+          placeholder={'Информация о питомце в свободном стиле'}
+          register={register('biography')}
+        />
         <ColorField control={control} colors={colors} />
         <PhotosField control={control} setImageFilesWithDimensions={setImageFilesWithDimensions} />
       </Fieldset>

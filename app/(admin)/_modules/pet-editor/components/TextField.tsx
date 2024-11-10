@@ -13,10 +13,11 @@ export const TextField = ({
   errors: FieldError | undefined
 }) => {
   return (
-    <Field className="flex w-full items-center">
-      <Label>{label}:</Label>
+    <Field className="mb-3 flex w-full items-center">
+      <Label className="w-1/4">{label}:</Label>
       <Input
         type="text"
+        placeholder={`Укажите ${label}`}
         {...register}
         className={clsx(
           'ms-auto w-3/4 shrink-0 border-0 bg-transparent',
