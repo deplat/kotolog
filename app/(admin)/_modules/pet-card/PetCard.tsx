@@ -17,7 +17,7 @@ export const PetCard = ({ id, name, slug, avatarSrc }: PetCardProps) => {
         <div className="flex">
           <PetCardAvatar avatarSrc={avatarSrc} name={name} />
         </div>
-        <div className="flex w-full flex-col justify-between p-3">
+        <div className="flex w-full flex-col justify-evenly p-3">
           <div className="text-stone-600 dark:text-stone-400">#{id}</div>
           <div className="text-lg">{name}</div>
           <div className="text-stone-600 dark:text-stone-400">/{slug}</div>
