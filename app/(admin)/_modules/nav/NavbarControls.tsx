@@ -16,9 +16,11 @@ import {
 import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
 import { Button, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+import { useTheme } from 'next-themes'
 
 export const NavbarControls = () => {
   const pathname = usePathname()
+  const { setTheme } = useTheme()
   console.log(pathname)
   return (
     <>
@@ -71,24 +73,40 @@ export const NavbarControls = () => {
             className="flex min-w-36 flex-col gap-y-2.5 rounded-lg bg-stone-50/55 text-center shadow-lg ring-1 ring-orange-600 backdrop-blur dark:bg-gray-800/55"
           >
             <div className="flex">
-              <MenuItem as={Button} className="flex flex-1 justify-center p-2">
+              <MenuItem
+                as={Button}
+                onClick={() => setTheme('light')}
+                className="flex flex-1 justify-center p-2 hover:text-orange-700"
+              >
                 <Sun size={30} absoluteStrokeWidth />
               </MenuItem>
-              <MenuItem as={Button} className="flex flex-1 justify-center p-2">
+              <MenuItem
+                as={Button}
+                onClick={() => setTheme('system')}
+                className="flex flex-1 justify-center p-2 hover:text-orange-700"
+              >
                 <SunMoon size={30} absoluteStrokeWidth />
               </MenuItem>
-              <MenuItem as={Button} className="flex flex-1 justify-center p-2">
+              <MenuItem
+                as={Button}
+                onClick={() => setTheme('dark')}
+                className="flex flex-1 justify-center p-2 hover:text-orange-700"
+              >
                 <Moon size={30} absoluteStrokeWidth />
               </MenuItem>
             </div>
             <div className="flex">
-              <MenuItem as={Link} href="/" className="flex flex-1 justify-center p-2">
+              <MenuItem
+                as={Link}
+                href="/"
+                className="flex flex-1 justify-center p-2 hover:text-orange-700"
+              >
                 <Home size={30} absoluteStrokeWidth />
               </MenuItem>
               <MenuItem
                 as={Link}
                 href="/api/auth/signout"
-                className="flex flex-1 justify-center p-2"
+                className="flex flex-1 justify-center p-2 hover:text-red-800"
               >
                 <LogOut size={30} absoluteStrokeWidth />
               </MenuItem>
