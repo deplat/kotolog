@@ -3,7 +3,7 @@ import { ColorCardControls } from '@/app/(admin)/_modules/color-card/ColorCardCo
 
 export const ColorCard = ({ id, name }: Color) => {
   return (
-    <div className="border-b-1 flex w-full items-center justify-between border-stone-950 bg-stone-50/75 shadow-md">
+    <div className="flex w-full items-center justify-between rounded bg-stone-100/75 shadow-sm sm:shadow-md">
       <div className="px-3">
         <span>{name}</span>
       </div>
