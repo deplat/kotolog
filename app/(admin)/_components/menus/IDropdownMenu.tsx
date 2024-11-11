@@ -39,7 +39,7 @@ export const IDropdownMenu = ({
 
   // MenuButton styles
   const menuButtonBaseStyle = clsx(
-    'group underline-offset-4 flex items-center justify-center transition rounded-bl-lg',
+    'group underline-offset-4 flex items-center justify-center transition rounded-bl',
     createStateStyles('hover', ['underline', 'shadow'])
   )
   const menuButtonVariantStyles = {
@@ -106,7 +106,7 @@ export const IDropdownMenu = ({
 
       <MenuItems
         anchor={{ gap: 8, to: 'bottom', offset: -60 }}
-        className="absolute z-10 min-w-36 rounded shadow-2xl ring-1 ring-stone-700 transition duration-100 data-[closed]:opacity-0"
+        className="absolute z-10 min-w-36 rounded bg-stone-50 shadow-2xl ring-1 ring-gray-300/85 transition duration-100 data-[closed]:opacity-0"
         transition
       >
         {menuItems.map((item) => {
