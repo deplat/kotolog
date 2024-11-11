@@ -17,7 +17,7 @@ export const ColorList = async () => {
           <Plus size={30} absoluteStrokeWidth />
         </Link>
       </div>
-      <ul className="flex flex-col gap-y-2 overflow-hidden rounded p-3 shadow-lg ring-2 ring-stone-700/85">
+      <ul className="flex flex-col gap-y-2">
         {colors.map((color) => (
           <div key={color.id}>
             <ColorCard id={color.id} name={color.name} />
