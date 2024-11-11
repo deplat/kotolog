@@ -82,9 +82,7 @@ export const AvatarField = ({
       render={({ field }) => (
         <Field className="flex flex-col items-center justify-center gap-2">
           <div className="relative flex h-72 w-72 items-center justify-center overflow-hidden rounded ring-2 ring-stone-700/75 dark:ring-stone-400/75">
-            {imagePreviewSrc ? (
-              <NextImage src={imagePreviewSrc} alt="Select avatar" objectFit={'cover'} fill />
-            ) : null}
+            {imagePreviewSrc ? <NextImage src={imagePreviewSrc} alt="Select avatar" fill /> : null}
             <Input
               id="avatar"
               type="file"
