@@ -4,6 +4,8 @@ import { prisma } from '@/prisma/prisma'
 import { Prisma } from '@prisma/client'
 import { revalidateTag, unstable_cache } from 'next/cache'
 import { prismaErrorHandler } from '@/utils/errorHandlers'
+import { checkUserRole } from '@/utils/checkUserRole'
+import { UserRole } from '@/types/UserRole'
 
 export type Color = Prisma.PromiseReturnType<typeof getColorById>
 export type Colors = Prisma.PromiseReturnType<typeof getColors>
@@ -13,20 +15,29 @@ const colorSelect = Prisma.validator<Prisma.ColorSelect>()({
   name: true,
 })
 
-export const createColor = async (name: string) => {
+export const createColor = async (
+  name: string
+): Promise<{ success: boolean; message: string; data: Color | null }> => {
+  const { allowed, role } = await checkUserRole([UserRole.ADMIN, UserRole.MANAGER])
+  if (!allowed) {
+    console.error(`User with role ${role} is not authorized to create colors.`)
+    return { success: false, message: 'User is not authorized to create colors.', data: null }
+  }
   try {
     const newColor = await prisma.color.create({
       data: { name },
     })
-    try {
-      revalidateTag('colors')
-    } catch (revalidateError) {
-      console.error('Tag revalidation failed:', revalidateError)
-    }
-    return newColor
+    revalidateTag('colors')
+
+    return { success: true, message: 'Color created successfully.', data: newColor }
   } catch (error) {
-    console.error('Error creating color:', error)
-    throw prismaErrorHandler(error)
+    const prismaError = prismaErrorHandler(error)
+    console.error('Error creating color:', prismaError.message)
+    return {
+      success: false,
+      message: 'Error creating color: ' + prismaError.message,
+      data: null,
+    }
   }
 }
 

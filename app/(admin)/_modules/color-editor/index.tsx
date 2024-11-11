@@ -1,17 +1,14 @@
+'use client'
+
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Color } from '@/types'
 import { Button, Field, Input, Label } from '@headlessui/react'
 import clsx from 'clsx'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { createColor, getColorByName, updateColor } from '@/data-access'
 
-export const ColorEditor = ({
-  color,
-  closeEditor,
-}: {
-  color: Color | null
-  closeEditor: () => void
-}) => {
+export const ColorEditor = ({ color }: { color: Color | null }) => {
+  const [feedback, setFeedback] = useState<string | null>(null)
   const {
     register,
     handleSubmit,
@@ -28,8 +25,7 @@ export const ColorEditor = ({
     const checkName = async (name: string, id?: number) => {
       try {
         const existingColor = await getColorByName(name)
-        if (existingColor && existingColor.id != id) {
-          console.log(existingColor.name)
+        if (existingColor && existingColor.id !== id) {
           setError('name', { type: 'custom', message: 'Name is already in use' })
         } else {
           clearErrors('name')
@@ -38,35 +34,55 @@ export const ColorEditor = ({
         setError('name', { type: 'custom', message: 'Cannot check name' })
       }
     }
+
     if (watchName) {
       checkName(watchName, color?.id).then()
     }
   }, [clearErrors, setError, watchName])
-  const onSubmit: SubmitHandler<Color> = async (data) => {
-    console.log('Color data:', data)
+
+  const onSubmit: SubmitHandler<Color> = async (formData) => {
     if (errors.name) {
       console.log(errors.name)
       return
     }
+
     if (!color) {
-      const createdColor = await createColor(data.name)
-      console.log('Color created:', createdColor)
-    }
-    if (color) {
-      const updatedColor = await updateColor(data.id, data.name)
-      console.log('Color updated:', updatedColor)
+      // Creating a new color
+      const { success, message, data } = await createColor(formData.name)
+      if (success) {
+        console.log('Color created:', data)
+        setFeedback('Color created successfully.')
+      } else {
+        setFeedback(message)
+      }
+    } else {
+      // Updating existing color
+      const updatedColor = await updateColor(formData.id, formData.name)
+      if (updatedColor) {
+        console.log('Color updated:', updatedColor)
+        setFeedback('Color updated successfully.')
+      } else {
+        setFeedback('Failed to update color.')
+      }
     }
   }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-3">
       <Field className="flex w-full items-center gap-x-2">
         <Label>Name:</Label>
-        <Input type="text" {...register('name', { required: 'Name is required' })} />
+        <Input
+          type="text"
+          {...register('name', { required: 'Name is required' })}
+          aria-invalid={!!errors.name}
+        />
+        {errors.name && <p className="text-red-500">{errors.name.message}</p>}
       </Field>
+
+      {feedback && <p className="text-blue-500">{feedback}</p>}
+
       <div className="ms-auto flex gap-x-2">
-        {' '}
         <Button
-          onClick={closeEditor}
           className={clsx('px-4 py-2.5 underline-offset-4', 'text-red-600 data-[hover]:underline')}
         >
           Cancel

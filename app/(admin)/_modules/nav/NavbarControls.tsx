@@ -38,7 +38,7 @@ export const NavbarControls = () => {
           },
           {
             title: 'Add new pet',
-            href: '/admin/newPet',
+            href: '/admin/pets/newPet',
             icon: Plus,
           },
           {

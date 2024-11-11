@@ -1,6 +1,8 @@
 import { getCachedColors } from '@/data-access'
 import { ColorCard } from '@/app/(admin)/_modules/color-card'
 import { NoColors } from '@/app/(admin)/_modules/color-list/components/NoColors'
+import Link from 'next/link'
+import { Plus } from 'lucide-react'
 
 export const ColorList = async () => {
   const colors = await getCachedColors()
@@ -11,6 +13,9 @@ export const ColorList = async () => {
     <div className="flex h-full w-full flex-col px-3 sm:max-w-xl">
       <div className="flex items-center justify-between py-3">
         <h1 className="text-2xl">Colors</h1>
+        <Link href="/admin/colors/newColor">
+          <Plus size={30} absoluteStrokeWidth />
+        </Link>
       </div>
       <ul className="flex flex-col">
         {colors.map((color) => (

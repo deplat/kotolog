@@ -12,7 +12,7 @@ export default async function Page() {
     return <NotAuthorized />
   }
   return (
-    <div className="flex w-full justify-center bg-stone-300 sm:p-3">
+    <div className="flex w-full flex-col justify-center bg-stone-300 sm:p-3">
       <ColorList />
     </div>
   )
