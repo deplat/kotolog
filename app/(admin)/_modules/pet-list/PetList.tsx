@@ -6,7 +6,7 @@ export const PetList = async () => {
   return (
     <div className="mx-auto flex w-full flex-col p-3">
       {pets ? (
-        <ul className="flex flex-col gap-y-4">
+        <ul className="flex flex-col gap-y-3 sm:gap-y-4">
           {pets.map((pet, index) => (
             <li key={index}>
               <PetCard id={pet.id} name={pet.name} slug={pet.slug} avatarSrc={pet.avatar?.src} />

@@ -70,7 +70,7 @@ export const NavbarControls = () => {
           </MenuButton>
           <MenuItems
             anchor={{ gap: 20, to: 'top', offset: -50 }}
-            className="flex min-w-36 flex-col gap-y-2.5 rounded bg-stone-50/55 text-center shadow-lg ring-2 ring-orange-600 backdrop-blur dark:bg-gray-800/55"
+            className="flex min-w-36 flex-col gap-y-2.5 rounded bg-stone-50/55 text-center shadow-2xl ring-1 ring-stone-700 backdrop-blur dark:bg-gray-800/55"
           >
             <div className="flex">
               <MenuItem
