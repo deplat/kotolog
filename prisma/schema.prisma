@@ -198,7 +198,7 @@ model Specialty {
 
 model Image {
   id        Int      @id @default(autoincrement())
-  src       String
+  src       String   @unique
   width     Int
   height    Int
   createdAt DateTime @default(now())

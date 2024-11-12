@@ -5,6 +5,8 @@ import { prismaErrorHandler } from '@/utils/errorHandlers'
 import { Prisma } from '@prisma/client'
 import { revalidateTag, unstable_cache } from 'next/cache'
 import { PetData } from '@/types'
+import { UserRole } from '@/types/UserRole'
+import { checkUserRole } from '@/utils/checkUserRole'
 
 export type Pet = Prisma.PromiseReturnType<typeof getPet>
 export type Pets = Prisma.PromiseReturnType<typeof getPets>
@@ -160,6 +162,11 @@ export const getCachedPets = unstable_cache(getPets, ['(.)pets'], { tags: ['(.)p
 
 /*  UPDATE  */
 export const updatePet = async (id: number, data: PetData) => {
+  const { allowed, role } = await checkUserRole([UserRole.ADMIN, UserRole.MANAGER])
+  if (!allowed) {
+    console.error(`User with role ${role} is not authorized to update pets.`)
+    return { success: false, message: 'User is not authorized to update pets.', data: null }
+  }
   try {
     const updateInput: Prisma.PetUpdateInput = {
       name: data.name,
@@ -218,7 +225,7 @@ export const updatePet = async (id: number, data: PetData) => {
       }
     }
 
-    if (data.photos) {
+    if (data.photos && data.photos.length > 0) {
       updateInput.photos = {
         createMany: {
           data: data.photos,
@@ -231,17 +238,18 @@ export const updatePet = async (id: number, data: PetData) => {
       data: updateInput,
       include: petInclude,
     })
-
-    try {
-      revalidateTag('(.)pets')
-      revalidateTag('cats')
-      revalidateTag('get_unique_colors_from_cats')
-    } catch (revalidateError) {
-      console.error('Tag revalidation failed:', revalidateError)
-    }
-    return updatedPet
+    revalidateTag('(.)pets')
+    revalidateTag('cats')
+    revalidateTag('get_unique_colors_from_cats')
+    return { success: true, message: 'Pet updated successfully.', data: updatedPet }
   } catch (error) {
-    throw prismaErrorHandler(error)
+    const prismaError = prismaErrorHandler(error)
+    console.error('Error updating pet:', prismaError.message)
+    return {
+      success: false,
+      message: 'Error updating pet' + prismaError.message,
+      data: null,
+    }
   }
 }
 
