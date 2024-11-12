@@ -1,6 +1,6 @@
 export default async function Page() {
   return (
-    <main>
+    <main className="p-3">
       <h1 className="text-2xl">Terms of Service</h1>
       <p>
         <em>Last updated: 2024-11-12</em>
