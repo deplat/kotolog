@@ -61,7 +61,7 @@ export const NavbarControls = () => {
       </>
       <>
         <Menu>
-          <MenuButton className="group">
+          <MenuButton className="group" title="Menu">
             <MenuIcon
               size={30}
               absoluteStrokeWidth
