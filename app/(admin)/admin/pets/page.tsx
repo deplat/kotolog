@@ -14,7 +14,7 @@ export default async function Pets() {
     return <NotAuthorized />
   }
   return (
-    <div className="w-full max-w-xl">
+    <div className="w-full max-w-7xl">
       <div className="flex justify-between py-3">
         <h3 className="text-2xl">Pets</h3>
         <AvatarToggleLink />

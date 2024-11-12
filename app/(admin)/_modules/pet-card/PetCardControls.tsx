@@ -20,7 +20,7 @@ export const PetCardControls = ({ id, avatarSrc, name }: PetCardControlsProps) =
   const showDeleteDialog = () => setIsDeleteDialogOpen(true)
 
   return (
-    <div>
+    <>
       <IDropdownMenu
         menuButton={{ leftIcon: icons.dotsVertical, variant: 'primary' }}
         menuItems={[
@@ -57,6 +57,6 @@ export const PetCardControls = ({ id, avatarSrc, name }: PetCardControlsProps) =
           </DialogPanel>
         </div>
       </Dialog>
-    </div>
+    </>
   )
 }

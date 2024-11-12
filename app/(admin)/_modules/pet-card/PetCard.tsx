@@ -1,7 +1,7 @@
+'use server'
+
 import Link from 'next/link'
-import { StaticImageData } from 'next/image'
-import { PetCardControls } from './PetCardControls'
-import { PetCardAvatar } from '@/app/(admin)/_modules/pet-card/PetCardAvatar'
+import Image, { StaticImageData } from 'next/image'
 
 interface PetCardProps {
   id: number
@@ -10,18 +10,21 @@ interface PetCardProps {
   avatarSrc?: string | StaticImageData
 }
 
-export const PetCard = ({ id, name, slug, avatarSrc }: PetCardProps) => {
+export const PetCard = async ({ id, name, slug, avatarSrc }: PetCardProps) => {
   return (
-    <>
-      <Link href={`/koshki/${slug}`} className="flex w-full">
-        <PetCardAvatar avatarSrc={avatarSrc} name={name} />
-        <div className="flex w-full flex-col justify-evenly gap-y-1 px-3 py-2">
-          <div className="text-stone-600 dark:text-stone-400">#{id}</div>
-          <div className="text-xl text-orange-600">{name}</div>
-          <div className="text-stone-600 dark:text-stone-400">/{slug}</div>
+    <div className="group flex overflow-hidden rounded bg-stone-100 shadow-sm sm:shadow-lg">
+      <Link href={`/koshki/${slug}`} className="flex flex-1">
+        <div className="h-40 min-w-40 max-w-40 rounded bg-stone-200">
+          {avatarSrc && (
+            <Image src={avatarSrc} alt={name} width={160} height={160} className="rounded" />
+          )}
+        </div>
+        <div className="flex flex-1 flex-col overflow-hidden truncate">
+          <div>#{id}</div>
+          <div className="overflow-hidden truncate">{name}</div>
+          <div>{slug}</div>
         </div>
       </Link>
-      <PetCardControls id={id} name={name} avatarSrc={avatarSrc} />
-    </>
+    </div>
   )
 }

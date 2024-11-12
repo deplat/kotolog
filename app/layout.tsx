@@ -42,8 +42,8 @@ export default function RootLayout({
     <html lang={siteMetadata.lang} className={source_serif.className} suppressHydrationWarning>
       <body
         className={clsx(
-          'min-h-screen scroll-smooth bg-gray-100 text-stone-900',
-          'from-gray-800 to-black dark:bg-gray-800 dark:bg-gradient-to-br dark:text-stone-200'
+          'bg-gray-10 min-h-screen scroll-smooth text-stone-900',
+          'from-gray-800 to-black dark:bg-gray-800 dark:bg-gradient-to-b dark:text-stone-200'
         )}
       >
         <ThemeProvider attribute="class" defaultTheme={siteMetadata.theme} enableSystem>
