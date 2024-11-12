@@ -1,5 +1,6 @@
 import GitHub from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
+import Yandex from 'next-auth/providers/yandex'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import type { DefaultSession } from 'next-auth'
 import NextAuth from 'next-auth'
@@ -23,7 +24,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: {
     strategy: 'database',
   },
-  providers: [GitHub, Google],
+  providers: [Yandex, Google, GitHub],
   adapter: PrismaAdapter(prisma),
   secret: process.env.AUTH_SECRET,
   callbacks: {
