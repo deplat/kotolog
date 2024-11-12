@@ -52,6 +52,11 @@ const petInclude = Prisma.validator<Prisma.PetInclude>()({
 
 /*  CREATE  */
 export const createPet = async (data: PetData) => {
+  const { allowed, role } = await checkUserRole([UserRole.ADMIN, UserRole.MANAGER])
+  if (!allowed) {
+    console.error(`User with role ${role} is not authorized to create pets.`)
+    return { success: false, message: 'User is not authorized to create pets.', data: null }
+  }
   try {
     const createInput: Prisma.PetCreateInput = {
       name: data.name,
@@ -111,16 +116,18 @@ export const createPet = async (data: PetData) => {
       include: petInclude,
     })
     console.log('Created Pet', createdPet)
-    try {
-      revalidateTag('(.)pets')
-      revalidateTag('cats')
-      revalidateTag('unique_colors_from_cats')
-    } catch (revalidateError) {
-      console.error('Tag revalidation failed:', revalidateError)
-    }
-    return createdPet
+    revalidateTag('(.)pets')
+    revalidateTag('cats')
+    revalidateTag('unique_colors_from_cats')
+    return { success: true, message: 'Pet created successfully.', data: createdPet }
   } catch (error) {
-    throw prismaErrorHandler(error)
+    const prismaError = prismaErrorHandler(error)
+    console.error('Error creating pet:', prismaError.message)
+    return {
+      success: false,
+      message: 'Error creating pet: ' + prismaError.message,
+      data: null,
+    }
   }
 }
 
@@ -255,6 +262,11 @@ export const updatePet = async (id: number, data: PetData) => {
 
 /*  DELETE  */
 export const deletePet = async (id: number) => {
+  const { allowed, role } = await checkUserRole([UserRole.ADMIN, UserRole.MANAGER])
+  if (!allowed) {
+    console.error(`User with role ${role} is not authorized to delete pets.`)
+    return { success: false, message: 'User is not authorized to delete pets.', data: null }
+  }
   try {
     const pet = await prisma.pet.findUnique({
       where: { id: id },
@@ -319,15 +331,17 @@ export const deletePet = async (id: number) => {
       })
     }
     const deletedPet = await prisma.pet.delete({ where: { id } })
-    try {
-      revalidateTag('(.)pets')
-      revalidateTag('cats')
-      revalidateTag('get_unique_colors_from_cats')
-    } catch (revalidateError) {
-      console.error('Tag revalidation failed:', revalidateError)
-    }
-    return deletedPet
+    revalidateTag('(.)pets')
+    revalidateTag('cats')
+    revalidateTag('get_unique_colors_from_cats')
+    return { success: true, message: 'Pet deleted successfully.', data: deletedPet }
   } catch (error) {
-    throw prismaErrorHandler(error)
+    const prismaError = prismaErrorHandler(error)
+    console.error('Error deleting pet:', prismaError.message)
+    return {
+      success: false,
+      message: 'Error deleting pet: ' + prismaError.message,
+      data: null,
+    }
   }
 }

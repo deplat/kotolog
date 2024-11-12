@@ -3,12 +3,13 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Color } from '@/types'
 import { Button, Field, Input, Label } from '@headlessui/react'
-import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { createColor, getColorByName, updateColor } from '@/data-access'
+import { useRouter } from 'next/navigation'
 
 export const ColorEditor = ({ color }: { color: Color | null }) => {
   const [feedback, setFeedback] = useState<string | null>(null)
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -26,12 +27,12 @@ export const ColorEditor = ({ color }: { color: Color | null }) => {
       try {
         const existingColor = await getColorByName(name)
         if (existingColor && existingColor.id !== id) {
-          setError('name', { type: 'custom', message: 'Name is already in use' })
+          setError('name', { type: 'custom', message: 'Цвет с таким названием уже существует.' })
         } else {
           clearErrors('name')
         }
       } catch (error) {
-        setError('name', { type: 'custom', message: 'Cannot check name' })
+        setError('name', { type: 'custom', message: 'Не удалось проверить название.' })
       }
     }
 
@@ -47,52 +48,45 @@ export const ColorEditor = ({ color }: { color: Color | null }) => {
     }
 
     if (!color) {
-      const { success, message, data } = await createColor(formData.name)
+      const { success, message } = await createColor(formData.name)
       if (success) {
-        console.log('Color created:', data)
-        setFeedback('Color created successfully.')
+        setFeedback('Окрас добавлен успешно.')
+        router.push('/admin/colors')
       } else {
         setFeedback(message)
       }
     } else {
-      const { success, message, data } = await updateColor(color.id, formData.name)
+      const { success, message } = await updateColor(color.id, formData.name)
       if (success) {
-        console.log('Color updated:', message, data)
-        setFeedback(message)
+        setFeedback('Окрас обновлён успешно.')
+        router.push('/admin/colors')
       } else {
-        setFeedback('Failed to update color.' + message)
+        setFeedback('Не удалось добавить окрас:' + message)
       }
     }
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-3">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-col gap-y-3 rounded bg-stone-100 p-3"
+    >
       <Field className="flex w-full items-center gap-x-2">
-        <Label>Name:</Label>
+        <Label className="w-1/4">Название:</Label>
         <Input
           type="text"
-          {...register('name', { required: 'Name is required' })}
+          {...register('name', { required: 'Укажите название окраса.' })}
+          placeholder="Введите название окраса..."
           aria-invalid={!!errors.name}
+          className="w-3/4 rounded border-0 bg-stone-200 focus:ring-orange-600"
         />
-        {errors.name && <p className="text-red-500">{errors.name.message}</p>}
       </Field>
-
+      {errors.name && <p className="text-red-500">{errors.name.message}</p>}
       {feedback && <p className="text-blue-500">{feedback}</p>}
 
       <div className="ms-auto flex gap-x-2">
-        <Button
-          className={clsx('px-4 py-2.5 underline-offset-4', 'text-red-600 data-[hover]:underline')}
-        >
-          Cancel
-        </Button>
-        <Button
-          type="submit"
-          className={clsx(
-            'border border-stone-950 bg-stone-100 px-4 py-2.5 underline-offset-4',
-            'hover:text-stone-100 hover:underline data-[hover]:bg-stone-950'
-          )}
-        >
-          Save
+        <Button type="submit" className="rounded bg-gray-500 px-4 py-2.5 text-stone-100">
+          Сохранить
         </Button>
       </div>
     </form>
