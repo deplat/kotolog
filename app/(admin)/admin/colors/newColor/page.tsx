@@ -11,7 +11,7 @@ export default async function Page() {
   }
   return (
     <div className="mx-auto w-full max-w-xl py-3">
-      <h1 className="mb-3 text-2xl">Добавить цвет</h1>
+      <h1 className="mb-3 text-2xl">Добавить окрас</h1>
       <ColorEditor color={null} />
     </div>
   )

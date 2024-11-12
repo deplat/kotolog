@@ -6,6 +6,7 @@ import { Button, Field, Input, Label } from '@headlessui/react'
 import { useEffect, useState } from 'react'
 import { createColor, getColorByName, updateColor } from '@/data-access'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export const ColorEditor = ({ color }: { color: Color | null }) => {
   const [feedback, setFeedback] = useState<string | null>(null)
@@ -69,7 +70,7 @@ export const ColorEditor = ({ color }: { color: Color | null }) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-y-3 rounded bg-stone-100 p-3"
+      className="flex flex-col gap-y-3 rounded bg-stone-100 p-3 shadow"
     >
       <Field className="flex w-full items-center gap-x-2">
         <Label className="w-1/4">Название:</Label>
@@ -85,7 +86,10 @@ export const ColorEditor = ({ color }: { color: Color | null }) => {
       {feedback && <p className="text-blue-500">{feedback}</p>}
 
       <div className="ms-auto flex gap-x-2">
-        <Button type="submit" className="rounded bg-gray-500 px-4 py-2.5 text-stone-100">
+        <Link href="/admin/colors" className="btn-warning">
+          Отмена
+        </Link>
+        <Button type="submit" className="btn-primary">
           Сохранить
         </Button>
       </div>

@@ -23,7 +23,12 @@ export default async function Page(props: { params: Promise<{ id: number }> }) {
     if (!color) {
       return <div>There's no color with id: {id}</div>
     }
-    return <ColorEditor color={color} />
+    return (
+      <div className="mx-auto w-full max-w-xl py-3">
+        <h1 className="mb-3 text-2xl">Редактировать окрас: "{color.name}"</h1>
+        <ColorEditor color={color} />
+      </div>
+    )
   } catch (error) {
     console.error('Error getting color:', error)
     return <div>Error getting color, please try again later.</div>
