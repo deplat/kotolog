@@ -47,7 +47,6 @@ export const ColorEditor = ({ color }: { color: Color | null }) => {
     }
 
     if (!color) {
-      // Creating a new color
       const { success, message, data } = await createColor(formData.name)
       if (success) {
         console.log('Color created:', data)
@@ -56,13 +55,12 @@ export const ColorEditor = ({ color }: { color: Color | null }) => {
         setFeedback(message)
       }
     } else {
-      // Updating existing color
-      const updatedColor = await updateColor(formData.id, formData.name)
-      if (updatedColor) {
-        console.log('Color updated:', updatedColor)
-        setFeedback('Color updated successfully.')
+      const { success, message, data } = await updateColor(color.id, formData.name)
+      if (success) {
+        console.log('Color updated:', message, data)
+        setFeedback(message)
       } else {
-        setFeedback('Failed to update color.')
+        setFeedback('Failed to update color.' + message)
       }
     }
   }

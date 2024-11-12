@@ -89,44 +89,55 @@ export const getCachedListOfUniqueColorsFromCats = unstable_cache(
 )
 
 export const updateColor = async (id: number, name: string) => {
+  const { allowed, role } = await checkUserRole([UserRole.ADMIN, UserRole.MANAGER])
+  if (!allowed) {
+    console.error(`User with role ${role} is not authorized to update colors.`)
+    return { success: false, message: 'User is not authorized to update colors.', data: null }
+  }
   try {
     const updatedColor = await prisma.color.update({
-      where: {
-        id,
-      },
-      data: {
-        name,
-      },
+      where: { id },
+      data: { name },
     })
-    try {
-      revalidateTag('colors')
-    } catch (revalidateError) {
-      console.error('Tag revalidation failed:', revalidateError)
-    }
-    return updatedColor
+    revalidateTag('colors')
+    revalidateTag('pets')
+    revalidateTag('cats')
+    revalidateTag('unique_colors_from_cats')
+
+    return { success: true, message: 'Color updated successfully.', data: updatedColor }
   } catch (error) {
-    console.error('Error updating color:', error)
-    throw prismaErrorHandler(error)
+    const prismaError = prismaErrorHandler(error)
+    console.error('Error updating color:', prismaError.message)
+    return {
+      success: false,
+      message: 'Error updating color: ' + prismaError.message,
+      data: null,
+    }
   }
 }
 
 export const deleteColor = async (id: number) => {
+  const { allowed, role } = await checkUserRole([UserRole.ADMIN, UserRole.MANAGER])
+  if (!allowed) {
+    console.error(`User with role ${role} is not authorized to delete colors.`)
+    return { success: false, message: 'User is not authorized to delete colors.', data: null }
+  }
   try {
-    await prisma.color.delete({
-      where: {
-        id,
-      },
+    const deletedColor = await prisma.color.delete({
+      where: { id },
     })
-    try {
-      revalidateTag('colors')
-      revalidateTag('(.)pets')
-      revalidateTag('cats')
-      revalidateTag('unique_colors_from_cats')
-    } catch (revalidateError) {
-      console.error('Tag revalidation failed:', revalidateError)
-    }
+    revalidateTag('colors')
+    revalidateTag('pets')
+    revalidateTag('cats')
+    revalidateTag('unique_colors_from_cats')
+    return { success: true, message: 'Color deleted successfully.', data: deletedColor }
   } catch (error) {
-    console.error('Error deleting color:', error)
-    throw prismaErrorHandler(error)
+    const prismaError = prismaErrorHandler(error)
+    console.error('Error deleting color:', prismaError.message)
+    return {
+      success: false,
+      message: 'Error deleting color: ' + prismaError.message,
+      data: null,
+    }
   }
 }

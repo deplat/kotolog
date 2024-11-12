@@ -14,7 +14,7 @@ export default async function Pets() {
     return <NotAuthorized />
   }
   return (
-    <div className="max-w-xl grow">
+    <div className="w-full max-w-xl">
       <div className="flex items-start justify-between px-3 pt-2">
         <h3 className="text-2xl">Pets</h3>
         <AvatarToggleLink />

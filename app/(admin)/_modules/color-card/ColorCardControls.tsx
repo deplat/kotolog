@@ -11,9 +11,7 @@ import { Color } from '@/types'
 export const ColorCardControls = ({ id, name }: Color) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const onDeleteColor = async (id: number) => await deleteColor(id)
-  const onEditColor = (id: number) => {
-    console.log(id)
-  }
+
   return (
     <div>
       <IDropdownMenu
@@ -22,7 +20,8 @@ export const ColorCardControls = ({ id, name }: Color) => {
           {
             id: '1',
             label: 'Edit',
-            onClick: () => onEditColor(id),
+            link: true,
+            href: `/admin/colors/${id}`,
             variant: 'primary',
           },
           {

@@ -72,7 +72,7 @@ export const IDropdownMenu = ({
   )
 
   // MenuItem styles
-  const menuItemBaseStyle = 'group block w-full transition duration-75'
+  const menuItemBaseStyle = 'text-center group block w-full transition duration-75'
   const menuItemVariantStyles = (variant: 'primary' | 'secondary' | 'warning', focus: boolean) => {
     switch (variant) {
       case 'primary':

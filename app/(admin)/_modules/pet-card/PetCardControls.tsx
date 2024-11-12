@@ -6,7 +6,6 @@ import { Button, Description, Dialog, DialogPanel, DialogTitle } from '@headless
 import Image, { StaticImageData } from 'next/image'
 import clsx from 'clsx'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { deletePet } from '@/data-access'
 
 interface PetCardControlsProps {
@@ -17,8 +16,6 @@ interface PetCardControlsProps {
 
 export const PetCardControls = ({ id, avatarSrc, name }: PetCardControlsProps) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-  const router = useRouter()
-  const onEditPet = () => router.push(`/admin/${id}`)
   const onDeletePet = async () => await deletePet(id)
   const showDeleteDialog = () => setIsDeleteDialogOpen(true)
 
@@ -27,7 +24,7 @@ export const PetCardControls = ({ id, avatarSrc, name }: PetCardControlsProps) =
       <IDropdownMenu
         menuButton={{ leftIcon: icons.dotsVertical, variant: 'primary' }}
         menuItems={[
-          { id: '1', label: 'Edit', onClick: onEditPet },
+          { id: '1', label: 'Edit', link: true, href: `/admin/pets/${id}` },
           { id: '2', label: 'Delete', onClick: showDeleteDialog, variant: 'warning' },
         ]}
       />
