@@ -12,8 +12,8 @@ interface PetCardProps {
 
 export const PetCard = ({ id, name, slug, avatarSrc }: PetCardProps) => {
   return (
-    <div className="flex w-full overflow-hidden rounded bg-stone-100 shadow dark:bg-gray-950/15 dark:ring-stone-400/65 sm:min-w-80 sm:shadow">
-      <Link href={`/koshki/${slug}`} className="flex w-full">
+    <>
+      <Link href={`/koshki/${slug}`} className="flex-1">
         <PetCardAvatar avatarSrc={avatarSrc} name={name} />
         <div className="flex w-full flex-col justify-evenly gap-y-1 px-3 py-2">
           <div className="text-stone-600 dark:text-stone-400">#{id}</div>
@@ -22,6 +22,6 @@ export const PetCard = ({ id, name, slug, avatarSrc }: PetCardProps) => {
         </div>
       </Link>
       <PetCardControls id={id} name={name} avatarSrc={avatarSrc} />
-    </div>
+    </>
   )
 }

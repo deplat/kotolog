@@ -6,10 +6,19 @@
   .btn-primary {
     @apply py-2.5 px-4 rounded bg-gray-500 hover:bg-gray-700 text-stone-100 shadow
   }
+    .btn-secondary {
+        @apply py-2.5 px-4 rounded bg-gray-300 hover:bg-gray-500 text-stone-100 shadow
+    }
   .btn-warning {
     @apply py-2.5 px-4 text-red-600 hover:text-stone-100 rounded hover:bg-red-600 hover:shadow
   }
+
+    .pet-card {
+        @apply flex w-full lg:w-1/2 bg-stone-100 shadow sm:shadow-lg overflow-hidden rounded text-wrap dark:bg-stone-800
+    }
 }
+
+
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }

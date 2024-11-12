@@ -4,11 +4,11 @@ import { PetCard } from '@/app/(admin)/_modules/pet-card'
 export const PetList = async () => {
   const pets = await getCachedPets()
   return (
-    <div className="mx-auto flex w-full flex-col p-3">
+    <div className="max-w-full flex-1">
       {pets ? (
         <ul className="flex flex-col gap-y-4">
           {pets.map((pet, index) => (
-            <li key={index}>
+            <li key={index} className="pet-card">
               <PetCard id={pet.id} name={pet.name} slug={pet.slug} avatarSrc={pet.avatar?.src} />
             </li>
           ))}
