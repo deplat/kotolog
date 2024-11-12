@@ -13,7 +13,7 @@ interface PetCardProps {
 export const PetCard = ({ id, name, slug, avatarSrc }: PetCardProps) => {
   return (
     <>
-      <Link href={`/koshki/${slug}`} className="flex-1">
+      <Link href={`/koshki/${slug}`} className="flex flex-1">
         <PetCardAvatar avatarSrc={avatarSrc} name={name} />
         <div className="flex w-full flex-col justify-evenly gap-y-1 px-3 py-2">
           <div className="text-stone-600 dark:text-stone-400">#{id}</div>

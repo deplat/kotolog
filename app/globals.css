@@ -14,7 +14,7 @@
   }
 
     .pet-card {
-        @apply flex w-full lg:w-1/2 bg-stone-100 shadow sm:shadow-lg overflow-hidden rounded text-wrap dark:bg-stone-800
+        @apply flex w-full lg:w-1/2 bg-stone-100 shadow sm:shadow-lg overflow-hidden rounded text-wrap dark:bg-stone-950/25
     }
 }
 
