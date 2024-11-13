@@ -14,9 +14,9 @@ export const PetList = async () => {
   const pets = await getCachedPets()
   if (!pets) return <div>Can't get pets, please try again later :(</div>
   return (
-    <ul className="grid gap-x-6 gap-y-4 lg:grid-cols-2 2xl:grid-cols-3">
+    <ul className="grid gap-x-3 gap-y-3 overflow-hidden sm:gap-x-5 sm:gap-y-5 lg:grid-cols-2 2xl:grid-cols-3">
       {pets.map((pet, index) => (
-        <li key={index} className="grid-cols-1 overflow-hidden">
+        <li key={index} className="overflow-hidden">
           <PetCard id={pet.id} name={pet.name} slug={pet.slug} avatarSrc={pet.avatar?.src} />
         </li>
       ))}
