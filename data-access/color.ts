@@ -75,16 +75,36 @@ export const getCachedColors = unstable_cache(getColors, ['colors'], {
 })
 
 const getListOfUniqueColorsFromCats = async () => {
-  const uniqueColors: Colors =
-    await prisma.$queryRaw`SELECT DISTINCT name FROM "Color" WHERE id IN (SELECT "A" FROM "_PetColors")`
+  const uniqueColors: Colors = await prisma.$queryRaw`
+    SELECT DISTINCT "Color"."name" FROM "Color"
+    JOIN "_PetColors" ON "_PetColors"."A" = "Color"."id"
+    JOIN "Pet" ON "Pet"."id" = "_PetColors"."B"
+    WHERE "Pet"."petType" = 'CAT'`
   return uniqueColors.map((color: { name: string }) => color.name)
 }
 
 export const getCachedListOfUniqueColorsFromCats = unstable_cache(
-  async () => getListOfUniqueColorsFromCats(),
+  getListOfUniqueColorsFromCats,
   ['unique_colors_from_cats'],
   {
     tags: ['unique_colors_from_cats'],
+  }
+)
+
+const getListOfUniqueColorsFromDogs = async () => {
+  const uniqueColors: Colors = await prisma.$queryRaw`
+    SELECT DISTINCT "Color"."name" FROM "Color"
+    JOIN "_PetColors" ON "_PetColors"."A" = "Color"."id"
+    JOIN "Pet" ON "Pet"."id" = "_PetColors"."B"
+    WHERE "Pet"."petType" = 'DOG'`
+  return uniqueColors.map((color: { name: string }) => color.name)
+}
+
+export const getCachedListOfUniqueColorsFromDogs = unstable_cache(
+  getListOfUniqueColorsFromDogs,
+  ['unique_colors_from_dogs'],
+  {
+    tags: ['unique_colors_from_dogs'],
   }
 )
 
@@ -101,8 +121,8 @@ export const updateColor = async (id: number, name: string) => {
     })
     revalidateTag('colors')
     revalidateTag('pets')
-    revalidateTag('cats')
     revalidateTag('unique_colors_from_cats')
+    revalidateTag('unique_colors_from_dogs')
 
     return { success: true, message: 'Color updated successfully.', data: updatedColor }
   } catch (error) {
@@ -128,8 +148,8 @@ export const deleteColor = async (id: number) => {
     })
     revalidateTag('colors')
     revalidateTag('pets')
-    revalidateTag('cats')
     revalidateTag('unique_colors_from_cats')
+    revalidateTag('unique_colors_from_dogs')
     return { success: true, message: 'Color deleted successfully.', data: deletedColor }
   } catch (error) {
     const prismaError = prismaErrorHandler(error)

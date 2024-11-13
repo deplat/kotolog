@@ -72,18 +72,15 @@ export const IDropdownMenu = ({
   )
 
   // MenuItem styles
-  const menuItemBaseStyle = 'text-center group block w-full transition duration-75'
+  const menuItemBaseStyle = 'text-center group block w-full rounded transition duration-75'
   const menuItemVariantStyles = (variant: 'primary' | 'secondary' | 'warning', focus: boolean) => {
     switch (variant) {
       case 'primary':
-        return clsx(
-          'dark:bg-gray-800/55',
-          focus && 'bg-stone-700 text-stone-100 dark:bg-gray-400/55 dark:text-orange-600'
-        )
+        return clsx('dark:bg-gray-700 ', focus && 'bg-gray-700 text-stone-100 dark:bg-gray-800')
       case 'secondary':
         return clsx(focus && 'bg-stone-700 text-stone-100')
       case 'warning':
-        return clsx('text-red-600', focus && 'bg-red-600 text-stone-100')
+        return clsx(focus ? 'text-stone-100 bg-red-600' : 'text-red-600 dark:text-red-500')
     }
   }
   const menuItemSizeStyles = clsx({
@@ -106,7 +103,7 @@ export const IDropdownMenu = ({
 
       <MenuItems
         anchor={{ gap: 8, to: 'bottom', offset: -60 }}
-        className="absolute z-10 min-w-36 rounded bg-stone-50 shadow-2xl ring-1 ring-gray-300/85 transition duration-100 data-[closed]:opacity-0"
+        className="absolute z-10 min-w-36 rounded bg-stone-50 shadow-2xl ring-1 ring-gray-300/85 transition duration-100 data-[closed]:opacity-0 dark:bg-gray-700 dark:ring-gray-300/15"
         transition
       >
         {menuItems.map((item) => {

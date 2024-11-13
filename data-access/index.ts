@@ -20,3 +20,4 @@ export {
   deletePet,
 } from './pet'
 export { type Cats, getCachedCats } from './cat'
+export { type Dogs, getCachedDogs } from './dog'

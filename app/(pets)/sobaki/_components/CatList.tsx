@@ -21,7 +21,7 @@ export const CatList = ({ cats }: CatsListProps) => {
             <Image src={cat.avatar?.src || ''} alt={cat.name} fill />
           </div>
           <div className="my-4 text-center">
-            <h3 className="truncate text-wrap text-xl font-semibold lg:text-2xl">
+            <h3 className="text-xl font-semibold lg:text-2xl">
               <a href={`/koshki/${cat.slug}`}>
                 <span aria-hidden="true" className="absolute inset-0"></span>
                 {cat.name}

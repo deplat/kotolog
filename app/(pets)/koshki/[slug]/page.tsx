@@ -5,7 +5,7 @@ import { IoCheckmark } from 'react-icons/io5'
 import { getAgeFromDate } from '@/utils/getAgeFromDate'
 import ContactButton from '@/components/ContactButton'
 import clsx from 'clsx'
-import { PhotosCarousel } from '../_components/EmblaCarousel'
+import { PhotosCarousel } from '@/components/EmblaCarousel'
 import '@/app/globals.css'
 
 async function getPetWithProfile(slug: string) {

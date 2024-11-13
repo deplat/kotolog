@@ -15,8 +15,8 @@ export default async function Pets() {
   }
   return (
     <div className="w-full max-w-7xl">
-      <div className="flex justify-between py-3">
-        <h3 className="text-2xl">Pets</h3>
+      <div className="flex items-center justify-between py-3">
+        <h3 className="text-2xl">Питомцы</h3>
         <AvatarToggleLink />
       </div>
       <Suspense>

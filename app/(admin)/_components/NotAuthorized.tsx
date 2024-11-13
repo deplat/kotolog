@@ -4,7 +4,7 @@ export const NotAuthorized = () => {
   return (
     <main className="flex w-full flex-grow items-center justify-center">
       <div>
-        Not authorized :( <SignOut label="Sign Out" />
+        У вас нет доступа :( <SignOut label="Выйти" />
       </div>
     </main>
   )

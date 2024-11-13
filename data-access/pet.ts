@@ -115,10 +115,9 @@ export const createPet = async (data: PetData) => {
       data: createInput,
       include: petInclude,
     })
-    console.log('Created Pet', createdPet)
-    revalidateTag('(.)pets')
-    revalidateTag('cats')
+    revalidateTag('pets')
     revalidateTag('unique_colors_from_cats')
+    revalidateTag('unique_colors_from_dogs')
     return { success: true, message: 'Pet created successfully.', data: createdPet }
   } catch (error) {
     const prismaError = prismaErrorHandler(error)
@@ -165,7 +164,7 @@ export const getPets = async () => {
   }
 }
 
-export const getCachedPets = unstable_cache(getPets, ['(.)pets'], { tags: ['(.)pets'] })
+export const getCachedPets = unstable_cache(getPets, ['pets'], { tags: ['pets'] })
 
 /*  UPDATE  */
 export const updatePet = async (id: number, data: PetData) => {
@@ -245,9 +244,9 @@ export const updatePet = async (id: number, data: PetData) => {
       data: updateInput,
       include: petInclude,
     })
-    revalidateTag('(.)pets')
-    revalidateTag('cats')
-    revalidateTag('get_unique_colors_from_cats')
+    revalidateTag('pets')
+    revalidateTag('unique_colors_from_cats')
+    revalidateTag('unique_colors_from_dogs')
     return { success: true, message: 'Pet updated successfully.', data: updatedPet }
   } catch (error) {
     const prismaError = prismaErrorHandler(error)
@@ -291,7 +290,7 @@ export const deletePet = async (id: number) => {
       },
     })
     if (!pet) {
-      throw new Error('Pet not found')
+      return { success: false, message: 'Pet not found.', data: null }
     }
     if (pet.avatar) {
       await prisma.image.delete({
@@ -331,9 +330,9 @@ export const deletePet = async (id: number) => {
       })
     }
     const deletedPet = await prisma.pet.delete({ where: { id } })
-    revalidateTag('(.)pets')
-    revalidateTag('cats')
-    revalidateTag('get_unique_colors_from_cats')
+    revalidateTag('pets')
+    revalidateTag('unique_colors_from_cats')
+    revalidateTag('unique_colors_from_dogs')
     return { success: true, message: 'Pet deleted successfully.', data: deletedPet }
   } catch (error) {
     const prismaError = prismaErrorHandler(error)
