@@ -30,18 +30,15 @@ export const ControlledListBox = ({
         name={fieldKey}
         render={({ field }) => (
           <Listbox value={field.value} onChange={field.onChange}>
-            <ListboxButton className={clsx('relative block w-3/4 p-3 text-left')}>
-              {field.value == null ? 'Указать...' : field.value}
-              <IoChevronDown
-                className="group pointer-events-none absolute right-2.5 top-2.5 size-4"
-                aria-hidden="true"
-              />
+            <ListboxButton className="relative flex w-3/4 items-center justify-between rounded p-2.5 text-left ring-1 ring-stone-700/60 dark:ring-stone-400/50">
+              <div>{field.value == null ? 'Указать ...' : field.value}</div>
+              <IoChevronDown className="pointer-events-none block size-4" aria-hidden="true" />
             </ListboxButton>
             <ListboxOptions
-              anchor="bottom"
+              anchor={{ to: 'bottom' }}
               transition
               className={clsx(
-                'border border-stone-950 bg-stone-100 p-2 [--anchor-gap:var(--spacing-1)] focus:outline-none',
+                'rounded bg-stone-100 p-2 focus:outline-none dark:bg-gray-600',
                 'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0'
               )}
             >

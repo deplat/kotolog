@@ -16,6 +16,9 @@
     .pet-card {
         @apply flex w-full lg:w-1/2 bg-stone-100 shadow sm:shadow-lg overflow-hidden rounded text-wrap dark:bg-stone-950/25
     }
+  .fieldset {
+    @apply mb-6 flex w-full flex-col rounded bg-stone-100 p-3 shadow dark:bg-gray-700/50 sm:shadow-lg md:p-6
+  }
 }
 
 

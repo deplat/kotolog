@@ -66,7 +66,7 @@ export const PhotosField = ({
       render={({ field }) => (
         <div className="mb-6">
           <Field className="flex flex-col items-center justify-center gap-2">
-            <Label className="text-2xl">Photos:</Label>
+            <Label className="text-2xl">Альбом:</Label>
             <Input
               id="avatars"
               type="file"

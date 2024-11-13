@@ -136,10 +136,10 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex w-full max-w-xl flex-col items-center justify-center pb-28 pt-3"
+      className="mt-20 flex w-full max-w-2xl flex-col items-center justify-center"
     >
-      <Fieldset className="mb-6 flex w-full flex-col rounded bg-stone-100 p-3 ring-2 ring-stone-700/85 dark:ring-stone-400/85">
-        <div className="mb-3">
+      <Fieldset className="fieldset">
+        <div className="mb-3 md:mb-6">
           <AvatarField control={control} setAvatar={setAvatar} setAvatarFile={setAvatarFile} />
         </div>
         <TextField
@@ -186,7 +186,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
         />
       </Fieldset>
 
-      <Fieldset className="dark:ring-stone-40f0/85 mb-6 flex w-full flex-col gap-y-2 rounded bg-stone-50/85 p-3 ring-2 ring-stone-700/85 sm:p-6">
+      <Fieldset className="fieldset gap-y-3">
         <Legend className="mb-3 text-2xl">Установки:</Legend>
         {[
           { fieldKey: 'isVisible', label: 'отображать на сайте' },
@@ -205,7 +205,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
         ))}
       </Fieldset>
 
-      <Fieldset className="mb-6 flex w-full flex-col gap-y-2 rounded bg-stone-50/85 p-3 ring-2 ring-stone-700/75 dark:ring-stone-400/75 sm:p-6">
+      <Fieldset className="fieldset gap-y-3">
         <Legend className="mb-3 text-2xl">Здоровье и поведение:</Legend>
         {[
           { fieldKey: 'vaccinated', label: `вакцинирован${wordEnd()}` },
@@ -227,7 +227,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
           />
         ))}
       </Fieldset>
-      <Fieldset className="flex w-full flex-col items-center justify-center">
+      <Fieldset className="fieldset">
         <TextAreaField
           label={'Биография'}
           placeholder={'Информация о питомце в свободном стиле'}
@@ -236,7 +236,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
         <ColorField control={control} colors={colors} />
         <PhotosField control={control} setImageFilesWithDimensions={setImageFilesWithDimensions} />
       </Fieldset>
-      <div className="fixed bottom-20 flex justify-center gap-x-2 border border-stone-950 bg-stone-100">
+      <div className="fixed top-6 flex justify-center gap-x-2 rounded bg-stone-100 shadow-lg ring-1 ring-stone-700/60 dark:bg-gray-700 dark:ring-stone-400/50">
         <Button
           type="submit"
           className={clsx(
@@ -244,7 +244,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
             'data-[hover]:text-green-600 data-[hover]:underline'
           )}
         >
-          Save
+          Сохранить
         </Button>
         <Button
           onClick={redirectToPets}
@@ -253,7 +253,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
             'data-[hover]:text-red-500 data-[hover]:underline'
           )}
         >
-          Close
+          Закрыть
         </Button>
       </div>
     </form>

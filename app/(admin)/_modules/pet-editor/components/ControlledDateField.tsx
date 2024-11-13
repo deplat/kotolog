@@ -26,7 +26,7 @@ export const ControlledDateField = ({
               onChange={(date) => field.onChange(date)}
               dateFormat="yyyy-MM-dd"
               placeholderText="yyyy-MM-dd"
-              className="flex w-full shrink-0 border-0 bg-transparent focus:ring-2 focus:ring-orange-600"
+              className="flex w-full shrink-0 rounded border-0 bg-transparent ring-1 ring-stone-700/60 focus:ring-2 focus:ring-orange-600 dark:placeholder-gray-400 dark:ring-stone-400/50 dark:focus:ring-orange-600"
             />
           )}
         />
