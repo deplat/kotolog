@@ -35,10 +35,10 @@ export const ControlledListBox = ({
               <IoChevronDown className="pointer-events-none block size-4" aria-hidden="true" />
             </ListboxButton>
             <ListboxOptions
-              anchor={{ to: 'bottom' }}
+              anchor={{ to: 'bottom', gap: 4 }}
               transition
               className={clsx(
-                'rounded bg-stone-100 p-2 focus:outline-none dark:bg-gray-600',
+                'w-[var(--button-width)] rounded bg-stone-100 p-2 focus:outline-none dark:bg-gray-600',
                 'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0'
               )}
             >
@@ -46,7 +46,7 @@ export const ControlledListBox = ({
                 <ListboxOption
                   key={option.label}
                   value={option.value}
-                  className="group flex cursor-pointer items-center gap-2 px-3 py-1.5 ring-inset ring-orange-500 data-[focus]:ring-2"
+                  className="group flex cursor-pointer items-center gap-2 rounded px-3 py-1.5 ring-inset ring-orange-600 data-[focus]:ring-2"
                 >
                   <IoCheckmark className="invisible size-5 group-data-[selected]:visible" />
                   <div className="">{option.label}</div>

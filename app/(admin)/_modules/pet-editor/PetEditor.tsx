@@ -17,8 +17,8 @@ import {
   TextAreaField,
   TextField,
 } from '@/app/(admin)/_modules/pet-editor/components'
-import clsx from 'clsx'
 import { Gender } from 'aws-sdk/clients/polly'
+import Link from 'next/link'
 
 export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) => {
   const {
@@ -136,8 +136,16 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mt-20 flex w-full max-w-2xl flex-col items-center justify-center"
+      className="mt-12 flex w-full max-w-2xl flex-col items-center justify-center sm:mt-20"
     >
+      <div className="fixed top-2 z-90 flex justify-center rounded bg-stone-100 shadow-lg ring-1 ring-stone-700/60 dark:bg-gray-700 dark:ring-stone-400/50 sm:top-6">
+        <Button type="submit" className="btn-primary">
+          Сохранить
+        </Button>
+        <Link href="/admin/pets" className="btn-warning dark:ring-0">
+          Закрыть
+        </Link>
+      </div>
       <Fieldset className="fieldset">
         <div className="mb-3 md:mb-6">
           <AvatarField control={control} setAvatar={setAvatar} setAvatarFile={setAvatarFile} />
@@ -236,26 +244,6 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
         <ColorField control={control} colors={colors} />
         <PhotosField control={control} setImageFilesWithDimensions={setImageFilesWithDimensions} />
       </Fieldset>
-      <div className="fixed top-6 flex justify-center gap-x-2 rounded bg-stone-100 shadow-lg ring-1 ring-stone-700/60 dark:bg-gray-700 dark:ring-stone-400/50">
-        <Button
-          type="submit"
-          className={clsx(
-            'px-4 py-2.5 underline-offset-4',
-            'data-[hover]:text-green-600 data-[hover]:underline'
-          )}
-        >
-          Сохранить
-        </Button>
-        <Button
-          onClick={redirectToPets}
-          className={clsx(
-            'px-4 py-2.5 underline-offset-4',
-            'data-[hover]:text-red-500 data-[hover]:underline'
-          )}
-        >
-          Закрыть
-        </Button>
-      </div>
     </form>
   )
 }
