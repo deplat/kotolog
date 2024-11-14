@@ -1,12 +1,8 @@
-import { getCachedDogs } from '@/data-access'
-import { DogListLayout } from '@/app/(pets)/sobaki/DogListLayout'
+import { getCachedDogs, getCachedListOfUniqueColorsFromDogs } from '@/data-access'
+import { DogList } from '@/app/(pets)/sobaki/DogList'
 
 export default async function DogsPage() {
   const dogs = await getCachedDogs()
-  if (!dogs) return null
-  return (
-    <>
-      <DogListLayout />
-    </>
-  )
+  const colors = await getCachedListOfUniqueColorsFromDogs()
+  return <DogList initialDogs={dogs} uniqueColorsFromDogs={colors} />
 }

@@ -6,6 +6,7 @@ export {
   getColorById,
   getColorByName,
   getCachedListOfUniqueColorsFromCats,
+  getCachedListOfUniqueColorsFromDogs,
   updateColor,
   deleteColor,
 } from './color'

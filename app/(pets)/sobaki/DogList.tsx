@@ -6,7 +6,7 @@ import { Button, Field, Label } from '@headlessui/react'
 import { SlidersHorizontal } from 'lucide-react'
 import { GiSittingDog } from 'react-icons/gi'
 
-export const DogListLayout = ({
+export const DogList = ({
   initialDogs,
   uniqueColorsFromDogs,
 }: {
@@ -22,7 +22,7 @@ export const DogListLayout = ({
         <h1 className="text-4xl font-bold">Собаки</h1>
         <Button onClick={toggleSidebar} className="ms-auto flex items-center ps-4 text-xl">
           <SlidersHorizontal size={24} />
-          <span className="hidden sm:ms-2 sm:block">Фильтр</span>
+          <span className="me-2 hidden sm:ms-2 sm:block">Фильтр</span>
         </Button>
       </div>
       <Sidebar showSidebar={showSidebar}>
