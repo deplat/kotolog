@@ -146,7 +146,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
           Закрыть
         </Link>
       </div>
-      <Fieldset className="fieldset">
+      <Fieldset className="fieldset mb-6">
         <div className="mb-3 md:mb-6">
           <AvatarField
             control={control}
@@ -199,7 +199,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
         />
       </Fieldset>
 
-      <Fieldset className="fieldset gap-y-3">
+      <Fieldset className="fieldset mb-6 gap-y-3">
         <Legend className="mb-3 text-2xl">Установки:</Legend>
         {[
           { fieldKey: 'isVisible', label: 'отображать на сайте' },
@@ -218,7 +218,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
         ))}
       </Fieldset>
 
-      <Fieldset className="fieldset gap-y-3">
+      <Fieldset className="fieldset mb-6 gap-y-3">
         <Legend className="mb-3 text-2xl">Здоровье и поведение:</Legend>
         {[
           { fieldKey: 'vaccinated', label: `вакцинирован${wordEnd()}` },
@@ -241,7 +241,7 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
         ))}
       </Fieldset>
       <ColorFieldset control={control} colors={colors} />
-      <Fieldset className="fieldset">
+      <Fieldset className="fieldset mb-6">
         <TextAreaField
           label={'Биография'}
           placeholder={'Информация о питомце в свободном стиле'}

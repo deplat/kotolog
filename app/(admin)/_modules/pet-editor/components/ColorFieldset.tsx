@@ -15,7 +15,7 @@ export const ColorFieldset = ({
     control={control}
     name="colors"
     render={({ field }) => (
-      <Fieldset className="fieldset">
+      <Fieldset className="fieldset mb-6">
         <Legend className="mb-3 text-2xl">Окрасы:</Legend>
         <div className="flex flex-col gap-y-3">
           {colors.map((color: Color) => (

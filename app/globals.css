@@ -22,7 +22,7 @@
     @apply hidden size-5 group-data-[checked]:block group-data-[hover]:block
   }
   .fieldset {
-    @apply mb-6 flex w-full flex-col rounded bg-stone-100 p-3 shadow dark:bg-gray-700/50 sm:shadow-lg md:p-6
+    @apply  flex w-full flex-col rounded bg-stone-100 p-3 shadow dark:bg-gray-700/50 sm:shadow-lg md:p-6
   }
 }
 
