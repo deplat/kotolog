@@ -20,7 +20,7 @@ export const TextField = ({
         placeholder={`Введите ${label} ...`}
         {...register}
         className={clsx(
-          'ms-auto w-3/4 shrink-0 rounded border-0 bg-transparent ring-1 ring-stone-700/60 dark:ring-stone-400/50',
+          'ms-auto w-3/4 shrink-0 rounded border-0 bg-transparent ring-1 ring-inset ring-stone-700/60 dark:ring-stone-400/50',
           'data-[focus]:ring-2 data-[focus]:ring-orange-600 dark:placeholder-gray-400 dark:data-[focus]:ring-orange-600'
         )}
       />

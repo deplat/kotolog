@@ -1,21 +1,29 @@
 import { Control, Controller } from 'react-hook-form'
 import { Field, Input } from '@headlessui/react'
 import { ImageWithDimensions, PetData } from '@/types'
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react'
 import NextImage from 'next/image'
 
 export const AvatarField = ({
   control,
   setAvatar,
   setAvatarFile,
+  currentAvatarSrc,
 }: {
   control: Control<PetData>
   setAvatar: Dispatch<SetStateAction<ImageWithDimensions | null>>
   setAvatarFile: Dispatch<SetStateAction<File | null>>
+  currentAvatarSrc: string | null
 }) => {
   const [error, setError] = useState<string | null>(null)
   const [imagePreviewSrc, setImagePreviewSrc] = useState<string | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (currentAvatarSrc) {
+      setImagePreviewSrc(currentAvatarSrc)
+    }
+  }, [])
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null
@@ -89,8 +97,8 @@ export const AvatarField = ({
               accept="image/jpeg, image/jpg"
               ref={field.ref}
               onChange={handleImageChange}
-              className="flex h-full w-full items-end bg-transparent fill-transparent text-center text-transparent"
-            ></Input>
+              className="z-50 flex h-full w-full items-end bg-transparent fill-transparent text-center text-transparent"
+            />
           </div>
 
           {error && <p className="text-red-600">{error}</p>}

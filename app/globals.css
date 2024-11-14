@@ -6,16 +6,21 @@
   .btn-primary {
     @apply py-2.5 px-4 rounded bg-gray-500 hover:bg-gray-700 text-stone-100 shadow dark:bg-gray-700 dark:hover:bg-gray-500
   }
-    .btn-secondary {
-        @apply py-2.5 px-4 rounded bg-gray-300 hover:bg-gray-500 text-stone-100 shadow
-    }
+  .btn-secondary {
+    @apply py-2.5 px-4 rounded bg-gray-300 hover:bg-gray-500 text-stone-100 shadow
+  }
   .btn-warning {
     @apply py-2.5 px-4 text-red-600 hover:text-stone-100 rounded hover:bg-red-600 hover:shadow dark:text-red-600 dark:ring-red-600 dark:ring-1 ring-inset dark:hover:text-stone-100
   }
-
-    .pet-card {
-        @apply flex w-full lg:w-1/2 bg-stone-100 shadow sm:shadow-lg overflow-hidden rounded text-wrap dark:bg-stone-950/25
-    }
+  .pet-card {
+    @apply flex w-full lg:w-1/2 bg-stone-100 shadow sm:shadow-lg overflow-hidden rounded text-wrap dark:bg-stone-950/25
+  }
+  .checkbox {
+    @apply size-6 rounded p-0.5 ring-1 ring-inset ring-stone-950 transition duration-75 data-[checked]:bg-orange-500 data-[checked]:text-white data-[checked]:ring-orange-500 dark:ring-stone-400/50 dark:data-[checked]:bg-orange-600
+  }
+  .checkbox-icon {
+    @apply hidden size-5 group-data-[checked]:block group-data-[hover]:block
+  }
   .fieldset {
     @apply mb-6 flex w-full flex-col rounded bg-stone-100 p-3 shadow dark:bg-gray-700/50 sm:shadow-lg md:p-6
   }

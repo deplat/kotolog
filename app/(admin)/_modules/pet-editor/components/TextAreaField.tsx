@@ -20,7 +20,7 @@ export const TextAreaField = ({
         placeholder={placeholder}
         className={clsx(
           'min-h-64 w-full rounded border-0 bg-transparent ring-1 ring-inset ring-stone-950 dark:ring-stone-400/60',
-          'data-[focus]:ring-inset data-[focus]:ring-orange-600'
+          'data-[focus]:ring-inset data-[focus]:ring-orange-600 dark:data-[focus]:ring-orange-600'
         )}
       />
     </Field>

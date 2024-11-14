@@ -7,9 +7,11 @@ import NextImage from 'next/image'
 export const PhotosField = ({
   control,
   setImageFilesWithDimensions,
+  currentPhotos,
 }: {
   control: Control<PetData>
   setImageFilesWithDimensions: Dispatch<SetStateAction<ImageFileWithDimensions[]>>
+  currentPhotos: string[]
 }) => {
   const [errors, setErrors] = useState<string[]>([])
   const [photosPreviews, setPhotosPreviews] = useState<ImageFileWithDimensions[]>([])
@@ -64,9 +66,19 @@ export const PhotosField = ({
       name="photos"
       control={control}
       render={({ field }) => (
-        <div className="mb-6">
-          <Field className="flex flex-col items-center justify-center gap-2">
-            <Label className="text-2xl">Альбом:</Label>
+        <div className="fieldset">
+          <Field className="flex flex-col">
+            <Label className="mb-3 text-2xl">Альбом:</Label>
+            {currentPhotos && currentPhotos.length > 0 ? (
+              <div className="flex flex-wrap gap-3">
+                {currentPhotos.map((src, index) => (
+                  <div key={index}>
+                    <NextImage src={src} width={150} height={150} alt={`Preview ${index + 1}`} />
+                  </div>
+                ))}
+              </div>
+            ) : null}
+            <div className="my-3 text-xl">Добавить фотографии:</div>
             <Input
               id="avatars"
               type="file"

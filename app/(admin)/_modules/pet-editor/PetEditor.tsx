@@ -9,7 +9,7 @@ import { uploadFileAndReturnURL } from '@/utils/uploadFileAndReturnURL'
 import { Button, Fieldset, Legend } from '@headlessui/react'
 import {
   AvatarField,
-  ColorField,
+  ColorFieldset,
   ControlledCheckbox,
   ControlledDateField,
   ControlledListBox,
@@ -148,7 +148,12 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
       </div>
       <Fieldset className="fieldset">
         <div className="mb-3 md:mb-6">
-          <AvatarField control={control} setAvatar={setAvatar} setAvatarFile={setAvatarFile} />
+          <AvatarField
+            control={control}
+            setAvatar={setAvatar}
+            setAvatarFile={setAvatarFile}
+            currentAvatarSrc={pet?.avatar?.src || null}
+          />
         </div>
         <TextField
           label="Имя"
@@ -235,15 +240,19 @@ export const PetEditor = ({ pet, colors }: { pet: Pet | null; colors: Colors }) 
           />
         ))}
       </Fieldset>
+      <ColorFieldset control={control} colors={colors} />
       <Fieldset className="fieldset">
         <TextAreaField
           label={'Биография'}
           placeholder={'Информация о питомце в свободном стиле'}
           register={register('biography')}
         />
-        <ColorField control={control} colors={colors} />
-        <PhotosField control={control} setImageFilesWithDimensions={setImageFilesWithDimensions} />
       </Fieldset>
+      <PhotosField
+        control={control}
+        setImageFilesWithDimensions={setImageFilesWithDimensions}
+        currentPhotos={pet?.photos.map((photo) => photo.src) || []}
+      />
     </form>
   )
 }

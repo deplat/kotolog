@@ -30,7 +30,7 @@ export const ControlledListBox = ({
         name={fieldKey}
         render={({ field }) => (
           <Listbox value={field.value} onChange={field.onChange}>
-            <ListboxButton className="relative flex w-3/4 items-center justify-between rounded p-2.5 text-left ring-1 ring-stone-700/60 dark:ring-stone-400/50">
+            <ListboxButton className="relative flex w-3/4 items-center justify-between rounded p-2.5 text-left ring-1 ring-inset ring-stone-700/60 dark:ring-stone-400/50">
               <div>{field.value == null ? 'Указать ...' : field.value}</div>
               <IoChevronDown className="pointer-events-none block size-4" aria-hidden="true" />
             </ListboxButton>
@@ -38,8 +38,8 @@ export const ControlledListBox = ({
               anchor={{ to: 'bottom', gap: 4 }}
               transition
               className={clsx(
-                'w-[var(--button-width)] rounded bg-stone-100 p-2 focus:outline-none dark:bg-gray-600',
-                'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0'
+                'w-[var(--button-width)] rounded bg-stone-100 p-2 ring-1 ring-stone-700/60 dark:bg-gray-600 dark:ring-stone-400/50',
+                'shadow-lg transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0'
               )}
             >
               {options.map((option) => (
@@ -48,7 +48,7 @@ export const ControlledListBox = ({
                   value={option.value}
                   className="group flex cursor-pointer items-center gap-2 rounded px-3 py-1.5 ring-inset ring-orange-600 data-[focus]:ring-2"
                 >
-                  <IoCheckmark className="invisible size-5 group-data-[selected]:visible" />
+                  <IoCheckmark className="invisible size-5 data-[selected]:text-orange-600 group-data-[selected]:visible" />
                   <div className="">{option.label}</div>
                 </ListboxOption>
               ))}
