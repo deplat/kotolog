@@ -3,10 +3,11 @@
 import { useState } from 'react'
 import { CatFilter } from '@/app/(pets)/koshki/_components/CatFilter'
 import { CatList } from '@/app/(pets)/koshki/_components/CatList'
-import { IoClose, IoFilter, IoPaw } from 'react-icons/io5'
+import { IoClose, IoFilter } from 'react-icons/io5'
 import { Transition } from '@headlessui/react'
 import clsx from 'clsx'
 import { Cats } from '@/data-access'
+import { GiCat } from 'react-icons/gi'
 
 interface CatsListLayoutProps {
   initialCats: Cats
@@ -78,8 +79,8 @@ export const CatListLayout = ({ initialCats, uniqueColors }: CatsListLayoutProps
       </Transition>
       <div className="mx-auto flex w-full grow flex-col">
         <div className="mb-10 flex items-center">
-          <IoPaw size={36} className="mr-2 text-gray-500 md:mr-4" />
-          <h2 className="text-4xl font-bold tracking-tight">Наши кошки</h2>
+          <GiCat size={36} className="mr-2 text-gray-500 dark:text-gray-400 md:mr-4" />
+          <h2 className="text-4xl font-bold tracking-tight">Кошки</h2>
         </div>
         <div className="flex w-full justify-center">
           <CatList cats={filteredCats} />

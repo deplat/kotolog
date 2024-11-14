@@ -12,7 +12,10 @@ export const Header = () => {
           Котолог
         </Link>
         <Link href="/koshki" className="text-lg hover:text-orange-600">
-          Питомцы
+          Кошки
+        </Link>
+        <Link href="/sobaki" className="text-lg hover:text-orange-600">
+          Собаки
         </Link>
         <ThemeSwitch />
       </div>
