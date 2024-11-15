@@ -6,7 +6,6 @@ export {
   getColorById,
   getColorByName,
   getCachedListOfUniqueColorsFromCats,
-  getCachedListOfUniqueColorsFromDogs,
   updateColor,
   deleteColor,
 } from './color'
@@ -21,4 +20,11 @@ export {
   deletePet,
 } from './pet'
 export { type Cats, getCachedCats } from './cat'
-export { type Dogs, getCachedDogs } from './dog'
+export {
+  type Dogs,
+  getCachedDogs,
+  getCachedAvailableDogGenders,
+  getCachedAvailableDogFurTypes,
+  getCachedAvailableDogAgeGroups,
+  getCachedAvailableDogColors,
+} from './dog'

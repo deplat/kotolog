@@ -91,23 +91,6 @@ export const getCachedListOfUniqueColorsFromCats = unstable_cache(
   }
 )
 
-const getListOfUniqueColorsFromDogs = async () => {
-  const uniqueColors: Colors = await prisma.$queryRaw`
-    SELECT DISTINCT "Color"."name" FROM "Color"
-    JOIN "_PetColors" ON "_PetColors"."A" = "Color"."id"
-    JOIN "Pet" ON "Pet"."id" = "_PetColors"."B"
-    WHERE "Pet"."petType" = 'DOG'`
-  return uniqueColors.map((color: { name: string }) => color.name)
-}
-
-export const getCachedListOfUniqueColorsFromDogs = unstable_cache(
-  getListOfUniqueColorsFromDogs,
-  ['unique_colors_from_dogs'],
-  {
-    tags: ['unique_colors_from_dogs'],
-  }
-)
-
 export const updateColor = async (id: number, name: string) => {
   const { allowed, role } = await checkUserRole([UserRole.ADMIN, UserRole.MANAGER])
   if (!allowed) {

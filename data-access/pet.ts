@@ -117,7 +117,10 @@ export const createPet = async (data: PetData) => {
     })
     revalidateTag('pets')
     revalidateTag('unique_colors_from_cats')
-    revalidateTag('unique_colors_from_dogs')
+    revalidateTag('availableDogGenders')
+    revalidateTag('availableDogFurTypes')
+    revalidateTag('availableDogAgeGroups')
+    revalidateTag('availableDogColors')
     return { success: true, message: 'Pet created successfully.', data: createdPet }
   } catch (error) {
     const prismaError = prismaErrorHandler(error)
@@ -246,7 +249,10 @@ export const updatePet = async (id: number, data: PetData) => {
     })
     revalidateTag('pets')
     revalidateTag('unique_colors_from_cats')
-    revalidateTag('unique_colors_from_dogs')
+    revalidateTag('availableDogGenders')
+    revalidateTag('availableDogFurTypes')
+    revalidateTag('availableDogAgeGroups')
+    revalidateTag('availableDogColors')
     return { success: true, message: 'Pet updated successfully.', data: updatedPet }
   } catch (error) {
     const prismaError = prismaErrorHandler(error)
@@ -332,7 +338,10 @@ export const deletePet = async (id: number) => {
     const deletedPet = await prisma.pet.delete({ where: { id } })
     revalidateTag('pets')
     revalidateTag('unique_colors_from_cats')
-    revalidateTag('unique_colors_from_dogs')
+    revalidateTag('availableDogGenders')
+    revalidateTag('availableDogFurTypes')
+    revalidateTag('availableDogAgeGroups')
+    revalidateTag('availableDogColors')
     return { success: true, message: 'Pet deleted successfully.', data: deletedPet }
   } catch (error) {
     const prismaError = prismaErrorHandler(error)
