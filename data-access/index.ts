@@ -21,8 +21,10 @@ export {
 } from './pet'
 export { type Cats, getCachedCats } from './cat'
 export {
+  type Dog,
   type Dogs,
   getCachedDogs,
+  getDogsWithFilters,
   getCachedAvailableDogGenders,
   getCachedAvailableDogFurTypes,
   getCachedAvailableDogAgeGroups,

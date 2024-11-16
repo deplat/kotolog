@@ -2,11 +2,12 @@
 
 import { prisma } from '@/prisma/prisma'
 import { unstable_cache } from 'next/cache'
-import { getAgeFromDate } from '@/utils/getAgeFromDate'
 import { Prisma } from '@prisma/client'
 import { Colors } from '@/data-access/color'
+import { getAgeDataFromBirthDate } from '@/utils/getAgeDataFromBirthDate'
 
 export type Dogs = Prisma.PromiseReturnType<typeof getDogs>
+export type Dog = Prisma.PromiseReturnType<typeof getDogBySlug>
 
 const dogSelect = Prisma.validator<Prisma.PetSelect>()({
   id: true,
@@ -35,7 +36,13 @@ const dogSelect = Prisma.validator<Prisma.PetSelect>()({
   },
 })
 
-const getDogs = async () => {
+const getDogs = async (filters?: {
+  [key: string]: string | string[]
+}): Promise<{
+  success: boolean
+  message: string
+  data: any
+}> => {
   const dogs = await prisma.pet.findMany({
     where: {
       petType: 'DOG',
@@ -47,25 +54,52 @@ const getDogs = async () => {
     },
   })
 
-  const today = new Date()
-  return dogs.map((dog) => {
-    const ageString = dog.birthDate ? getAgeFromDate(dog.birthDate) : ''
-    const birthDate = dog.birthDate ? new Date(dog.birthDate) : null
-    const ageInYears = birthDate ? today.getFullYear() - birthDate.getFullYear() : 0
-    const isKitten =
-      birthDate &&
-      (ageInYears < 1 || (ageInYears === 1 && today < new Date(birthDate.getFullYear() + 1)))
+  if (!dogs) {
+    return { success: false, message: 'Собаки не найдены', data: [] }
+  }
+  const data = dogs.map((dog) => {
+    const { ageString, ageGroup } = getAgeDataFromBirthDate(dog.birthDate)
     return {
       ...dog,
       ageString,
-      ageCategory: isKitten ? 'puppy' : 'adult',
+      ageGroup,
     }
   })
+
+  return {
+    success: true,
+    message: 'Собаки найдены',
+    data,
+  }
 }
 
-export const getCachedDogs = unstable_cache(async () => getDogs(), ['pets'], {
+export const getCachedDogs = unstable_cache(getDogs, ['pets'], {
   tags: ['pets'],
 })
+
+export const getDogBySlug = async (slug: string) => {
+  const dog = await prisma.pet.findUnique({
+    where: {
+      slug,
+    },
+    select: dogSelect,
+  })
+  if (!dog) {
+    return { success: false, message: 'Собака с таким слагом не найдена', data: null }
+  }
+  const today = new Date()
+  const ageString = dog.birthDate ? getAgeFromDate(dog.birthDate) : ''
+  const birthDate = dog.birthDate ? new Date(dog.birthDate) : null
+  const ageInYears = birthDate ? today.getFullYear() - birthDate.getFullYear() : 0
+  const isKitten =
+    birthDate &&
+    (ageInYears < 1 || (ageInYears === 1 && today < new Date(birthDate.getFullYear() + 1)))
+  return {
+    ...dog,
+    ageString,
+    ageCategory: isKitten ? 'PUPPY' : 'ADULT',
+  }
+}
 
 const getAvailableDogGenders = async (): Promise<string[]> => {
   const availableDogGenders = await prisma.pet.findMany({

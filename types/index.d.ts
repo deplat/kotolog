@@ -1,3 +1,9 @@
+export interface Filter {
+  key: string
+  label: string
+  value: string | string[] | number
+}
+
 export interface ImageWithDimensions {
   id?: number
   src: string
