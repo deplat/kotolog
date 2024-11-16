@@ -68,7 +68,7 @@ export const createPet = async (data: PetData) => {
       isUnclaimed: data.isUnclaimed,
       isAvailable: data.isAvailable,
       isFeatured: data.isFeatured,
-      isAdopted: data.isAdopted,
+      isAdopted: data.isAdopted ? data.isAdopted : false,
       isVisible: data.isVisible,
       profile: {
         create: {

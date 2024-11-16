@@ -38,27 +38,32 @@ export interface PetData {
   slug: string
   birthDate: Date | null
   gender: $Enums.Gender | null
-  petType: $Enums.PetType
-  furType: $Enums.FurType | null
-  isUnclaimed: boolean
-  isFeatured: boolean
-  isAvailable: boolean
-  isAdopted: boolean
-  isVisible: boolean
-  socialized: boolean
-  friendlyWithCats: boolean
-  friendlyWithDogs: boolean
-  friendlyWithAnimals: boolean
-  litterBoxTrained: boolean | null
-  usesScratchingPost: boolean | null
-  sterilized: boolean
-  vaccinated: boolean
-  treatedForParasites: boolean
-  healthStatus: $Enums.HealthStatus
-  healthNotes: HealthNote[]
-  specialties: Specialty[]
-  biography: string | null
-  colors: number[]
-  avatar: ImageWithDimensions | null
-  photos: ImageWithDimensions[]
+  petType?: $Enums.PetType
+  furType?: $Enums.FurType | null
+  isUnclaimed?: boolean
+  isFeatured?: boolean
+  isAvailable?: boolean
+  isAdopted?: boolean
+  isVisible?: boolean
+  socialized?: boolean
+  friendlyWithCats?: boolean
+  friendlyWithDogs?: boolean
+  friendlyWithAnimals?: boolean
+  litterBoxTrained?: boolean | null
+  usesScratchingPost?: boolean | null
+  sterilized?: boolean
+  vaccinated?: boolean
+  treatedForParasites?: boolean
+  healthStatus?: $Enums.HealthStatus
+  healthNotes?: HealthNote[]
+  specialties?: Specialty[]
+  biography?: string | null
+  colors?: number[]
+  avatar?: ImageWithDimensions | null
+  photos?: ImageWithDimensions[]
+}
+
+export interface FormattedPetData extends PetData {
+  ageString: string
+  ageGroup: 'Молодой' | 'Взрослый' | 'Не указано'
 }

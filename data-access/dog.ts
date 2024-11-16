@@ -5,9 +5,12 @@ import { unstable_cache } from 'next/cache'
 import { Prisma } from '@prisma/client'
 import { Colors } from '@/data-access/color'
 import { getAgeDataFromBirthDate } from '@/utils/getAgeDataFromBirthDate'
+import { FormattedPetData, PetData } from '@/types'
 
 export type Dogs = Prisma.PromiseReturnType<typeof getDogs>
 export type Dog = Prisma.PromiseReturnType<typeof getDogBySlug>
+
+const dogWhere = Prisma.validator<Prisma.PetSelect>
 
 const dogSelect = Prisma.validator<Prisma.PetSelect>()({
   id: true,
@@ -19,7 +22,6 @@ const dogSelect = Prisma.validator<Prisma.PetSelect>()({
   colors: {
     select: {
       id: true,
-      name: true,
     },
   },
   profile: {
@@ -36,17 +38,20 @@ const dogSelect = Prisma.validator<Prisma.PetSelect>()({
   },
 })
 
-const getDogs = async (filters?: {
+const getDogs = async (filters: {
   [key: string]: string | string[]
 }): Promise<{
   success: boolean
   message: string
-  data: any
+  data: FormattedPetData[]
 }> => {
   const dogs = await prisma.pet.findMany({
     where: {
       petType: 'DOG',
       isVisible: true,
+      colors: {
+        q,
+      },
     },
     select: dogSelect,
     orderBy: {
@@ -56,20 +61,22 @@ const getDogs = async (filters?: {
 
   if (!dogs) {
     return { success: false, message: 'Собаки не найдены', data: [] }
-  }
-  const data = dogs.map((dog) => {
-    const { ageString, ageGroup } = getAgeDataFromBirthDate(dog.birthDate)
-    return {
-      ...dog,
-      ageString,
-      ageGroup,
-    }
-  })
+  } else {
+    const data: FormattedPetData[] = dogs.map((dog) => {
+      let { ageString, ageGroup } = getAgeDataFromBirthDate(dog.birthDate)
+      return {
+        ...dog,
+        colors: dog.colors.map((color) => color.id),
+        ageString,
+        ageGroup,
+      }
+    })
 
-  return {
-    success: true,
-    message: 'Собаки найдены',
-    data,
+    return {
+      success: true,
+      message: 'Собаки найдены',
+      data: data,
+    }
   }
 }
 

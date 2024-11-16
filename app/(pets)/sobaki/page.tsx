@@ -22,7 +22,7 @@ export default async function DogsPage({
   const availableDogFurTypes = await getCachedAvailableDogFurTypes()
   const availableDogAgeGroups = await getCachedAvailableDogAgeGroups()
   const availableDogColors = await getCachedAvailableDogColors()
-  await getCachedDogs(params).then(({ success, message }) => {
+  await getCachedDogs(params).then(({ success, message, data }) => {
     if (!success) {
       console.log(message)
       return <>{message}</>
@@ -43,7 +43,9 @@ export default async function DogsPage({
               </FilterSidebar>
             </Suspense>
           </div>
-          <DogList />
+          <Suspense>
+            <DogList dogs={data} />
+          </Suspense>
         </div>
       )
     }
