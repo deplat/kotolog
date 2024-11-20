@@ -10,44 +10,34 @@ import {
   localizedAgeGroup,
   localizedFurType,
 } from '@/app/(pets)/sobaki/localizedFilterNamesAndOptions'
+import { SearchParams } from 'next/dist/server/request/search-params'
 
 export const DogFilters = ({
   availableDogGenders,
   availableDogAgeGroups,
   availableDogFurTypes,
   availableDogColors,
+  searchParams,
 }: {
   availableDogGenders: string[]
   availableDogAgeGroups: string[]
   availableDogFurTypes: string[]
   availableDogColors: string[]
+  searchParams: { [key: string]: string | string[] }
 }) => {
-  const searchParams = useSearchParams()
-
-  const getFiltersFromSearchParams = () => {
-    const gender = searchParams.get('gender') || ''
-    const ageGroup = searchParams.get('ageGroup') || ''
-    const furType = searchParams.getAll('furType') || []
-    const color = searchParams.getAll('color') || []
-    return { gender, ageGroup, furType, color }
+  const initialFilters = {
+    gender: searchParams['gender'],
+    ageGroup: searchParams['ageGroup'],
+    furType: searchParams['furType'],
+    color: searchParams['color'],
   }
 
   const [filters, setFilters] = useState<{
-    gender: string
-    ageGroup: string
-    furType: string[]
-    color: string[]
-  }>({
-    gender: '',
-    ageGroup: '',
-    furType: [],
-    color: [],
-  })
-
-  useEffect(() => {
-    const initialFilters = getFiltersFromSearchParams()
-    setFilters(initialFilters)
-  }, [searchParams])
+    gender: string | string[]
+    ageGroup: string | string[]
+    furType: string | string[]
+    color: string | string[]
+  }>(initialFilters)
 
   const updateFilters = (key: keyof typeof filters, value: string) => {
     setFilters((prev) => {

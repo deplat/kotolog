@@ -21,6 +21,7 @@ export const CatFilter = ({ uniqueColors, onFilterChange, toggleFilter }: Filter
     colors: [] as string[],
     age: '',
   })
+  const catAgeGroup = ageGroup == 'Молодой' ? 'Котёнок' : ageGroup
 
   const applyFilters = () => {
     onFilterChange(filters)

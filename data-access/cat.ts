@@ -4,6 +4,7 @@ import { prisma } from '@/prisma/prisma'
 import { unstable_cache } from 'next/cache'
 import { getAgeDataFromBirthDate } from '@/utils/getAgeDataFromBirthDate'
 import { Prisma } from '@prisma/client'
+import { FormattedPetData } from '@/types'
 
 export type Cats = Prisma.PromiseReturnType<typeof getCats>
 
@@ -34,31 +35,49 @@ const catSelect = Prisma.validator<Prisma.PetSelect>()({
   },
 })
 
-const getCats = async () => {
+const getCats = async (filters: { [key: string]: string | string[] }) => {
+  const colorFilters = Array.isArray(filters['colors'])
+    ? filters['colors'].map((color) => ({
+        name: color,
+      }))
+    : filters['colors']
+      ? [{ name: filters['colors'] }]
+      : undefined
   const cats = await prisma.pet.findMany({
     where: {
-      petType: 'CAT',
+      petType: 'DOG',
       isVisible: true,
+      colors: {
+        some: {
+          OR: colorFilters,
+        },
+      },
     },
     select: catSelect,
     orderBy: {
       id: 'desc',
     },
   })
-  return {
-    success: true,
-    data: cats.map((cat) => {
+  if (!cats) {
+    return {
+      success: false,
+    }
+  } else {
+    const data: FormattedPetData[] = cats.map((cat) => {
       const { ageString, ageGroup } = getAgeDataFromBirthDate(cat.birthDate)
-      const catAgeGroup = ageGroup == 'Молодой' ? 'Котёнок' : ageGroup
       return {
         ...cat,
         ageString,
-        catAgeGroup,
+        ageGroup,
       }
-    }),
+    })
+    return {
+      success: true,
+      data,
+    }
   }
 }
 
-export const getCachedCats = unstable_cache(async () => getCats(), ['pets'], {
+export const getCachedCats = unstable_cache(getCats, ['pets'], {
   tags: ['pets'],
 })

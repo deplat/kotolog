@@ -58,7 +58,7 @@ export interface PetData {
   healthNotes?: HealthNote[]
   specialties?: Specialty[]
   biography?: string | null
-  colors?: number[]
+  colors?: { id: number }[]
   avatar?: ImageWithDimensions | null
   photos?: ImageWithDimensions[]
 }

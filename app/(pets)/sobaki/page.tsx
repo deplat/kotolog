@@ -39,6 +39,7 @@ export default async function DogsPage({
                   availableDogFurTypes={availableDogFurTypes}
                   availableDogAgeGroups={availableDogAgeGroups}
                   availableDogColors={availableDogColors}
+                  searchParams={params}
                 />
               </FilterSidebar>
             </Suspense>
