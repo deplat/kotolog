@@ -37,7 +37,7 @@ const dogSelect = Prisma.validator<Prisma.PetSelect>()({
 })
 
 const getDogs = async (filters: {
-  [key: string]: string | string[]
+  [p: string]: string[]
 }): Promise<{
   success: boolean
   message: string
@@ -55,6 +55,9 @@ const getDogs = async (filters: {
     where: {
       petType: 'DOG',
       isVisible: true,
+      furType: {
+        in: filters['furType'],
+      },
       colors: {
         some: {
           OR: colorFilters,

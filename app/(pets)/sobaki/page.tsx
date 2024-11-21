@@ -16,13 +16,22 @@ export default async function DogsPage({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] }>
 }) {
-  const params = await searchParams
-  console.log(params)
+  function parseSearchParams(searchParams: { [key: string]: string | string[] }) {
+    const filters: { [key: string]: string[] } = {}
+
+    for (const [key, value] of Object.entries(searchParams)) {
+      filters[key] = Array.isArray(value) ? value : [value]
+    }
+
+    return filters
+  }
+  const filters = parseSearchParams(await searchParams)
+  console.log(searchParams)
   const availableDogGenders = await getCachedAvailableDogGenders()
   const availableDogFurTypes = await getCachedAvailableDogFurTypes()
   const availableDogAgeGroups = await getCachedAvailableDogAgeGroups()
   const availableDogColors = await getCachedAvailableDogColors()
-  await getCachedDogs(params).then(({ success, message, data }) => {
+  await getCachedDogs(filters).then(({ success, message, data }) => {
     if (!success) {
       console.log(message)
       return <>{message}</>
@@ -39,7 +48,7 @@ export default async function DogsPage({
                   availableDogFurTypes={availableDogFurTypes}
                   availableDogAgeGroups={availableDogAgeGroups}
                   availableDogColors={availableDogColors}
-                  searchParams={params}
+                  initialFilters={filters}
                 />
               </FilterSidebar>
             </Suspense>

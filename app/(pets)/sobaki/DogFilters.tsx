@@ -1,76 +1,53 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Checkbox, Field, Fieldset, Label, Legend } from '@headlessui/react'
 import { IoCheckmark } from 'react-icons/io5'
-import { useSearchParams } from 'next/navigation'
 import clsx from 'clsx'
 import {
   localizedFilterNames,
   localizedAgeGroup,
   localizedFurType,
 } from '@/app/(pets)/sobaki/localizedFilterNamesAndOptions'
-import { SearchParams } from 'next/dist/server/request/search-params'
+
+type Filters = {
+  [key in 'furType' | 'gender' | 'ageGroup' | 'colors']: string[]
+}
 
 export const DogFilters = ({
   availableDogGenders,
   availableDogAgeGroups,
   availableDogFurTypes,
   availableDogColors,
-  searchParams,
+  initialFilters,
 }: {
   availableDogGenders: string[]
   availableDogAgeGroups: string[]
   availableDogFurTypes: string[]
   availableDogColors: string[]
-  searchParams: { [key: string]: string | string[] }
+  initialFilters: Filters
 }) => {
-  const initialFilters = {
-    gender: searchParams['gender'],
-    ageGroup: searchParams['ageGroup'],
-    furType: searchParams['furType'],
-    color: searchParams['color'],
-  }
+  const [formState, setFormState] = useState<Filters>(initialFilters)
 
-  const [filters, setFilters] = useState<{
-    gender: string | string[]
-    ageGroup: string | string[]
-    furType: string | string[]
-    color: string | string[]
-  }>(initialFilters)
-
-  const updateFilters = (key: keyof typeof filters, value: string) => {
-    setFilters((prev) => {
-      return { ...prev, [key]: prev[key] === value ? '' : value }
-    })
-  }
-
-  const updateMultiValueFilter = (
-    key: keyof { furType: string[]; color: string[] },
-    value: string
-  ) => {
-    setFilters((prev) => {
-      const updatedValues = prev[key].includes(value)
+  const updateFilters = (key: keyof Filters, value: string) => {
+    setFormState((prev) => ({
+      ...prev,
+      [key]: prev[key].includes(value)
         ? prev[key].filter((item) => item !== value)
-        : [...prev[key], value]
-      return { ...prev, [key]: updatedValues }
-    })
+        : [...prev[key], value],
+    }))
   }
-
-  const checkIfSingleOption = (options: string[]) => options.length === 1
-  const checkIfTwoOptions = (options: string[]) => options.length === 2
-  const checkIfMultipleOptions = (options: string[]) => options.length > 2
 
   const renderFilterOptions = (
-    key: keyof typeof filters,
+    key: string,
     options: string[],
     localized: (value: string) => string
   ) => {
     if (!options.length) return null
 
-    const isSingleOption = checkIfSingleOption(options)
-    const isTwoOptions = checkIfTwoOptions(options)
-    const isMultipleOptions = checkIfMultipleOptions(options)
+    const isSingleOption = options.length === 1
+    const isTwoOptions = options.length === 2
+    const isMultipleOptions = options.length > 2
 
     return (
       <div>
@@ -83,19 +60,12 @@ export const DogFilters = ({
                   name={key}
                   value={value}
                   checked={
-                    isMultipleOptions ? filters[key].includes(value) : filters[key] === value
+                    isMultipleOptions ? formState[key].includes(value) : formState[key] === value
                   }
-                  onChange={() =>
-                    isMultipleOptions
-                      ? updateMultiValueFilter(
-                          key as keyof { furType: string[]; color: string[] },
-                          value
-                        )
-                      : updateFilters(key, value)
-                  }
+                  onChange={() => updateFilters(key, value)}
                   disabled={
-                    (isSingleOption && !filters[key]) ||
-                    (isTwoOptions && filters[key] === value && filters[key].length === 1)
+                    isSingleOption ||
+                    (isTwoOptions && formState[key].includes(value) && formState[key].length === 1)
                   }
                   className="group size-6 rounded-md bg-gray-800/15 p-0.5 ring-1 ring-inset ring-white/15 data-[checked]:bg-orange-500 data-[checked]:text-white dark:data-[checked]:bg-orange-600"
                 >
@@ -116,11 +86,7 @@ export const DogFilters = ({
   }
 
   const sortOptions = (options: string[], order: string[]) => {
-    return options.sort((a, b) => {
-      const indexA = order.indexOf(a)
-      const indexB = order.indexOf(b)
-      return indexA - indexB
-    })
+    return options.sort((a, b) => order.indexOf(a) - order.indexOf(b))
   }
 
   return (
