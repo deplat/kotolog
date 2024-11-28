@@ -1,0 +1,154 @@
+import { FurType, HealthStatus, PetGender, PetType, Status } from '@prisma/client'
+
+export interface PetData {
+  id?: string
+  name?: string
+  slug?: string
+  birthDate?: Date
+  type?: PetType
+  gender?: PetGender
+  furType?: FurType
+  isReadyForAdoption?: boolean
+  isFeatured?: boolean
+  isAdopted?: boolean
+  isPublished?: boolean
+  status?: Status
+  createdAt?: Date
+  updatedAt?: Date
+  archivedAt?: Date
+  archivedReason?: string
+  profile: {
+    id: string
+    name: string
+  }
+  petProfile?: PetProfileData
+  colors?: PetColorData[]
+  photos?: PetImageData[]
+}
+
+export interface PetProfileData {
+  petId?: string
+  isSocialized?: boolean
+  isFriendlyWithCats?: boolean
+  isFriendlyWithDogs?: boolean
+  isFriendlyWithOtherAnimals?: boolean
+  isLitterBoxTrained?: boolean
+  isUsesScratchingPost?: boolean
+  isSterilized?: boolean
+  isVaccinated?: boolean
+  isTreatedForParasites?: boolean
+  healthStatus?: HealthStatus
+  biography?: string
+}
+
+export interface PetColorData {
+  id: string
+  name?: string
+}
+
+export interface ColorData {
+  id: string
+  name: string
+}
+
+export interface PetImageFileWithDimensions {
+  file: File
+  width: number
+  height: number
+  isAvatar: boolean
+  isPrimary: boolean
+}
+
+export interface PetImageData {
+  id?: string
+  petId?: string
+  s3Key?: string
+  src: string
+  width: number
+  height: number
+  altText?: string
+  isAvatar?: boolean
+  isPrimary?: boolean
+}
+
+export interface PetImageCreateInputData {
+  s3Key: string
+  src: string
+  width: number
+  height: number
+  altText?: string
+  isAvatar: boolean
+  isPrimary: boolean
+}
+
+export interface PetProfileInputData {
+  petId?: string
+  isSocialized: boolean
+  isFriendlyWithCats: boolean
+  isFriendlyWithOtherAnimals: boolean
+  isLitterBoxTrained?: boolean
+  isUsesScratchingPost?: boolean
+  isSterilized: boolean
+  isVaccinated: boolean
+  isTreatedForParasites: boolean
+  healthStatus: HealthStatus
+  biography: string
+}
+
+export interface PetProfileUpdateData {
+  petId?: string
+  isSocialized?: boolean
+  isFriendlyWithCats?: boolean
+  isFriendlyWithOtherAnimals?: boolean
+  isLitterBoxTrained?: boolean
+  isUsesScratchingPost?: boolean
+  isSterilized?: boolean
+  isVaccinated?: boolean
+  isTreatedForParasites?: boolean
+  healthStatus?: HealthStatus
+  biography?: string
+}
+
+export interface PetCreateInputData {
+  name: string
+  slug: string
+  birthDate: Date
+  type: PetType
+  gender: PetGender
+  furType: FurType
+  isReadyForAdoption: boolean
+  isFeatured: boolean
+  isAdopted: boolean
+  isPublished: boolean
+  status: Status
+  profile: {
+    id: string
+    name: string
+  }
+  petProfile: PetProfileInputData
+  colors: PetColorData[]
+  photos: PetImageCreateInputData[]
+}
+
+export interface PetUpdateInputData {
+  id?: string
+  name?: string
+  slug?: string
+  birthDate?: Date
+  type?: PetType
+  gender?: PetGender
+  furType?: FurType
+  isReadyForAdoption?: boolean
+  isFeatured?: boolean
+  isAdopted?: boolean
+  isPublished?: boolean
+  status?: Status
+  archivedReason?: string
+  profile?: {
+    id: string
+    name: string
+  }
+  petProfile: PetProfileUpdateData
+  colors: PetColorData[]
+  photos: PetImageCreateInputData[]
+}

@@ -8,7 +8,7 @@ import { useState } from 'react'
 import { deletePet } from '@/data-access'
 
 interface PetCardControlsProps {
-  id: number
+  id: string
   avatarSrc?: string | StaticImageData
   name: string
 }
@@ -16,7 +16,7 @@ interface PetCardControlsProps {
 export const PetCardControls = ({ id, avatarSrc, name }: PetCardControlsProps) => {
   const [feedback, setFeedback] = useState<string | null>(null)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-  async function onDeletePet(id: number) {
+  async function onDeletePet(id: string) {
     setFeedback('Удаление питомца...')
     try {
       const response = await deletePet(id)

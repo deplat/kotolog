@@ -1,7 +1,7 @@
 import { Field, Label, Textarea } from '@headlessui/react'
-import { PetData } from '@/types'
 import { UseFormRegister } from 'react-hook-form'
 import clsx from 'clsx'
+import { PetCreateInputData, PetUpdateInputData } from '@/types/pet'
 
 export const TextAreaField = ({
   label,
@@ -10,7 +10,7 @@ export const TextAreaField = ({
 }: {
   label: string
   placeholder: string
-  register: ReturnType<UseFormRegister<PetData>>
+  register: ReturnType<UseFormRegister<PetCreateInputData | PetUpdateInputData>>
 }) => {
   return (
     <Field className="mb-6 flex w-full flex-col gap-y-2">

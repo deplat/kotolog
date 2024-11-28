@@ -4,19 +4,19 @@ import Yandex from 'next-auth/providers/yandex'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import type { DefaultSession } from 'next-auth'
 import NextAuth from 'next-auth'
+import type { UserAppRole } from '@prisma/client'
 
-// eslint-disable-next-line import/no-unresolved
 import { prisma } from '@/prisma/prisma'
 
 declare module 'next-auth' {
   interface Session {
     user: {
-      role: 'USER' | 'MANAGER' | 'ADMIN'
+      role: UserAppRole
     } & DefaultSession['user']
   }
 
   interface User {
-    role: 'USER' | 'MANAGER' | 'ADMIN'
+    role: UserAppRole
   }
 }
 

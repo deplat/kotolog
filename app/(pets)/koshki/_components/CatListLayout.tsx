@@ -40,7 +40,7 @@ export const CatListLayout = ({ initialCats, uniqueColors }: CatsListLayoutProps
 
     if (filters.colors && filters.colors.length > 0) {
       newCats = newCats.filter((cat) =>
-        filters.colors?.some((color) => cat.colors?.some((catColor) => catColor.name === color))
+        filters.colors?.some((color) => cat.colors?.some((catColor) => catColor.colorId === color))
       )
     }
 

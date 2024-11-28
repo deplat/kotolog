@@ -1,61 +1,31 @@
-import { Pet } from '@/data-access'
-import { Color } from '@/types'
+import { PetData } from '@/types/pet'
+import { FurType } from '@prisma/client'
 
-export const getDefaultValuesFromPetData = (pet: Pet | null) => {
+export const getDefaultValuesFromPetData = (
+  pet: PetData | null,
+  profile: { id: string; name: string }
+): PetData => {
   return pet
-    ? {
-        id: pet.id,
-        name: pet.name,
-        slug: pet.slug,
-        birthDate: pet.birthDate,
-        gender: pet.gender,
-        petType: pet.petType,
-        furType: pet.furType,
-        isUnclaimed: pet.isUnclaimed,
-        isFeatured: pet.isFeatured,
-        isAvailable: pet.isAvailable,
-        isAdopted: pet.isAdopted,
-        isVisible: pet.isVisible,
-        socialized: pet.profile?.socialized,
-        friendlyWithCats: pet.profile?.friendlyWithCats,
-        friendlyWithDogs: pet.profile?.friendlyWithDogs,
-        friendlyWithAnimals: pet.profile?.friendlyWithAnimals,
-        litterBoxTrained: pet.profile?.litterBoxTrained,
-        usesScratchingPost: pet.profile?.usesScratchingPost,
-        sterilized: pet.profile?.sterilized,
-        vaccinated: pet.profile?.vaccinated,
-        treatedForParasites: pet.profile?.treatedForParasites,
-        healthStatus: pet.profile?.healthStatus,
-        healthNotes: pet.profile?.healthNotes,
-        specialties: pet.profile?.specialties,
-        biography: pet.profile?.biography,
-        colors: pet.colors?.map((color: Color) => color.id),
-        avatar: pet.avatar,
-        photos: pet.photos,
-      }
+    ? pet
     : {
-        birthDate: null,
         gender: 'MALE',
-        petType: 'CAT',
-        furType: null,
-        isUnclaimed: false,
+        type: 'CAT',
+        furType: FurType.SHORT,
+        isReadyForAdoption: true,
         isFeatured: false,
-        isAvailable: true,
         isAdopted: false,
-        isVisible: false,
-        socialized: true,
-        friendlyWithCats: true,
-        friendlyWithDogs: false,
-        friendlyWithAnimals: false,
-        healthStatus: 'UNKNOWN',
-        healthNotes: [],
-        specialties: [],
-        sterilized: true,
-        vaccinated: true,
-        treatedForParasites: true,
-        biography: null,
+        isPublished: false,
+        profile: profile,
+        petProfile: {
+          isSocialized: true,
+          isFriendlyWithCats: true,
+          isFriendlyWithDogs: false,
+          isFriendlyWithOtherAnimals: false,
+          healthStatus: 'UNKNOWN',
+          isSterilized: true,
+          isVaccinated: true,
+          isTreatedForParasites: true,
+        },
         colors: [],
-        avatar: null,
-        photos: [],
       }
 }

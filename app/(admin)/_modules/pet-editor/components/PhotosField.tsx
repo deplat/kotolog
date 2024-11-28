@@ -1,117 +1,142 @@
-import { Control, Controller } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { Field, Input, Label } from '@headlessui/react'
-import { ImageFileWithDimensions, PetData } from '@/types'
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import NextImage from 'next/image'
+import { PetImageData, PetImageFileWithDimensions } from '@/types/pet'
+
+interface PreviewImageData {
+  file: File
+  src: string
+  width: number
+  height: number
+  isAvatar: boolean
+  isPrimary: boolean
+}
 
 export const PhotosField = ({
-  control,
-  setImageFilesWithDimensions,
-  currentPhotos,
+  name,
+  currentImages,
 }: {
-  control: Control<PetData>
-  setImageFilesWithDimensions: Dispatch<SetStateAction<ImageFileWithDimensions[]>>
-  currentPhotos: string[]
+  name: string
+  currentImages: PetImageData[]
+  setImageFilesWithDimensions: Dispatch<SetStateAction<PetImageFileWithDimensions[]>>
 }) => {
-  const [errors, setErrors] = useState<string[]>([])
-  const [photosPreviews, setPhotosPreviews] = useState<ImageFileWithDimensions[]>([])
+  const [imagePreviews, setImagePreviews] = useState<PreviewImageData[]>([])
   const [loading, setLoading] = useState<boolean>(false)
 
-  const handleImagesChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const {
+    setValue,
+    formState: { errors },
+  } = useFormContext()
+
+  const handleFiles = (files: FileList) => {
     setLoading(true)
-    const files = e.target.files ? Array.from(e.target.files) : []
+    const newImages = Array.from(files).map((file) => {
+      const objectUrl = URL.createObjectURL(file)
+      const img = new Image()
+      img.src = objectUrl
 
-    const imageFilePromises = files.map((file) => {
-      return new Promise<ImageFileWithDimensions | string>((resolve) => {
-        if (!['image/jpeg', 'image/jpg'].includes(file.type)) {
-          resolve(`${file.name}: Please upload a valid JPG or JPEG image.`)
-          return
+      return new Promise<PreviewImageData>((resolve) => {
+        img.onload = () => {
+          resolve({
+            file,
+            src: objectUrl,
+            width: img.width,
+            height: img.height,
+            isAvatar: false,
+            isPrimary: false,
+          })
+          URL.revokeObjectURL(objectUrl) // Cleanup
         }
-
-        const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
-        if (file.size > MAX_FILE_SIZE) {
-          resolve(`${file.name}: File size exceeds the 5MB limit.`)
-          return
+        img.onerror = () => {
+          resolve({
+            file,
+            src: '',
+            width: 0,
+            height: 0,
+            isAvatar: false,
+            isPrimary: false,
+          })
         }
-
-        const fileReader = new FileReader()
-        fileReader.onload = (event) => {
-          const imageSrc = event.target?.result as string
-          const img = new Image()
-          img.onload = () => {
-            resolve({ file, width: img.width, height: img.height, src: imageSrc })
-          }
-          img.onerror = () => resolve('Error loading image')
-          img.src = imageSrc
-        }
-        fileReader.readAsDataURL(file)
       })
     })
 
-    Promise.all(imageFilePromises).then((results) => {
-      const newErrors = results.filter((result) => typeof result === 'string') as string[]
-      const validImages = results.filter(
-        (result) => typeof result !== 'string'
-      ) as ImageFileWithDimensions[]
-
-      setErrors(newErrors)
-      setPhotosPreviews(validImages as ImageFileWithDimensions[])
-      setImageFilesWithDimensions(validImages as ImageFileWithDimensions[])
-      setLoading(false)
+    Promise.all(newImages).then((resolvedImages) => {
+      const updatedImages = [...imagePreviews, ...resolvedImages]
+      setImagePreviews(updatedImages)
+      setValue(name, updatedImages) // Update form state
     })
   }
 
+  const toggleIsAvatar = (index: number) => {
+    const updatedImages = imagePreviews.map((img, i) => ({
+      ...img,
+      isAvatar: i === index ? !img.isAvatar : img.isAvatar,
+    }))
+    setImagePreviews(updatedImages)
+    setValue(name, updatedImages) // Update form state
+  }
+
+  const toggleIsPrimary = (index: number) => {
+    const updatedImages = imagePreviews.map((img, i) => ({
+      ...img,
+      isPrimary: i === index ? !img.isPrimary : img.isPrimary,
+    }))
+    setImagePreviews(updatedImages)
+    setValue(name, updatedImages)
+  }
+
   return (
-    <Controller
-      name="photos"
-      control={control}
-      render={({ field }) => (
-        <div className="fieldset">
-          <Field className="flex flex-col">
-            <Label className="mb-3 text-2xl">Альбом:</Label>
-            {currentPhotos && currentPhotos.length > 0 ? (
-              <div className="flex flex-wrap gap-3">
-                {currentPhotos.map((src, index) => (
-                  <div key={index}>
-                    <NextImage src={src} width={150} height={150} alt={`Preview ${index + 1}`} />
-                  </div>
-                ))}
+    <div className="fieldset">
+      <Field className="flex flex-col">
+        <Label className="mb-3 text-2xl">Альбом:</Label>
+        {currentImages && currentImages.length > 0 ? (
+          <div className="flex flex-wrap gap-3">
+            {currentImages.map((src, index) => (
+              <div key={index}>
+                <NextImage src={src} width={150} height={150} alt={`Preview ${index + 1}`} />
               </div>
-            ) : null}
-            <div className="my-3 text-xl">Добавить фотографии:</div>
-            <Input
-              id="avatars"
-              type="file"
-              accept="image/jpeg, image/jpg"
-              multiple
-              ref={field.ref}
-              onChange={handleImagesChange}
-            />
-            {errors.length > 0 && (
-              <div className="text-red-600">
-                {errors.map((error, index) => (
-                  <p key={index}>{error}</p>
-                ))}
+            ))}
+          </div>
+        ) : null}
+        <div className="my-3 text-xl">Добавить фотографии:</div>
+        <Input
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={(e) => handleFiles(e.target.files!)}
+        />
+        {errors.name && (
+          <div className="text-red-600">
+            <p>{errors.name.message as string}</p>
+          </div>
+        )}
+      </Field>
+      {loading ? (
+        <p>Processing photos...</p>
+      ) : (
+        <ul className="mt-4 grid grid-cols-3 gap-4">
+          {imagePreviews.map((img, index) => (
+            <li key={index}>
+              <NextImage
+                key={index}
+                src={img.src}
+                width={300}
+                height={300}
+                alt={`Preview ${index + 1}`}
+              />
+              <div>
+                <button type="button" onClick={() => toggleIsAvatar(index)}>
+                  {img.isAvatar ? 'Unset Avatar' : 'Set Avatar'}
+                </button>
+                <button type="button" onClick={() => toggleIsPrimary(index)}>
+                  {img.isPrimary ? 'Unset Primary' : 'Set Primary'}
+                </button>
               </div>
-            )}
-          </Field>
-          {loading ? (
-            <p>Processing photos...</p>
-          ) : (
-            <div className="mt-4 grid grid-cols-3 gap-4">
-              {photosPreviews.map((imageFile, index) => (
-                <NextImage
-                  key={index}
-                  src={imageFile.src}
-                  width={300}
-                  height={300}
-                  alt={`Preview ${index + 1}`}
-                />
-              ))}
-            </div>
-          )}
-        </div>
+            </li>
+          ))}
+        </ul>
       )}
-    />
+    </div>
   )
 }

@@ -1,11 +1,13 @@
 'use server'
 
 import { prisma } from '@/prisma/prisma'
-import { Prisma } from '@prisma/client'
+import { Prisma, UserAppRole, UserProfileRole } from '@prisma/client'
 import { revalidateTag, unstable_cache } from 'next/cache'
-import { prismaErrorHandler } from '@/utils/errorHandlers'
-import { checkUserRole } from '@/utils/checkUserRole'
-import { UserRole } from '@/types/UserRole'
+import { prismaErrorHandler } from '@/utils/error-handler'
+import { auth } from '@/auth'
+import { errorResponse, successResponse } from '@/utils/response'
+import { logAction } from '@/utils/logging'
+import { validateUserAppRole } from '@/utils/validateUserAppRole'
 
 export type Color = Prisma.PromiseReturnType<typeof getColorById>
 export type Colors = Prisma.PromiseReturnType<typeof getColors>
@@ -15,29 +17,44 @@ const colorSelect = Prisma.validator<Prisma.ColorSelect>()({
   name: true,
 })
 
-export const createColor = async (
-  name: string
-): Promise<{ success: boolean; message: string; data: Color | null }> => {
-  const { allowed, role } = await checkUserRole([UserRole.ADMIN, UserRole.MANAGER])
-  if (!allowed) {
-    console.error(`User with role ${role} is not authorized to create colors.`)
-    return { success: false, message: 'User is not authorized to create colors.', data: null }
+export const createColor = async (name: string) => {
+  const user = (await auth())?.user
+  const userId = user?.id
+  if (!user || !userId) {
+    return errorResponse('You must be logged in to create an pet')
+  }
+  const hasPermissions = await validateUserAppRole(userId, [
+    UserAppRole.MODERATOR,
+    UserAppRole.ADMIN,
+    UserAppRole.SUPER_ADMIN,
+  ])
+  if (!hasPermissions) {
+    await logAction({
+      userId,
+      action: 'CREATE_COLOR_ERROR',
+      metadata: {
+        error: 'User does not have permission to create color',
+      },
+    })
+    return errorResponse('You do not have permission to create color')
   }
   try {
     const newColor = await prisma.color.create({
       data: { name },
     })
     revalidateTag('colors')
-
-    return { success: true, message: 'Color created successfully.', data: newColor }
+    return successResponse('Color created: ', newColor)
   } catch (error) {
-    const prismaError = prismaErrorHandler(error)
-    console.error('Error creating color:', prismaError.message)
-    return {
-      success: false,
-      message: 'Error creating color: ' + prismaError.message,
-      data: null,
-    }
+    const parsedError = prismaErrorHandler(error)
+    await logAction({
+      userId,
+      action: 'CREATE_COLOR_ERROR',
+      metadata: {
+        error: parsedError.message,
+        input: name,
+      },
+    })
+    return errorResponse(parsedError.message)
   }
 }
 
@@ -47,12 +64,12 @@ const getColors = async () => {
       select: colorSelect,
     })
   } catch (error) {
-    console.error('Error getting (.)colors:', error)
+    console.error('Error getting colors:', error)
     throw prismaErrorHandler(error)
   }
 }
 
-export const getColorById = async (id: number) => {
+export const getColorById = async (id: string) => {
   try {
     return await prisma.color.findUnique({ where: { id }, select: colorSelect })
   } catch (error) {
@@ -76,10 +93,10 @@ export const getCachedColors = unstable_cache(getColors, ['colors'], {
 
 const getListOfUniqueColorsFromCats = async () => {
   const uniqueColors: Colors = await prisma.$queryRaw`
-    SELECT DISTINCT "Color"."name" FROM "Color"
-    JOIN "_PetColors" ON "_PetColors"."A" = "Color"."id"
-    JOIN "Pet" ON "Pet"."id" = "_PetColors"."B"
-    WHERE "Pet"."petType" = 'CAT'`
+    SELECT DISTINCT "Color"."name", "Color"."id" FROM "Color"
+    JOIN "PetColor" ON "PetColor"."colorId" = "Color"."id"
+    JOIN "Pet" ON "Pet"."id" = "PetColor"."petId"
+    WHERE "Pet"."type" = 'CAT'`
   return uniqueColors.map((color: { name: string }) => color.name)
 }
 
@@ -108,11 +125,26 @@ export const getCachedListOfUniqueColorsFromDogs = unstable_cache(
   }
 )
 
-export const updateColor = async (id: number, name: string) => {
-  const { allowed, role } = await checkUserRole([UserRole.ADMIN, UserRole.MANAGER])
-  if (!allowed) {
-    console.error(`User with role ${role} is not authorized to update colors.`)
-    return { success: false, message: 'User is not authorized to update colors.', data: null }
+export const updateColor = async (id: string, name: string) => {
+  const user = (await auth())?.user
+  const userId = user?.id
+  if (!user || !userId) {
+    return errorResponse('You must be logged in to create an pet')
+  }
+  const hasPermissions = await validateUserAppRole(userId, [
+    UserAppRole.MODERATOR,
+    UserAppRole.ADMIN,
+    UserAppRole.SUPER_ADMIN,
+  ])
+  if (!hasPermissions) {
+    await logAction({
+      userId,
+      action: 'CREATE_COLOR_ERROR',
+      metadata: {
+        error: 'User does not have permission to create color',
+      },
+    })
+    return errorResponse('You do not have permission to create color')
   }
   try {
     const updatedColor = await prisma.color.update({
@@ -136,11 +168,26 @@ export const updateColor = async (id: number, name: string) => {
   }
 }
 
-export const deleteColor = async (id: number) => {
-  const { allowed, role } = await checkUserRole([UserRole.ADMIN, UserRole.MANAGER])
-  if (!allowed) {
-    console.error(`User with role ${role} is not authorized to delete colors.`)
-    return { success: false, message: 'User is not authorized to delete colors.', data: null }
+export const deleteColor = async (id: string) => {
+  const user = (await auth())?.user
+  const userId = user?.id
+  if (!user || !userId) {
+    return errorResponse('You must be logged in to create an pet')
+  }
+  const hasPermissions = await validateUserAppRole(userId, [
+    UserAppRole.MODERATOR,
+    UserAppRole.ADMIN,
+    UserAppRole.SUPER_ADMIN,
+  ])
+  if (!hasPermissions) {
+    await logAction({
+      userId,
+      action: 'CREATE_COLOR_ERROR',
+      metadata: {
+        error: 'User does not have permission to create color',
+      },
+    })
+    return errorResponse('You do not have permission to create color')
   }
   try {
     const deletedColor = await prisma.color.delete({

@@ -18,16 +18,16 @@ type Story = StoryObj<typeof PetCard>
 
 export const Default: Story = {
   args: {
-    id: 1,
+    id: 's',
     name: 'Daniel',
     slug: 'Daniel',
-    avatarSrc: cat,
+    avatarSrc: 'cat',
   },
 }
 
 export const WithoutAvatar: Story = {
   args: {
-    id: 2,
+    id: 's',
     name: 'Daniel',
     slug: 'Daniel',
   },

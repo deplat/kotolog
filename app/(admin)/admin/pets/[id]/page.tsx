@@ -1,31 +1,28 @@
-import { getPet, getCachedColors, Pet, Colors } from '@/data-access'
+import { getCachedColors, Colors, getPetBaseById } from '@/data-access'
 import { PetEditor } from '@/app/(admin)/_modules/pet-editor'
 import { auth } from '@/auth'
 import { NotAuthenticated } from '@/app/(admin)/_components/NotAuthenticated'
-import { NotAuthorized } from '@/app/(admin)/_components/NotAuthorized'
+import { validateUserAppRole } from '@/utils/validateUserAppRole'
+import { UserAppRole } from '@prisma/client'
 
-export default async function Page(props: { params: Promise<{ id: number }> }) {
-  const session = await auth()
-  const userRole = session?.user.role
-  if (!session) {
-    return <NotAuthenticated />
-  }
-  if (userRole == 'USER') {
-    return <NotAuthorized />
-  }
-  const params = await props.params
-  const id = Number(params.id)
-  if (isNaN(id) || id <= 0) {
-    return <div>Invalid pet ID.</div>
-  }
+export default async function Page(props: { params: Promise<{ id: string }> }) {
+  const userId = (await auth())?.user.id
+  if (!userId) return <NotAuthenticated />
+  const hasPermissions = validateUserAppRole(userId, [
+    UserAppRole.MODERATOR,
+    UserAppRole.ADMIN,
+    UserAppRole.SUPER_ADMIN,
+  ])
+  if (!hasPermissions) return null
+  const id = (await props.params).id
   try {
-    const pet: Pet = await getPet(id)
-    if (!pet) return <div>There's no pet with id: {id}</div>
+    const { success, message, data } = await getPetBaseById(id)
+    if (!data) return <div>There's no pet with id: {id}</div>
     const colors: Colors = await getCachedColors()
     if (!colors) console.log('Error fetching (.)colors.')
     return (
       <main className="flex w-full justify-center px-3">
-        <PetEditor pet={pet} colors={colors} />
+        <PetEditor pet={data} colors={colors} profile={{ id: 's', name: 'b' }} />
       </main>
     )
   } catch (error) {

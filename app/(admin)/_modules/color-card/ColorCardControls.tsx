@@ -5,11 +5,11 @@ import { icons } from '@/components/icons'
 import { Button, Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { useState } from 'react'
 import { deleteColor } from '@/data-access'
-import { Color } from '@/types'
+import { PetColorData } from '@/types/pet'
 
-export const ColorCardControls = ({ id, name }: Color) => {
+export const ColorCardControls = ({ id, name }: PetColorData) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-  const onDeleteColor = async (id: number) => await deleteColor(id)
+  const onDeleteColor = async (id: string) => await deleteColor(id)
 
   return (
     <div>

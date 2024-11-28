@@ -1,14 +1,14 @@
 'use server'
 
 import Link from 'next/link'
-import Image, { StaticImageData } from 'next/image'
+import Image from 'next/image'
 import { PetCardControls } from '@/app/(admin)/_modules/pet-card/PetCardControls'
 
 interface PetCardProps {
-  id: number
+  id: string
   name: string
   slug: string
-  avatarSrc?: string | StaticImageData
+  avatarSrc: string
 }
 
 export const PetCard = async ({ id, name, slug, avatarSrc }: PetCardProps) => {

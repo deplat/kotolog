@@ -1,31 +1,12 @@
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("POSTGRES_PRISMA_URL")
 }
 
-enum UserRole {
-  USER
-  MANAGER
-  ADMIN
+generator client {
+  provider = "prisma-client-js"
 }
 
-model User {
-  id            String          @id @default(cuid())
-  name          String?
-  email         String          @unique
-  emailVerified DateTime?
-  role          UserRole        @default(USER)
-  image         String?
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  accounts      Account[]
-  Authenticator Authenticator[]
-  sessions      Session[]
-}
 
 model Account {
   userId            String
@@ -39,9 +20,11 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
 }
@@ -50,9 +33,10 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model VerificationToken {
@@ -63,197 +47,33 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
-model Authenticator {
-  credentialID         String  @unique
-  userId               String
-  providerAccountId    String
-  credentialPublicKey  String
-  counter              Int
-  credentialDeviceType String
-  credentialBackedUp   Boolean
-  transports           String?
-  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+// Schema start
 
-  @@id([userId, credentialID])
+enum UserAppRole {
+  BASIC_USER
+  MODERATOR
+  ADMIN
+  SUPER_ADMIN
 }
 
-model Color {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  pets      Pet[]    @relation("PetColors")
+enum UserProfileRole {
+  PROFILE_MANAGER
+  PROFILE_ADMIN
+  PROFILE_OWNER
 }
 
-model Pet {
-  id                   Int                   @id @default(autoincrement())
-  petType              PetType
-  name                 String
-  slug                 String                @unique
-  birthDate            DateTime?
-  gender               Gender?
-  furType              FurType?
-  isUnclaimed          Boolean
-  isFeatured           Boolean
-  isAvailable          Boolean
-  isAdopted            Boolean
-  isVisible            Boolean               @default(true)
-  createdAt            DateTime              @default(now())
-  updatedAt            DateTime              @updatedAt
-  avatarId             Int?                  @unique
-  adoptionApplications AdoptionApplication[]
-  fosterings           Fostering[]
-  healthRecords        HealthRecord[]
-  profile              PetProfile?
-  colors               Color[]               @relation("PetColors")
-  avatar               Image?                @relation("PetAvatar", fields: [avatarId], references: [id])
-  photos               Image[]               @relation("PetPhotos")
+enum ProfileType {
+  ORGANIZATION
+  INDIVIDUAL
 }
 
-model PetProfile {
-  id                  Int          @id @default(autoincrement())
-  petId               Int          @unique
-  socialized          Boolean
-  friendlyWithCats    Boolean
-  friendlyWithDogs    Boolean
-  friendlyWithAnimals Boolean
-  litterBoxTrained    Boolean?
-  usesScratchingPost  Boolean?
-  sterilized          Boolean
-  vaccinated          Boolean
-  treatedForParasites Boolean
-  healthStatus        HealthStatus
-  biography           String?
-  createdAt           DateTime     @default(now())
-  updatedAt           DateTime     @updatedAt
-  healthNotes         HealthNote[]
-  pet                 Pet          @relation(fields: [petId], references: [id])
-  specialties         Specialty[]
-}
-
-model HealthRecord {
-  id           Int           @id @default(autoincrement())
-  petId        Int
-  observations String?
-  healthStatus HealthStatus
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  pet          Pet           @relation(fields: [petId], references: [id])
-  medications  Medication[]
-  treatments   Treatment[]
-  vaccinations Vaccination[]
-}
-
-model Vaccination {
-  id               Int          @id @default(autoincrement())
-  healthRecordId   Int
-  name             String
-  dateAdministered DateTime
-  nextDueDate      DateTime?
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
-  healthRecord     HealthRecord @relation(fields: [healthRecordId], references: [id])
-}
-
-model Treatment {
-  id               Int           @id @default(autoincrement())
-  healthRecordId   Int
-  type             TreatmentType
-  description      String
-  dateAdministered DateTime
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-  healthRecord     HealthRecord  @relation(fields: [healthRecordId], references: [id])
-}
-
-model Medication {
-  id             Int          @id @default(autoincrement())
-  healthRecordId Int
-  name           String
-  dosage         String
-  startDate      DateTime
-  endDate        DateTime?
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  healthRecord   HealthRecord @relation(fields: [healthRecordId], references: [id])
-}
-
-model HealthNote {
-  id          Int        @id @default(autoincrement())
-  description String
-  profileId   Int
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  petProfile  PetProfile @relation(fields: [profileId], references: [id])
-}
-
-model Specialty {
-  id          Int        @id @default(autoincrement())
-  description String
-  profileId   Int
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  petProfile  PetProfile @relation(fields: [profileId], references: [id])
-}
-
-model Image {
-  id        Int      @id @default(autoincrement())
-  src       String   @unique
-  width     Int
-  height    Int
-  createdAt DateTime @default(now())
-  petId     Int?
-  pet       Pet?     @relation("PetPhotos", fields: [petId], references: [id])
-  avatarOf  Pet?     @relation("PetAvatar")
-}
-
-model AdoptionApplication {
-  id        Int               @id @default(autoincrement())
-  petId     Int
-  personId  Int
-  status    ApplicationStatus
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @default(now()) @updatedAt
-  person    Person            @relation(fields: [personId], references: [id])
-  pet       Pet               @relation(fields: [petId], references: [id])
-}
-
-model Person {
-  id           Int                   @id @default(autoincrement())
-  firstName    String
-  lastName     String
-  email        String                @unique
-  phone        String
-  address      String
-  isApplicant  Boolean               @default(false)
-  isFoster     Boolean               @default(false)
-  applications AdoptionApplication[]
-  fosterings   Fostering[]
-}
-
-model Fostering {
-  id        Int       @id @default(autoincrement())
-  petId     Int
-  personId  Int
-  startDate DateTime
-  endDate   DateTime?
-  isActive  Boolean   @default(true)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt
-  person    Person    @relation(fields: [personId], references: [id])
-  pet       Pet       @relation(fields: [petId], references: [id])
-}
-
-enum ApplicationStatus {
-  PENDING
-  APPROVED
-  REJECTED
-  WITHDRAWN
-}
-
-enum Gender {
+enum PetGender {
   MALE
   FEMALE
+  UNKNOWN
+  HERMAPHRODITE
+  ASEXUAL
+  NONE
 }
 
 enum FurType {
@@ -261,6 +81,7 @@ enum FurType {
   MEDIUM
   LONG
   HAIRLESS
+  NONE
 }
 
 enum HealthStatus {
@@ -271,14 +92,149 @@ enum HealthStatus {
   UNKNOWN
 }
 
-enum TreatmentType {
-  SURGERY
-  THERAPY
-  MEDICATION
-  OTHER
-}
-
 enum PetType {
   CAT
   DOG
+}
+
+enum Status {
+  ACTIVE
+  ARCHIVED
+  FREEZED
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  image         String
+  role          UserAppRole @default(BASIC_USER)
+  profileRoles ProfileRole[]
+  logs Log[]
+  sessions      Session[]
+  accounts Account[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  archivedat DateTime?
+}
+
+model Profile {
+  id String @id @default(cuid())
+  name String
+  description String
+  phone String
+  address String
+  website String?
+  owner String
+  type ProfileType
+  status Status @default(ACTIVE)
+  pets Pet[]
+  roles ProfileRole[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  archivedAt DateTime?
+  archivedReason String?
+}
+
+model ProfileRole {
+  userId String
+  profileId String @unique
+  role UserProfileRole
+  user User @relation(fields:[userId], references: [id])
+  profile Profile @relation(fields: [profileId], references: [id])
+
+  @@index([userId, profileId])
+}
+
+model Pet {
+  id             String      @id @default(cuid())
+  name           String
+  slug           String      @unique
+  birthDate      DateTime
+  type           PetType
+  gender         PetGender
+  furType        FurType
+  isReadyForAdoption    Boolean     @default(true)
+  isFeatured Boolean @default(false)
+  isAdopted      Boolean     @default(false)
+  isPublished    Boolean     @default(false)
+  status         Status      @default(ACTIVE)
+  profileId String
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  archivedAt     DateTime?
+  archivedReason String?
+  profile         Profile      @relation(fields: [profileId], references: [id])
+  petProfile  PetProfile?
+  colors         PetColor[]
+  photos         PetImage[]
+
+  @@index([slug])
+  @@index([status])
+  @@index([profileId, createdAt])
+  @@index([type, createdAt])
+}
+
+model PetProfile {
+  petId                    String       @unique
+  isSocialized               Boolean      @default(true)
+  isFriendlyWithCats         Boolean      @default(false)
+  isFriendlyWithDogs         Boolean      @default(false)
+  isFriendlyWithOtherAnimals Boolean      @default(false)
+  isLitterBoxTrained         Boolean?
+  isUsesScratchingPost       Boolean?
+  isSterilized               Boolean      @default(true)
+  isVaccinated               Boolean      @default(true)
+  isTreatedForParasites      Boolean      @default(true)
+  healthStatus             HealthStatus @default(UNKNOWN)
+  biography                String       @default("")
+  createdAt                DateTime     @default(now())
+  updatedAt                DateTime     @updatedAt
+  pet Pet @relation(fields: [petId],references: [id], onDelete: Cascade)
+
+  @@index([petId])
+}
+
+model PetColor {
+  petId     String
+  colorId   String
+  color     Color    @relation(fields: [colorId], references: [id], onDelete: Cascade)
+  pet       Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+
+  @@unique([petId, colorId])
+}
+
+model Color {
+  id        String        @id @default(cuid())
+  name      String     @unique
+  pets      PetColor[]
+}
+
+model PetImage {
+  id        String   @id @default(cuid())
+  petId     String
+  s3Key     String   @unique
+  src       String   @unique
+  width     Int
+  height    Int
+  altText   String?
+  isAvatar  Boolean  @default(false)
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  pet       Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+
+  @@index([petId, isAvatar])
+}
+
+model Log {
+  id        String   @id @default(cuid())
+  userId    String
+  profileId  String?
+  petId     String?
+  action    String
+  metadata  Json?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

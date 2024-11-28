@@ -1,14 +1,14 @@
 'use client'
 
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { Color } from '@/types'
 import { Button, Field, Input, Label } from '@headlessui/react'
 import { useEffect, useState } from 'react'
 import { createColor, getColorByName, updateColor } from '@/data-access'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { ColorData } from '@/types/pet'
 
-export const ColorEditor = ({ color }: { color: Color | null }) => {
+export const ColorEditor = ({ color }: { color: ColorData | null }) => {
   const [feedback, setFeedback] = useState<string | null>(null)
   const router = useRouter()
   const {
@@ -18,13 +18,13 @@ export const ColorEditor = ({ color }: { color: Color | null }) => {
     setError,
     clearErrors,
     formState: { errors },
-  } = useForm<Color>({
+  } = useForm<ColorData>({
     defaultValues: { name: color?.name },
   })
   const watchName = watch('name')
 
   useEffect(() => {
-    const checkName = async (name: string, id?: number) => {
+    const checkName = async (name: string, id?: string) => {
       try {
         const existingColor = await getColorByName(name)
         if (existingColor && existingColor.id !== id) {
@@ -42,7 +42,7 @@ export const ColorEditor = ({ color }: { color: Color | null }) => {
     }
   }, [clearErrors, setError, watchName])
 
-  const onSubmit: SubmitHandler<Color> = async (formData) => {
+  const onSubmit: SubmitHandler<ColorData> = async (formData) => {
     if (errors.name) {
       console.log(errors.name)
       return

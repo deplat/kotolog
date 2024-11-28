@@ -16,8 +16,7 @@ const dogSelect = Prisma.validator<Prisma.PetSelect>()({
   furType: true,
   colors: {
     select: {
-      id: true,
-      name: true,
+      colorId: true,
     },
   },
   profile: {
@@ -25,7 +24,10 @@ const dogSelect = Prisma.validator<Prisma.PetSelect>()({
       id: true,
     },
   },
-  avatar: {
+  photos: {
+    where: {
+      isPrimary: true,
+    },
     select: {
       src: true,
       width: true,
@@ -37,8 +39,8 @@ const dogSelect = Prisma.validator<Prisma.PetSelect>()({
 const getDogs = async () => {
   const dogs = await prisma.pet.findMany({
     where: {
-      petType: 'DOG',
-      isVisible: true,
+      type: 'DOG',
+      isPublished: true,
     },
     select: dogSelect,
     orderBy: {

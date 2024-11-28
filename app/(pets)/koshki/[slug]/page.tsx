@@ -9,19 +9,16 @@ import { PhotosCarousel } from '@/components/EmblaCarousel'
 import '@/app/globals.css'
 
 async function getPetWithProfile(slug: string) {
-  return prisma.pet.findUnique({
+  const pet = await prisma.pet.findUnique({
     where: { slug },
     include: {
-      avatar: true,
+      petProfile: true,
+      colors: true,
       photos: true,
-      profile: {
-        include: {
-          healthNotes: true,
-          specialties: true,
-        },
-      },
     },
   })
+
+  return pet
 }
 
 export default async function CatPage(props: { params: Promise<{ slug: string }> }) {
@@ -30,7 +27,7 @@ export default async function CatPage(props: { params: Promise<{ slug: string }>
   if (!cat) {
     return <NotFound />
   }
-
+  const avatars = cat.photos.filter((photo) => photo.isAvatar)
   let catAge: string | undefined
   const isFemale = cat.gender === 'FEMALE'
 
@@ -54,7 +51,7 @@ export default async function CatPage(props: { params: Promise<{ slug: string }>
       <div className="mb-8 text-center text-2xl font-medium">Знакомьтесь — {cat.name}!</div>
       <div className="mx-auto mb-8 size-fit rounded-lg shadow-xl">
         <div className="aspect-h-1 aspect-w-1 relative w-72 overflow-hidden rounded-lg">
-          <Image src={cat.avatar?.src || ''} alt={cat.name} fill />
+          <Image src={''} alt={cat.name} fill />
         </div>
       </div>
       {catAge && catAge !== '\u00A0' && (
@@ -63,67 +60,37 @@ export default async function CatPage(props: { params: Promise<{ slug: string }>
         </div>
       )}
       <ul className="mx-auto mb-10 max-w-fit px-4 font-medium sm:columns-2">
-        {cat.profile?.socialized && <ListItem>Социализирован{wordEnd()}</ListItem>}
-        {cat.profile?.friendlyWithCats && <ListItem>Ладит с другими кошками</ListItem>}
-        {cat.profile?.friendlyWithDogs && <ListItem>Ладит с собаками</ListItem>}
-        {cat.profile?.friendlyWithAnimals && <ListItem>Не против других животных</ListItem>}
-        {cat.profile?.litterBoxTrained && <ListItem>Приучен{wordEnd()} к лотку</ListItem>}
-        {cat.profile?.usesScratchingPost && <ListItem>Пользуется&nbsp;когтеточкой</ListItem>}
-        {cat.profile?.sterilized && <ListItem>Стерилизован{wordEnd()}</ListItem>}
-        {cat.profile?.vaccinated && <ListItem>Вакцинирован{wordEnd()}</ListItem>}
-        {cat.profile?.treatedForParasites && <ListItem>Обработан{wordEnd()} от паразитов</ListItem>}
+        {cat.petProfile?.isSocialized && <ListItem>Социализирован{wordEnd()}</ListItem>}
+        {cat.petProfile?.isFriendlyWithCats && <ListItem>Ладит с другими кошками</ListItem>}
+        {cat.petProfile?.isFriendlyWithDogs && <ListItem>Ладит с собаками</ListItem>}
+        {cat.petProfile?.isFriendlyWithOtherAnimals && (
+          <ListItem>Не против других животных</ListItem>
+        )}
+        {cat.petProfile?.isLitterBoxTrained && <ListItem>Приучен{wordEnd()} к лотку</ListItem>}
+        {cat.petProfile?.isUsesScratchingPost && <ListItem>Пользуется&nbsp;когтеточкой</ListItem>}
+        {cat.petProfile?.isSterilized && <ListItem>Стерилизован{wordEnd()}</ListItem>}
+        {cat.petProfile?.isVaccinated && <ListItem>Вакцинирован{wordEnd()}</ListItem>}
+        {cat.petProfile?.isTreatedForParasites && (
+          <ListItem>Обработан{wordEnd()} от паразитов</ListItem>
+        )}
       </ul>
       <div className="mb-10 flex justify-center">
         <ContactButton>Хочу забрать домой!</ContactButton>
       </div>
       <div className="container mx-auto max-w-7xl justify-center">
-        <div className="flex flex-col flex-wrap justify-center gap-3 md:flex-row md:gap-6">
-          {cat.profile?.healthNotes && cat.profile.healthNotes.length > 0 && (
-            <div
-              className={clsx(
-                'flex-1 rounded-lg bg-white p-4 shadow-lg ring-1 ring-inset ring-gray-600/15',
-                'dark:bg-slate-700/75 dark:ring-gray-50/15'
-              )}
-            >
-              Про здоровье:
-              <hr className="border border-orange-600" />
-              <ul className="mt-3.5">
-                {cat.profile.healthNotes.map((item, index) => (
-                  <li key={index}>{item.description}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {cat.profile?.specialties && cat.profile.specialties.length > 0 && (
-            <div
-              className={clsx(
-                'max-w-2xl flex-1 rounded-lg bg-white p-4 shadow-lg ring-1 ring-inset ring-gray-600/15',
-                'dark:bg-slate-700/75 dark:ring-gray-50/15'
-              )}
-            >
-              Характер и привычки:
-              <hr className="border border-orange-600" />
-              <ul className="mt-3.5">
-                {cat.profile.specialties.map((item, index) => (
-                  <li key={index}>{item.description}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
         {cat.photos.length > 0 && (
           <div className="mt-10">
             <PhotosCarousel slides={cat.photos} />
           </div>
         )}
-        {cat.profile?.biography && (
+        {cat.petProfile?.biography && (
           <div
             className={clsx(
               'mx-auto flex max-h-fit max-w-2xl rounded-lg bg-white p-4 shadow-lg ring-1 ring-inset ring-gray-600/15',
               'dark:bg-slate-700/75 dark:ring-gray-50/15'
             )}
           >
-            {cat.profile.biography}
+            {cat.petProfile.biography}
           </div>
         )}
       </div>

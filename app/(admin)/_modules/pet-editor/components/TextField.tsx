@@ -1,7 +1,7 @@
 import { FieldError, UseFormRegister } from 'react-hook-form'
-import { PetData } from '@/types'
 import { Field, Input, Label } from '@headlessui/react'
 import clsx from 'clsx'
+import { PetCreateInputData, PetUpdateInputData } from '@/types/pet'
 
 export const TextField = ({
   label,
@@ -9,7 +9,7 @@ export const TextField = ({
   errors,
 }: {
   label: string
-  register: ReturnType<UseFormRegister<PetData>>
+  register: ReturnType<UseFormRegister<PetCreateInputData | PetUpdateInputData>>
   errors: FieldError | undefined
 }) => {
   return (

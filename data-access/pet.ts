@@ -1,346 +1,397 @@
 'use server'
 
-import { prisma } from '@/prisma/prisma'
-import { prismaErrorHandler } from '@/utils/errorHandlers'
-import { Prisma } from '@prisma/client'
+import { prismaErrorHandler } from '@/utils/error-handler'
+import { Prisma, UserProfileRole } from '@prisma/client'
 import { revalidateTag, unstable_cache } from 'next/cache'
-import { PetData } from '@/types'
-import { UserRole } from '@/types/UserRole'
-import { checkUserRole } from '@/utils/checkUserRole'
+import { prisma } from '@/prisma/prisma'
+import { PetCreateInputData, PetUpdateInputData } from '@/types/pet'
+import { auth } from '@/auth'
+import { errorResponse, successResponse } from '@/utils/response'
+import { logAction } from '@/utils/logging'
+import { validateUserProfileRole } from '@/utils/validateUserProfileRole'
 
-export type Pet = Prisma.PromiseReturnType<typeof getPet>
-export type Pets = Prisma.PromiseReturnType<typeof getPets>
-
-const petInclude = Prisma.validator<Prisma.PetInclude>()({
-  avatar: {
-    select: {
-      src: true,
-      width: true,
-      height: true,
-    },
-  },
+const prismaPetIncludeBase = Prisma.validator<Prisma.PetInclude>()({
   photos: {
+    where: {
+      isPrimary: true,
+    },
     select: {
       src: true,
-      width: true,
-      height: true,
-    },
-  },
-  profile: {
-    select: {
-      socialized: true,
-      friendlyWithCats: true,
-      friendlyWithDogs: true,
-      friendlyWithAnimals: true,
-      litterBoxTrained: true,
-      usesScratchingPost: true,
-      sterilized: true,
-      vaccinated: true,
-      treatedForParasites: true,
-      healthStatus: true,
-      healthNotes: {
-        select: { id: true, description: true },
-      },
-      specialties: {
-        select: { id: true, description: true },
-      },
-      biography: true,
     },
   },
   colors: true,
 })
 
-/*  CREATE  */
-export const createPet = async (data: PetData) => {
-  const { allowed, role } = await checkUserRole([UserRole.ADMIN, UserRole.MANAGER])
-  if (!allowed) {
-    console.error(`User with role ${role} is not authorized to create pets.`)
-    return { success: false, message: 'User is not authorized to create pets.', data: null }
+export const createPet = async ({
+  name,
+  slug,
+  birthDate,
+  type,
+  gender,
+  furType,
+  isReadyForAdoption,
+  isFeatured,
+  isAdopted,
+  isPublished,
+  profile,
+  colors,
+  photos,
+}: PetCreateInputData) => {
+  const user = (await auth())?.user
+  const userId = user?.id
+  if (!user || !userId) {
+    return errorResponse('You must be logged in to create an pet')
   }
-  try {
-    const createInput: Prisma.PetCreateInput = {
-      name: data.name,
-      slug: data.slug,
-      birthDate: data.birthDate,
-      gender: data.gender,
-      petType: data.petType,
-      furType: data.furType,
-      isUnclaimed: data.isUnclaimed,
-      isAvailable: data.isAvailable,
-      isFeatured: data.isFeatured,
-      isAdopted: data.isAdopted,
-      isVisible: data.isVisible,
-      profile: {
-        create: {
-          socialized: data.socialized,
-          friendlyWithCats: data.friendlyWithCats,
-          friendlyWithDogs: data.friendlyWithDogs,
-          friendlyWithAnimals: data.friendlyWithAnimals,
-          litterBoxTrained: data.litterBoxTrained,
-          usesScratchingPost: data.usesScratchingPost,
-          sterilized: data.sterilized,
-          vaccinated: data.vaccinated,
-          treatedForParasites: data.treatedForParasites,
-          healthNotes: {
-            createMany: {
-              data: data.healthNotes,
-            },
-          },
-          specialties: {
-            createMany: {
-              data: data.specialties,
-            },
-          },
-          healthStatus: data.healthStatus,
-          biography: data.biography,
-        },
+  const hasPermissions = await validateUserProfileRole(userId, profile.id, [
+    UserProfileRole.PROFILE_OWNER,
+    UserProfileRole.PROFILE_ADMIN,
+    UserProfileRole.PROFILE_MANAGER,
+  ])
+  if (!hasPermissions) {
+    await logAction({
+      userId,
+      profileId: profile.id,
+      action: 'CREATE_PET_ERROR',
+      metadata: {
+        error: 'User does not have permission to create pet for selected profile',
       },
-      colors: {
-        connect: data.colors.map((id) => ({ id })),
-      },
-      ...(data.avatar && {
-        avatar: {
-          create: { src: data.avatar.src, width: data.avatar.width, height: data.avatar.height },
-        },
-      }),
-      ...(data.photos && {
-        photos: {
-          createMany: {
-            data: data.photos,
-          },
-        },
-      }),
-    }
-    const createdPet = await prisma.pet.create({
-      data: createInput,
-      include: petInclude,
     })
-    revalidateTag('pets')
-    revalidateTag('unique_colors_from_cats')
-    revalidateTag('unique_colors_from_dogs')
-    return { success: true, message: 'Pet created successfully.', data: createdPet }
-  } catch (error) {
-    const prismaError = prismaErrorHandler(error)
-    console.error('Error creating pet:', prismaError.message)
-    return {
-      success: false,
-      message: 'Error creating pet: ' + prismaError.message,
-      data: null,
+    return errorResponse('You do not have permission to create pet for selected profile')
+  }
+
+  const prismaPetCreateInput = Prisma.validator<Prisma.PetCreateInput>()({
+    name,
+    slug,
+    birthDate,
+    type,
+    gender,
+    furType,
+    isReadyForAdoption,
+    isFeatured,
+    isAdopted,
+    isPublished,
+    profile: {
+      connect: {
+        id: profile.id,
+      },
+    },
+    colors: colors.length
+      ? {
+          create: colors.map((color) => ({
+            color: {
+              connect: {
+                id: color.id,
+              },
+            },
+          })),
+        }
+      : undefined,
+    photos: photos.length
+      ? {
+          createMany: {
+            data: photos,
+          },
+        }
+      : undefined,
+  })
+
+  try {
+    const createdPet = await prisma.pet.create({
+      data: prismaPetCreateInput,
+      include: prismaPetIncludeBase,
+    })
+
+    if (!createdPet) {
+      await logAction({
+        userId,
+        profileId: profile.id,
+        action: 'CREATE_PET_ERROR',
+        metadata: {
+          input: prismaPetCreateInput,
+        },
+      })
+      return errorResponse('Failed to create a pet')
     }
+
+    await logAction({
+      userId,
+      profileId: profile.id,
+      action: 'CREATE_PET',
+      metadata: {
+        input: prismaPetCreateInput,
+      },
+    })
+
+    const tagsToRevalidate = ['pets', 'unique_colors_from_cats', 'unique_colors_from_dogs']
+    tagsToRevalidate.forEach(revalidateTag)
+
+    return successResponse('Pet created successfully', createdPet)
+  } catch (error) {
+    const parsedError = prismaErrorHandler(error)
+    await logAction({
+      userId,
+      profileId: profile.id,
+      action: 'CREATE_PET_ERROR',
+      metadata: {
+        error: parsedError.message,
+        input: prismaPetCreateInput,
+      },
+    })
+    return errorResponse(parsedError.message)
   }
 }
 
-export const getPet = async (id: number) => {
+export const getPetBaseById = async (id: string) => {
   try {
     const pet = await prisma.pet.findUnique({
       where: { id },
-      include: petInclude,
+      include: prismaPetIncludeBase,
     })
-    return pet
+    if (!pet) {
+      return errorResponse('Pet not found')
+    }
+    return successResponse('Pet found', pet)
   } catch (error) {
-    throw prismaErrorHandler(error)
+    const parsedError = prismaErrorHandler(error)
+    return errorResponse(parsedError.message)
   }
 }
 
-export const getPetBySlug = async (slug: string) => {
+export const getPetBaseBySlug = async (slug: string) => {
   try {
-    return await prisma.pet.findUnique({
+    const pet = await prisma.pet.findUnique({
       where: { slug },
-      select: { id: true, slug: true },
+      include: prismaPetIncludeBase,
     })
+    if (!pet) {
+      return errorResponse('Pet not found')
+    }
+    return successResponse('Pet found', pet)
   } catch (error) {
     throw prismaErrorHandler(error)
   }
 }
 
-export const getPets = async () => {
+export const getPetsBase = async () => {
   try {
     const pets = await prisma.pet.findMany({
-      include: petInclude,
+      include: prismaPetIncludeBase,
     })
+    if (!pets) {
+      return null
+    }
     return pets
   } catch (error) {
     throw prismaErrorHandler(error)
   }
 }
 
-export const getCachedPets = unstable_cache(getPets, ['pets'], { tags: ['pets'] })
+export const getCachedPetsBase = unstable_cache(getPetsBase, ['pets'], { tags: ['pets'] })
 
-/*  UPDATE  */
-export const updatePet = async (id: number, data: PetData) => {
-  const { allowed, role } = await checkUserRole([UserRole.ADMIN, UserRole.MANAGER])
-  if (!allowed) {
-    console.error(`User with role ${role} is not authorized to update pets.`)
-    return { success: false, message: 'User is not authorized to update pets.', data: null }
+export const updatePet = async ({
+  id,
+  slug,
+  birthDate,
+  type,
+  gender,
+  furType,
+  isReadyForAdoption,
+  isFeatured,
+  isAdopted,
+  isPublished,
+  profile,
+  colors,
+  photos,
+}: PetUpdateInputData) => {
+  const user = (await auth())?.user
+  const userId = user?.id
+  if (!user || !userId) {
+    return errorResponse('You must be logged in to create an pet')
   }
+
   try {
-    const updateInput: Prisma.PetUpdateInput = {
-      name: data.name,
-      slug: data.slug,
-      birthDate: data.birthDate,
-      gender: data.gender,
-      petType: data.petType,
-      furType: data.furType,
-      isUnclaimed: data.isUnclaimed,
-      isFeatured: data.isFeatured,
-      isAdopted: data.isAdopted,
-      isVisible: data.isVisible,
-      colors: {
-        set: data.colors.map((id) => ({ id })),
+    const petToUpdate = await prisma.pet.findUnique({
+      where: { id },
+      select: {
+        profileId: true,
       },
+    })
+    if (!petToUpdate) {
+      return errorResponse('Pet not found')
+    }
+    const hasPermissions = await validateUserProfileRole(userId, petToUpdate.profileId, [
+      UserProfileRole.PROFILE_OWNER,
+      UserProfileRole.PROFILE_ADMIN,
+      UserProfileRole.PROFILE_MANAGER,
+    ])
+    if (!hasPermissions) {
+      await logAction({
+        userId,
+        profileId: profile?.id,
+        action: 'CREATE_PET_ERROR',
+        metadata: {
+          error: 'User does not have permission to update pet for selected profile',
+        },
+      })
+      return errorResponse('You do not have permission to create pet for selected profile')
+    }
+
+    const prismaPetUpdateInput = Prisma.validator<Prisma.PetUpdateInput>()({
+      slug,
+      birthDate,
+      type,
+      gender,
+      furType,
+      isReadyForAdoption,
+      isFeatured,
+      isAdopted,
+      isPublished,
       profile: {
-        update: {
-          socialized: data.socialized,
-          friendlyWithCats: data.friendlyWithCats,
-          friendlyWithDogs: data.friendlyWithDogs,
-          friendlyWithAnimals: data.friendlyWithAnimals,
-          litterBoxTrained: data.litterBoxTrained,
-          usesScratchingPost: data.usesScratchingPost,
-          sterilized: data.sterilized,
-          vaccinated: data.vaccinated,
-          treatedForParasites: data.treatedForParasites,
-          healthStatus: data.healthStatus,
-          biography: data.biography,
-          healthNotes: data.healthNotes?.length
-            ? {
-                updateMany: {
-                  where: { id: { in: data.healthNotes.map((note) => note.id) } },
-                  data: data.healthNotes,
-                },
-              }
-            : undefined,
-          specialties: data.specialties?.length
-            ? {
-                updateMany: {
-                  where: { id: { in: data.specialties.map((spec) => spec.id) } },
-                  data: data.specialties,
-                },
-              }
-            : undefined,
+        connect: {
+          id: profile?.id,
         },
       },
-    }
-
-    if (data.avatar) {
-      updateInput.avatar = {
-        update: {
-          src: data.avatar.src,
-          width: data.avatar.width,
-          height: data.avatar.height,
-        },
-      }
-    }
-
-    if (data.photos && data.photos.length > 0) {
-      updateInput.photos = {
-        createMany: {
-          data: data.photos,
-        },
-      }
-    }
-
+      colors: colors.length
+        ? {
+            create: colors.map((color) => ({
+              color: {
+                connect: {
+                  id: color.id,
+                },
+              },
+            })),
+          }
+        : undefined,
+      photos: photos.length
+        ? {
+            createMany: {
+              data: photos,
+            },
+          }
+        : undefined,
+    })
     const updatedPet = await prisma.pet.update({
       where: { id },
-      data: updateInput,
-      include: petInclude,
+      data: prismaPetUpdateInput,
+      include: prismaPetIncludeBase,
     })
-    revalidateTag('pets')
-    revalidateTag('unique_colors_from_cats')
-    revalidateTag('unique_colors_from_dogs')
-    return { success: true, message: 'Pet updated successfully.', data: updatedPet }
-  } catch (error) {
-    const prismaError = prismaErrorHandler(error)
-    console.error('Error updating pet:', prismaError.message)
-    return {
-      success: false,
-      message: 'Error updating pet' + prismaError.message,
-      data: null,
+    if (!updatedPet) {
+      await logAction({
+        userId,
+        petId: id,
+        profileId: profile?.id,
+        action: 'UPDATE_PET_ERROR',
+        metadata: {
+          input: prismaPetUpdateInput,
+        },
+      })
+      return errorResponse('Failed to update a pet')
     }
+
+    await logAction({
+      userId,
+      petId: id,
+      profileId: profile?.id,
+      action: 'UPDATE_PET',
+      metadata: {
+        input: prismaPetUpdateInput,
+      },
+    })
+
+    const tagsToRevalidate = ['pets', 'unique_colors_from_cats', 'unique_colors_from_dogs']
+    tagsToRevalidate.forEach(revalidateTag)
+
+    return successResponse('Pet updated successfully', updatedPet)
+  } catch (error) {
+    const parsedError = prismaErrorHandler(error)
+    await logAction({
+      userId,
+      profileId: profile?.id,
+      action: 'CREATE_PET_ERROR',
+      metadata: {
+        error: parsedError.message,
+      },
+    })
+    return errorResponse(parsedError.message)
   }
 }
 
-/*  DELETE  */
-export const deletePet = async (id: number) => {
-  const { allowed, role } = await checkUserRole([UserRole.ADMIN, UserRole.MANAGER])
-  if (!allowed) {
-    console.error(`User with role ${role} is not authorized to delete pets.`)
-    return { success: false, message: 'User is not authorized to delete pets.', data: null }
+export const deletePet = async (id: string) => {
+  const user = (await auth())?.user
+  const userId = user?.id
+  if (!user || !userId) {
+    return errorResponse('You must be logged in to create an pet')
   }
   try {
-    const pet = await prisma.pet.findUnique({
-      where: { id: id },
-      include: {
-        adoptionApplications: true,
-        fosterings: true,
-        healthRecords: {
-          include: {
-            medications: true,
-            treatments: true,
-            vaccinations: true,
-          },
-        },
-        avatar: true,
-        photos: true,
-        profile: {
-          include: {
-            healthNotes: true,
-            specialties: true,
-          },
-        },
+    const petToDelete = await prisma.pet.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        profileId: true,
       },
     })
-    if (!pet) {
-      return { success: false, message: 'Pet not found.', data: null }
+    if (!petToDelete) {
+      return errorResponse('Pet not found')
     }
-    if (pet.avatar) {
-      await prisma.image.delete({
-        where: {
-          id: pet.avatar.id,
+    const hasPermissions = await validateUserProfileRole(userId, petToDelete.profileId, [
+      UserProfileRole.PROFILE_OWNER,
+      UserProfileRole.PROFILE_ADMIN,
+      UserProfileRole.PROFILE_MANAGER,
+    ])
+    if (!hasPermissions) {
+      await logAction({
+        userId,
+        profileId: petToDelete.profileId,
+        petId: id,
+        action: 'CREATE_PET_ERROR',
+        metadata: {
+          error: 'User does not have permission to update pet for selected profile',
         },
       })
+      return errorResponse('You do not have permission to create pet for selected profile')
     }
-
-    if (pet.photos.length > 0) {
-      await prisma.image.deleteMany({
-        where: { petId: pet.id },
-      })
-    }
-
-    if (pet.profile) {
-      if (pet.profile.healthNotes) {
-        await prisma.healthNote.deleteMany({
-          where: {
-            profileId: pet.profile.id,
-          },
-        })
-      }
-
-      if (pet.profile.specialties) {
-        await prisma.specialty.deleteMany({
-          where: {
-            profileId: pet.profile.id,
-          },
-        })
-      }
-
-      await prisma.petProfile.delete({
-        where: {
-          id: pet.profile.id,
+    const deletedPet = await prisma.pet.delete({
+      where: { id },
+      select: {
+        id: true,
+        profileId: true,
+      },
+    })
+    if (!deletedPet) {
+      await logAction({
+        userId,
+        petId: id,
+        profileId: petToDelete.profileId,
+        action: 'DELETE_PET_ERROR',
+        metadata: {
+          pet: deletedPet,
         },
       })
+      return errorResponse('Failed to delete a pet')
     }
-    const deletedPet = await prisma.pet.delete({ where: { id } })
-    revalidateTag('pets')
-    revalidateTag('unique_colors_from_cats')
-    revalidateTag('unique_colors_from_dogs')
-    return { success: true, message: 'Pet deleted successfully.', data: deletedPet }
+    await logAction({
+      userId,
+      petId: id,
+      profileId: petToDelete.profileId,
+      action: 'DELETE_PET',
+      metadata: {
+        pet: deletedPet,
+      },
+    })
+    const tagsToRevalidate = ['pets', 'unique_colors_from_cats', 'unique_colors_from_dogs']
+    tagsToRevalidate.forEach(revalidateTag)
+
+    return successResponse('Pet deleted successfully', deletedPet)
   } catch (error) {
-    const prismaError = prismaErrorHandler(error)
-    console.error('Error deleting pet:', prismaError.message)
-    return {
-      success: false,
-      message: 'Error deleting pet: ' + prismaError.message,
-      data: null,
-    }
+    const parsedError = prismaErrorHandler(error)
+    await logAction({
+      userId,
+      petId: id,
+      action: 'DELETE_PET_ERROR',
+      metadata: {
+        error: parsedError.message,
+      },
+    })
+    return errorResponse(`Failed to delete a pet: ${parsedError.message}`)
   }
 }
