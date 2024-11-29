@@ -75,24 +75,21 @@ export const createPet = async ({
         id: profile.id,
       },
     },
-    colors: colors.length
-      ? {
-          create: colors.map((color) => ({
-            color: {
-              connect: {
-                id: color.id,
-              },
-            },
-          })),
-        }
-      : undefined,
-    photos: photos.length
-      ? {
-          createMany: {
-            data: photos,
-          },
-        }
-      : undefined,
+    colors: {
+      createMany: {
+        data:
+          colors.length > 0
+            ? colors.map((color) => ({
+                colorId: color.id,
+              }))
+            : [],
+      },
+    },
+    photos: {
+      createMany: {
+        data: photos ? photos : [],
+      },
+    },
   })
 
   try {

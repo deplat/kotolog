@@ -22,7 +22,11 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     if (!colors) console.log('Error fetching (.)colors.')
     return (
       <main className="flex w-full justify-center px-3">
-        <PetEditor pet={data} colors={colors} profile={{ id: 's', name: 'b' }} />
+        <PetEditor
+          pet={data}
+          colors={colors}
+          profile={{ id: 'cm42kx9yk00012067occe7tjg', name: 'Kotolife' }}
+        />
       </main>
     )
   } catch (error) {

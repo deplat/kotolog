@@ -2,7 +2,19 @@ import { useFormContext } from 'react-hook-form'
 import { Field, Input, Label } from '@headlessui/react'
 import { Dispatch, SetStateAction, useState } from 'react'
 import NextImage from 'next/image'
-import { PetImageData, PetImageFileWithDimensions } from '@/types/pet'
+import { PetImageFileWithDimensions } from '@/types/pet'
+
+interface CurrentPhoto {
+  id?: string
+  petId?: string
+  s3Key?: string
+  src: string
+  width: number
+  height: number
+  altText?: string
+  isAvatar?: boolean
+  isPrimary?: boolean
+}
 
 interface PreviewImageData {
   file: File
@@ -16,9 +28,10 @@ interface PreviewImageData {
 export const PhotosField = ({
   name,
   currentImages,
+  setImageFilesWithDimensions,
 }: {
   name: string
-  currentImages: PetImageData[]
+  currentImages: CurrentPhoto[]
   setImageFilesWithDimensions: Dispatch<SetStateAction<PetImageFileWithDimensions[]>>
 }) => {
   const [imagePreviews, setImagePreviews] = useState<PreviewImageData[]>([])
@@ -62,43 +75,74 @@ export const PhotosField = ({
     })
 
     Promise.all(newImages).then((resolvedImages) => {
-      const updatedImages = [...imagePreviews, ...resolvedImages]
-      setImagePreviews(updatedImages)
-      setValue(name, updatedImages) // Update form state
+      setImagePreviews((prev) => [...prev, ...resolvedImages])
+      setImageFilesWithDimensions((prev) => [...prev, ...resolvedImages])
+      setLoading(false)
     })
   }
 
-  const toggleIsAvatar = (index: number) => {
-    const updatedImages = imagePreviews.map((img, i) => ({
-      ...img,
-      isAvatar: i === index ? !img.isAvatar : img.isAvatar,
-    }))
-    setImagePreviews(updatedImages)
-    setValue(name, updatedImages) // Update form state
+  const toggleIsAvatar = (index: number, isPreview: boolean) => {
+    if (isPreview) {
+      setImagePreviews((prev) =>
+        prev.map((img, i) => ({
+          ...img,
+          isAvatar: i === index ? !img.isAvatar : img.isAvatar,
+        }))
+      )
+    } else {
+      const updatedImages = currentImages.map((img, i) => ({
+        ...img,
+        isAvatar: i === index ? !img.isAvatar : img.isAvatar,
+      }))
+      setValue(name, updatedImages)
+    }
   }
 
-  const toggleIsPrimary = (index: number) => {
-    const updatedImages = imagePreviews.map((img, i) => ({
-      ...img,
-      isPrimary: i === index ? !img.isPrimary : img.isPrimary,
-    }))
-    setImagePreviews(updatedImages)
-    setValue(name, updatedImages)
+  const toggleIsPrimary = (index: number, isPreview: boolean) => {
+    if (isPreview) {
+      setImagePreviews((prev) =>
+        prev.map((img, i) => ({
+          ...img,
+          isPrimary: i === index ? !img.isPrimary : img.isPrimary,
+        }))
+      )
+    } else {
+      const updatedImages = currentImages.map((img, i) => ({
+        ...img,
+        isPrimary: i === index ? !img.isPrimary : false,
+      }))
+      setValue(name, updatedImages)
+    }
   }
 
   return (
     <div className="fieldset">
       <Field className="flex flex-col">
         <Label className="mb-3 text-2xl">Альбом:</Label>
-        {currentImages && currentImages.length > 0 ? (
+
+        {currentImages && currentImages.length > 0 && (
           <div className="flex flex-wrap gap-3">
-            {currentImages.map((src, index) => (
-              <div key={index}>
-                <NextImage src={src} width={150} height={150} alt={`Preview ${index + 1}`} />
+            {currentImages.map((image, index) => (
+              <div key={image.id || index} className="relative">
+                <NextImage
+                  src={image.src}
+                  width={150}
+                  height={150}
+                  alt={image.altText || `Image ${index + 1}`}
+                />
+                <div className="mt-2 flex justify-center space-x-2">
+                  <button type="button" onClick={() => toggleIsAvatar(index, false)}>
+                    {image.isAvatar ? 'Unset Avatar' : 'Set Avatar'}
+                  </button>
+                  <button type="button" onClick={() => toggleIsPrimary(index, false)}>
+                    {image.isPrimary ? 'Unset Primary' : 'Set Primary'}
+                  </button>
+                </div>
               </div>
             ))}
           </div>
-        ) : null}
+        )}
+
         <div className="my-3 text-xl">Добавить фотографии:</div>
         <Input
           type="file"
@@ -106,30 +150,25 @@ export const PhotosField = ({
           multiple
           onChange={(e) => handleFiles(e.target.files!)}
         />
-        {errors.name && (
+        {errors[name] && (
           <div className="text-red-600">
-            <p>{errors.name.message as string}</p>
+            <p>{errors[name].message as string}</p>
           </div>
         )}
       </Field>
+
       {loading ? (
         <p>Processing photos...</p>
       ) : (
         <ul className="mt-4 grid grid-cols-3 gap-4">
           {imagePreviews.map((img, index) => (
             <li key={index}>
-              <NextImage
-                key={index}
-                src={img.src}
-                width={300}
-                height={300}
-                alt={`Preview ${index + 1}`}
-              />
-              <div>
-                <button type="button" onClick={() => toggleIsAvatar(index)}>
+              <NextImage src={img.src} width={150} height={150} alt={`Preview ${index + 1}`} />
+              <div className="mt-2 flex justify-center space-x-2">
+                <button type="button" onClick={() => toggleIsAvatar(index, true)}>
                   {img.isAvatar ? 'Unset Avatar' : 'Set Avatar'}
                 </button>
-                <button type="button" onClick={() => toggleIsPrimary(index)}>
+                <button type="button" onClick={() => toggleIsPrimary(index, true)}>
                   {img.isPrimary ? 'Unset Primary' : 'Set Primary'}
                 </button>
               </div>

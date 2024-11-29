@@ -138,13 +138,12 @@ model Profile {
 }
 
 model ProfileRole {
+  id String @id @default(cuid())
   userId String
-  profileId String @unique
+  profileId String
   role UserProfileRole
   user User @relation(fields:[userId], references: [id])
   profile Profile @relation(fields: [profileId], references: [id])
-
-  @@index([userId, profileId])
 }
 
 model Pet {

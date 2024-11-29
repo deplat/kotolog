@@ -53,6 +53,7 @@ export interface ColorData {
 
 export interface PetImageFileWithDimensions {
   file: File
+  src: string
   width: number
   height: number
   isAvatar: boolean

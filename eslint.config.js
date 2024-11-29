@@ -82,5 +82,6 @@ export default [
         config: './tailwindcss.config.ts',
       },
     },
+    ignores: ['**/node_modules/**', '**/dist/**', '**/build/**'],
   },
 ]

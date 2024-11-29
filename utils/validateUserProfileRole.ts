@@ -6,7 +6,7 @@ export async function validateUserProfileRole(
   profileId: string,
   allowedProfileRoles: UserProfileRole[]
 ): Promise<boolean> {
-  const userProfileRole = await prisma.profileRole.findUnique({
+  const userProfileRole = await prisma.profileRole.findFirst({
     where: {
       userId,
       profileId,

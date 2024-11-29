@@ -8,25 +8,36 @@ import {
 } from '@headlessui/react'
 import clsx from 'clsx'
 import { IoCheckmark, IoChevronDown } from 'react-icons/io5'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, Path, FieldValues, PathValue } from 'react-hook-form'
 
-export const ControlledListBox = ({
+interface ListBoxProps<T extends FieldValues> {
+  fieldLabel: string
+  fieldKey: Path<T>
+  options: { value: PathValue<T, Path<T>>; label: string }[]
+}
+
+export const ListBox = <T extends FieldValues>({
   fieldLabel,
   fieldKey,
   options,
-}: {
-  fieldLabel: string
-  fieldKey: any
-  options: { value: any; label: string }[]
-}) => {
-  const { setValue, getValues } = useFormContext()
+}: ListBoxProps<T>) => {
+  const { setValue, watch } = useFormContext<T>()
+
+  const currentValue = watch(fieldKey)
+
+  const currentLabel =
+    options.find((option) => option.value === currentValue)?.label || 'Указать ...'
+
   return (
     <Field className="mb-3 flex w-full items-center">
       <Label className="w-1/4">{fieldLabel}</Label>
 
-      <Listbox value={getValues(fieldKey)} onChange={(value) => setValue(fieldKey, value)}>
+      <Listbox
+        value={currentValue}
+        onChange={(value) => setValue(fieldKey, value as PathValue<T, Path<T>>)}
+      >
         <ListboxButton className="relative flex w-3/4 items-center justify-between rounded p-2.5 text-left ring-1 ring-inset ring-stone-700/60 dark:ring-stone-400/50">
-          <div>{getValues(fieldKey) == null ? 'Указать ...' : getValues(fieldKey)}</div>
+          <div>{currentLabel}</div>
           <IoChevronDown className="pointer-events-none block size-4" aria-hidden="true" />
         </ListboxButton>
         <ListboxOptions
@@ -39,12 +50,12 @@ export const ControlledListBox = ({
         >
           {options.map((option) => (
             <ListboxOption
-              key={option.label}
+              key={option.value}
               value={option.value}
               className="group flex cursor-pointer items-center gap-2 rounded px-3 py-1.5 ring-inset ring-orange-600 data-[focus]:ring-2"
             >
               <IoCheckmark className="invisible size-5 data-[selected]:text-orange-600 group-data-[selected]:visible" />
-              <div className="">{option.label}</div>
+              <div>{option.label}</div>
             </ListboxOption>
           ))}
         </ListboxOptions>
