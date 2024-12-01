@@ -22,7 +22,7 @@
     "@aws-sdk/client-s3": "^3.699.0",
     "@aws-sdk/s3-presigned-post": "^3.699.0",
     "@headlessui/react": "^2.2.0",
-    "@prisma/client": "^5.22.0",
+    "@prisma/client": "^6.0.0",
     "autoprefixer": "^10.4.20",
     "aws-sdk": "^2.1692.0",
     "clsx": "^2.1.1",
@@ -76,7 +76,7 @@
     "eslint-plugin-tailwindcss": "^3.17.5",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.9",
-    "prisma": "^5.22.0",
+    "prisma": "^6.0.0",
     "storybook": "^8.4.5",
     "typescript": "^5.7.2"
   },

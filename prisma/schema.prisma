@@ -7,7 +7,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 model Account {
   userId            String
   type              String
@@ -104,70 +103,71 @@ enum Status {
 }
 
 model User {
-  id            String          @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String?
-  email         String          @unique
+  email         String        @unique
   emailVerified DateTime?
   image         String
-  role          UserAppRole @default(BASIC_USER)
-  profileRoles ProfileRole[]
-  logs Log[]
+  role          UserAppRole   @default(BASIC_USER)
+  profileRoles  ProfileRole[]
+  logs          Log[]
   sessions      Session[]
-  accounts Account[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  archivedat DateTime?
+  accounts      Account[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  archivedat    DateTime?
 }
 
 model Profile {
-  id String @id @default(cuid())
-  name String
-  description String
-  phone String
-  address String
-  website String?
-  owner String
-  type ProfileType
-  status Status @default(ACTIVE)
-  pets Pet[]
-  roles ProfileRole[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  archivedAt DateTime?
+  id             String        @id @default(cuid())
+  name           String
+  nickName       String        @unique
+  description    String
+  phone          String
+  address        String
+  website        String?
+  owner          String
+  type           ProfileType
+  status         Status        @default(ACTIVE)
+  pets           Pet[]
+  roles          ProfileRole[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  archivedAt     DateTime?
   archivedReason String?
 }
 
 model ProfileRole {
-  id String @id @default(cuid())
-  userId String
+  id        String          @id @default(cuid())
+  userId    String
   profileId String
-  role UserProfileRole
-  user User @relation(fields:[userId], references: [id])
-  profile Profile @relation(fields: [profileId], references: [id])
+  role      UserProfileRole
+  user      User            @relation(fields: [userId], references: [id])
+  profile   Profile         @relation(fields: [profileId], references: [id])
 }
 
 model Pet {
-  id             String      @id @default(cuid())
-  name           String
-  slug           String      @unique
-  birthDate      DateTime
-  type           PetType
-  gender         PetGender
-  furType        FurType
-  isReadyForAdoption    Boolean     @default(true)
-  isFeatured Boolean @default(false)
-  isAdopted      Boolean     @default(false)
-  isPublished    Boolean     @default(false)
-  status         Status      @default(ACTIVE)
-  profileId String
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
-  archivedAt     DateTime?
-  archivedReason String?
-  profile         Profile      @relation(fields: [profileId], references: [id])
-  petProfile  PetProfile?
-  colors         PetColor[]
-  photos         PetImage[]
+  id                 String      @id @default(cuid())
+  name               String
+  slug               String      @unique
+  birthDate          DateTime
+  type               PetType
+  gender             PetGender
+  furType            FurType
+  isReadyForAdoption Boolean     @default(true)
+  isFeatured         Boolean     @default(false)
+  isAdopted          Boolean     @default(false)
+  isPublished        Boolean     @default(false)
+  status             Status      @default(ACTIVE)
+  profileId          String
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  archivedAt         DateTime?
+  archivedReason     String?
+  profile            Profile     @relation(fields: [profileId], references: [id])
+  petProfile         PetProfile?
+  colors             PetColor[]
+  photos             PetImage[]
 
   @@index([slug])
   @@index([status])
@@ -176,7 +176,7 @@ model Pet {
 }
 
 model PetProfile {
-  petId                    String       @unique
+  petId                      String       @unique
   isSocialized               Boolean      @default(true)
   isFriendlyWithCats         Boolean      @default(false)
   isFriendlyWithDogs         Boolean      @default(false)
@@ -186,28 +186,28 @@ model PetProfile {
   isSterilized               Boolean      @default(true)
   isVaccinated               Boolean      @default(true)
   isTreatedForParasites      Boolean      @default(true)
-  healthStatus             HealthStatus @default(UNKNOWN)
-  biography                String       @default("")
-  createdAt                DateTime     @default(now())
-  updatedAt                DateTime     @updatedAt
-  pet Pet @relation(fields: [petId],references: [id], onDelete: Cascade)
+  healthStatus               HealthStatus @default(UNKNOWN)
+  biography                  String       @default("")
+  createdAt                  DateTime     @default(now())
+  updatedAt                  DateTime     @updatedAt
+  pet                        Pet          @relation(fields: [petId], references: [id], onDelete: Cascade)
 
   @@index([petId])
 }
 
 model PetColor {
-  petId     String
-  colorId   String
-  color     Color    @relation(fields: [colorId], references: [id], onDelete: Cascade)
-  pet       Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+  petId   String
+  colorId String
+  color   Color  @relation(fields: [colorId], references: [id], onDelete: Cascade)
+  pet     Pet    @relation(fields: [petId], references: [id], onDelete: Cascade)
 
   @@unique([petId, colorId])
 }
 
 model Color {
-  id        String        @id @default(cuid())
-  name      String     @unique
-  pets      PetColor[]
+  id   String     @id @default(cuid())
+  name String     @unique
+  pets PetColor[]
 }
 
 model PetImage {
@@ -230,7 +230,7 @@ model PetImage {
 model Log {
   id        String   @id @default(cuid())
   userId    String
-  profileId  String?
+  profileId String?
   petId     String?
   action    String
   metadata  Json?

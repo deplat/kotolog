@@ -22,7 +22,7 @@ export async function createProfile({
   const user = (await auth())?.user
   const userId = user?.id
   if (!user || !userId) {
-    return errorResponse('You must be logged in to create an profile')
+    return errorResponse('You must be logged in to create an profiles')
   }
   const createProfileInput = Prisma.validator<Prisma.ProfileCreateInput>()({
     name,
@@ -73,7 +73,7 @@ export async function createProfile({
           },
         },
       })
-      return errorResponse('Failed to create profile')
+      return errorResponse('Failed to create profiles')
     }
     await logAction({
       userId,
@@ -116,7 +116,7 @@ export async function updateProfile({
   const user = (await auth())?.user
   const userId = user?.id
   if (!user || !userId) {
-    return errorResponse('You must be logged in to update an profile')
+    return errorResponse('You must be logged in to update an profiles')
   }
   const hasPermissions = await validateUserProfileRole(userId, id, [
     UserProfileRole.PROFILE_OWNER,
@@ -127,9 +127,9 @@ export async function updateProfile({
       userId,
       profileId: id,
       action: 'UPDATE_PROFILE_ERROR',
-      metadata: { message: 'User does not have permission to update this profile' },
+      metadata: { message: 'User does not have permission to update this profiles' },
     })
-    return errorResponse('You do not have permission to update this profile')
+    return errorResponse('You do not have permission to update this profiles')
   }
 
   try {

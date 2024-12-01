@@ -53,10 +53,10 @@ export const createPet = async ({
       profileId: profile.id,
       action: 'CREATE_PET_ERROR',
       metadata: {
-        error: 'User does not have permission to create pet for selected profile',
+        error: 'User does not have permission to create pet for selected profiles',
       },
     })
-    return errorResponse('You do not have permission to create pet for selected profile')
+    return errorResponse('You do not have permission to create pet for selected profiles')
   }
 
   const prismaPetCreateInput = Prisma.validator<Prisma.PetCreateInput>()({
@@ -227,10 +227,10 @@ export const updatePet = async ({
         profileId: profile?.id,
         action: 'CREATE_PET_ERROR',
         metadata: {
-          error: 'User does not have permission to update pet for selected profile',
+          error: 'User does not have permission to update pet for selected profiles',
         },
       })
-      return errorResponse('You do not have permission to create pet for selected profile')
+      return errorResponse('You do not have permission to create pet for selected profiles')
     }
 
     const prismaPetUpdateInput = Prisma.validator<Prisma.PetUpdateInput>()({
@@ -342,10 +342,10 @@ export const deletePet = async (id: string) => {
         petId: id,
         action: 'CREATE_PET_ERROR',
         metadata: {
-          error: 'User does not have permission to update pet for selected profile',
+          error: 'User does not have permission to update pet for selected profiles',
         },
       })
-      return errorResponse('You do not have permission to create pet for selected profile')
+      return errorResponse('You do not have permission to create pet for selected profiles')
     }
     const deletedPet = await prisma.pet.delete({
       where: { id },
