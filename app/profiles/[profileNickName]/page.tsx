@@ -1,17 +1,40 @@
 import { prisma } from '@/prisma/prisma'
 import { validateUserProfileRole } from '@/utils/validateUserProfileRole'
 import { auth } from '@/auth'
-import { UserProfileRole } from '@prisma/client'
+import { ProfileType, Status, UserProfileRole } from '@prisma/client'
+
+interface ProfileData {
+  name: string
+  id: string
+  nickName: string
+  description: string
+  phone: string
+  address: string
+  website: string | null
+  owner: string
+  type: ProfileType
+  status: Status
+  createdAt: Date
+  updatedAt: Date
+  archivedAt: Date | null
+  archivedReason: string | null
+}
 
 export default async function Page({ params }: { params: Promise<{ profileNickName: string }> }) {
   const userId = (await auth())?.user.id
   if (!userId) {
-    return <>Not authenticated</>
+    return <>Please login to continue.</>
   }
 
   const profileNickName = (await params).profileNickName
-  const profile = await prisma.profile.findUnique({ where: { nickName: profileNickName } })
-  if (!profile) return <>Cannot find profile with this name.</>
+  if (!profileNickName) {
+    return <>Incorrect profile nick name.</>
+  }
+
+  const profile: ProfileData | null = await prisma.profile.findUnique({
+    where: { nickName: profileNickName },
+  })
+  if (!profile) return <>No profile with nickname "{profileNickName}" found.</>
 
   const hasPermissions = await validateUserProfileRole(userId, profile.id, [
     UserProfileRole.PROFILE_MANAGER,
@@ -20,5 +43,17 @@ export default async function Page({ params }: { params: Promise<{ profileNickNa
   ])
   if (!hasPermissions) return <>You are not authorized to view this profile.</>
 
-  return <div>{profile.name}</div>
+  return (
+    <>
+      <div>
+        <div>{profile.name}</div>
+        <div>{profile.nickName}</div>
+        <div>{profile.description}</div>
+        <div>{profile.phone}</div>
+        <div>{profile.website}</div>
+        <div>{profile.owner}</div>
+        <div>{profile.type}</div>
+      </div>
+    </>
+  )
 }

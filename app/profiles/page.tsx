@@ -1,3 +1,3 @@
 export default async function Page() {
-  return <>Profile page</>
+  return <>Profiles page</>
 }
