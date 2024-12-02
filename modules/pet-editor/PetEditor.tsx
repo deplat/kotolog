@@ -10,7 +10,6 @@ import {
   TextAreaField,
   TextField,
   DateField,
-  ListBox,
 } from '@/modules/pet-editor/components'
 import { uploadImageFileAndReturnImageData } from '@/utils/s3'
 import Link from 'next/link'
@@ -66,7 +65,7 @@ export const PetEditor = ({
   >([])
   const router = useRouter()
 
-  const redirectToPets = () => router.push(`/admin/pets`)
+  const redirectToPets = () => router.push(`/profiles/${profile.nickName}/pets`)
 
   const watchNickName = watch('nickName')
   const watchGender = watch('gender')

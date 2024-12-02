@@ -1,6 +1,6 @@
 'use server'
 
-import { getCachedPetsBase, getPetsBase } from '@/data-access/pet'
+import { getPetsBase } from '@/data-access/pet'
 import { PetCard } from '@/modules/pet-card'
 import { auth } from '@/auth'
 import { NotAuthenticated } from '@/components/NotAuthenticated'
@@ -27,7 +27,7 @@ export const PetList = async ({ profileNickName }: { profileNickName: string }) 
             id={pet.id}
             name={pet.name}
             nickName={pet.nickName}
-            avatarSrc={pet.photos[0].src}
+            avatarSrc={pet.photos[0]?.src || ''}
           />
         </li>
       ))}

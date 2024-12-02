@@ -11,9 +11,10 @@ interface PetCardControlsProps {
   id: string
   avatarSrc?: string | StaticImageData
   name: string
+  profileNickName: string
 }
 
-export const PetCardControls = ({ id, avatarSrc, name }: PetCardControlsProps) => {
+export const PetCardControls = ({ id, avatarSrc, name, profileNickName }: PetCardControlsProps) => {
   const [feedback, setFeedback] = useState<string | null>(null)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   async function onDeletePet(id: string) {
@@ -33,7 +34,12 @@ export const PetCardControls = ({ id, avatarSrc, name }: PetCardControlsProps) =
       <IDropdownMenu
         menuButton={{ leftIcon: icons.dotsVertical, variant: 'primary' }}
         menuItems={[
-          { id: '1', label: 'Изменить', link: true, href: `/admin/pets/${id}` },
+          {
+            id: '1',
+            label: 'Изменить',
+            link: true,
+            href: `/profiles/${profileNickName}/pets/${id}`,
+          },
           {
             id: '2',
             label: 'Удалить',
@@ -53,7 +59,7 @@ export const PetCardControls = ({ id, avatarSrc, name }: PetCardControlsProps) =
               Удалить питомца?
             </DialogTitle>
             <Description>Вы планируете удалить питомца:</Description>
-            <Image src={avatarSrc || ''} alt={name} width={125} height={125} />
+            {avatarSrc && <Image src={avatarSrc} alt={name} width={125} height={125} />}
             <span className="text-lg font-semibold">{name}</span>
             <div className="flex gap-x-2">
               <Button onClick={() => onDeletePet(id)} className="btn-warning">

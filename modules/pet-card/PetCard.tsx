@@ -20,7 +20,7 @@ export const PetCard = async ({ id, name, nickName, avatarSrc }: PetCardProps) =
 
       <Link href={`/koshki/${nickName}`} className="flex flex-1 overflow-hidden">
         <div className="h-40 w-40 shrink-0 rounded bg-stone-200">
-          {avatarSrc && (
+          {avatarSrc && avatarSrc != '' && (
             <Image
               src={avatarSrc}
               alt={name}
