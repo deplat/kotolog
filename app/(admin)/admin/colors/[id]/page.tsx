@@ -1,6 +1,6 @@
 import { getColorById } from '@/data-access'
-import { NotAuthenticated } from '@/app/(admin)/_components/NotAuthenticated'
-import { ColorEditor } from '@/app/(admin)/_modules/color-editor'
+import { NotAuthenticated } from '@/components/NotAuthenticated'
+import { ColorEditor } from '@/modules/color-editor'
 import { auth } from '@/auth'
 import { validateUserAppRole } from '@/utils/validateUserAppRole'
 import { UserAppRole } from '@prisma/client'

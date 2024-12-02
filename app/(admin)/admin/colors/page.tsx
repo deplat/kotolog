@@ -1,6 +1,6 @@
-import { ColorList } from '@/app/(admin)/_modules/color-list'
+import { ColorList } from '@/modules/color-list'
 import { auth } from '@/auth'
-import { NotAuthenticated } from '@/app/(admin)/_components/NotAuthenticated'
+import { NotAuthenticated } from '@/components/NotAuthenticated'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import { validateUserAppRole } from '@/utils/validateUserAppRole'

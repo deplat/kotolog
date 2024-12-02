@@ -22,7 +22,7 @@ export const CatList = ({ cats }: CatsListProps) => {
           </div>
           <div className="my-4 text-center">
             <h3 className="truncate text-wrap text-xl font-semibold lg:text-2xl">
-              <a href={`/koshki/${cat.slug}`}>
+              <a href={`/koshki/${cat.nickName}`}>
                 <span aria-hidden="true" className="absolute inset-0"></span>
                 {cat.name}
               </a>

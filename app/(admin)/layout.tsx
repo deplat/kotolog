@@ -1,4 +1,4 @@
-import { Navbar } from '@/app/(admin)/_modules/nav/Navbar'
+import { Navbar } from '@/modules/nav/Navbar'
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   return (

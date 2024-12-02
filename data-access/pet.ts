@@ -24,7 +24,7 @@ const prismaPetIncludeBase = Prisma.validator<Prisma.PetInclude>()({
 
 export const createPet = async ({
   name,
-  slug,
+  nickName,
   birthDate,
   type,
   gender,
@@ -42,7 +42,9 @@ export const createPet = async ({
   if (!user || !userId) {
     return errorResponse('You must be logged in to create an pet')
   }
-  const hasPermissions = await validateUserProfileRole(userId, profile.id, [
+  const profileId = (await prisma.profile.findUnique({ where: { nickName: profile.nickName } }))?.id
+  if (!profileId) return errorResponse('No profile found with this nickName')
+  const hasPermissions = await validateUserProfileRole(userId, profileId, [
     UserProfileRole.PROFILE_OWNER,
     UserProfileRole.PROFILE_ADMIN,
     UserProfileRole.PROFILE_MANAGER,
@@ -50,7 +52,7 @@ export const createPet = async ({
   if (!hasPermissions) {
     await logAction({
       userId,
-      profileId: profile.id,
+      profileId: profileId,
       action: 'CREATE_PET_ERROR',
       metadata: {
         error: 'User does not have permission to create pet for selected profiles',
@@ -61,7 +63,7 @@ export const createPet = async ({
 
   const prismaPetCreateInput = Prisma.validator<Prisma.PetCreateInput>()({
     name,
-    slug,
+    nickName,
     birthDate,
     type,
     gender,
@@ -72,7 +74,7 @@ export const createPet = async ({
     isPublished,
     profile: {
       connect: {
-        id: profile.id,
+        id: profileId,
       },
     },
     colors: {
@@ -101,7 +103,7 @@ export const createPet = async ({
     if (!createdPet) {
       await logAction({
         userId,
-        profileId: profile.id,
+        profileId: profileId,
         action: 'CREATE_PET_ERROR',
         metadata: {
           input: prismaPetCreateInput,
@@ -112,7 +114,7 @@ export const createPet = async ({
 
     await logAction({
       userId,
-      profileId: profile.id,
+      profileId: profileId,
       action: 'CREATE_PET',
       metadata: {
         input: prismaPetCreateInput,
@@ -127,7 +129,7 @@ export const createPet = async ({
     const parsedError = prismaErrorHandler(error)
     await logAction({
       userId,
-      profileId: profile.id,
+      profileId: profileId,
       action: 'CREATE_PET_ERROR',
       metadata: {
         error: parsedError.message,
@@ -154,10 +156,10 @@ export const getPetBaseById = async (id: string) => {
   }
 }
 
-export const getPetBaseBySlug = async (slug: string) => {
+export const getPetBaseByNickName = async (nickName: string) => {
   try {
     const pet = await prisma.pet.findUnique({
-      where: { slug },
+      where: { nickName },
       include: prismaPetIncludeBase,
     })
     if (!pet) {
@@ -169,9 +171,14 @@ export const getPetBaseBySlug = async (slug: string) => {
   }
 }
 
-export const getPetsBase = async () => {
+export const getPetsBase = async (profileNickName: string) => {
   try {
     const pets = await prisma.pet.findMany({
+      where: {
+        profile: {
+          nickName: profileNickName,
+        },
+      },
       include: prismaPetIncludeBase,
     })
     if (!pets) {
@@ -187,7 +194,7 @@ export const getCachedPetsBase = unstable_cache(getPetsBase, ['pets'], { tags: [
 
 export const updatePet = async ({
   id,
-  slug,
+  nickName,
   birthDate,
   type,
   gender,
@@ -205,6 +212,9 @@ export const updatePet = async ({
   if (!user || !userId) {
     return errorResponse('You must be logged in to create an pet')
   }
+  const profileId = (await prisma.profile.findUnique({ where: { nickName: profile?.nickName } }))
+    ?.id
+  if (!profileId) return errorResponse('No profile found with this nickName')
 
   try {
     const petToUpdate = await prisma.pet.findUnique({
@@ -224,7 +234,7 @@ export const updatePet = async ({
     if (!hasPermissions) {
       await logAction({
         userId,
-        profileId: profile?.id,
+        profileId: profileId,
         action: 'CREATE_PET_ERROR',
         metadata: {
           error: 'User does not have permission to update pet for selected profiles',
@@ -234,7 +244,7 @@ export const updatePet = async ({
     }
 
     const prismaPetUpdateInput = Prisma.validator<Prisma.PetUpdateInput>()({
-      slug,
+      nickName,
       birthDate,
       type,
       gender,
@@ -245,7 +255,7 @@ export const updatePet = async ({
       isPublished,
       profile: {
         connect: {
-          id: profile?.id,
+          id: profileId,
         },
       },
       colors: colors.length
@@ -276,7 +286,7 @@ export const updatePet = async ({
       await logAction({
         userId,
         petId: id,
-        profileId: profile?.id,
+        profileId: profileId,
         action: 'UPDATE_PET_ERROR',
         metadata: {
           input: prismaPetUpdateInput,
@@ -288,7 +298,7 @@ export const updatePet = async ({
     await logAction({
       userId,
       petId: id,
-      profileId: profile?.id,
+      profileId: profileId,
       action: 'UPDATE_PET',
       metadata: {
         input: prismaPetUpdateInput,
@@ -303,7 +313,7 @@ export const updatePet = async ({
     const parsedError = prismaErrorHandler(error)
     await logAction({
       userId,
-      profileId: profile?.id,
+      profileId: profileId,
       action: 'CREATE_PET_ERROR',
       metadata: {
         error: parsedError.message,

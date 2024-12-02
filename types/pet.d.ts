@@ -3,7 +3,7 @@ import { FurType, HealthStatus, PetGender, PetType, Status } from '@prisma/clien
 export interface PetData {
   id?: string
   name?: string
-  slug?: string
+  nickName?: string
   birthDate?: Date
   type?: PetType
   gender?: PetGender
@@ -18,8 +18,7 @@ export interface PetData {
   archivedAt?: Date
   archivedReason?: string
   profile: {
-    id: string
-    name: string
+    nickName: string
   }
   petProfile?: PetProfileData
   colors?: PetColorData[]
@@ -112,7 +111,7 @@ export interface PetProfileUpdateData {
 
 export interface PetCreateInputData {
   name: string
-  slug: string
+  nickName: string
   birthDate: Date
   type: PetType
   gender: PetGender
@@ -123,8 +122,7 @@ export interface PetCreateInputData {
   isPublished: boolean
   status: Status
   profile: {
-    id: string
-    name: string
+    nickName: string
   }
   petProfile: PetProfileInputData
   colors: PetColorData[]
@@ -134,7 +132,7 @@ export interface PetCreateInputData {
 export interface PetUpdateInputData {
   id?: string
   name?: string
-  slug?: string
+  nickName?: string
   birthDate?: Date
   type?: PetType
   gender?: PetGender
@@ -146,8 +144,7 @@ export interface PetUpdateInputData {
   status?: Status
   archivedReason?: string
   profile?: {
-    id: string
-    name: string
+    nickName: string
   }
   petProfile: PetProfileUpdateData
   colors: PetColorData[]

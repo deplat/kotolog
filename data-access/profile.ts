@@ -12,6 +12,7 @@ import { revalidateTag } from 'next/cache'
 
 export async function createProfile({
   name,
+  nickName,
   description,
   phone,
   address,
@@ -26,6 +27,7 @@ export async function createProfile({
   }
   const createProfileInput = Prisma.validator<Prisma.ProfileCreateInput>()({
     name,
+    nickName,
     description,
     phone,
     address,
@@ -104,6 +106,7 @@ export async function createProfile({
 export async function updateProfile({
   id,
   name,
+  nickName,
   description,
   phone,
   address,
@@ -135,6 +138,7 @@ export async function updateProfile({
   try {
     const updateProfileInput = Prisma.validator<Prisma.ProfileUpdateInput>()({
       name,
+      nickName,
       description,
       phone,
       address,

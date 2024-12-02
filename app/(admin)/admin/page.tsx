@@ -1,8 +1,8 @@
 'use server'
 
 import { auth } from '@/auth'
-import { NotAuthenticated } from '@/app/(admin)/_components/NotAuthenticated'
-import { NotAuthorized } from '@/app/(admin)/_components/NotAuthorized'
+import { NotAuthenticated } from '@/components/NotAuthenticated'
+import { NotAuthorized } from '@/components/NotAuthorized'
 import { redirect } from 'next/navigation'
 import { validateUserAppRole } from '@/utils/validateUserAppRole'
 import { UserAppRole } from '@prisma/client'

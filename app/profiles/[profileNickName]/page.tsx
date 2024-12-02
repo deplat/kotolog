@@ -2,6 +2,9 @@ import { prisma } from '@/prisma/prisma'
 import { validateUserProfileRole } from '@/utils/validateUserProfileRole'
 import { auth } from '@/auth'
 import { ProfileType, Status, UserProfileRole } from '@prisma/client'
+import { NotAuthenticated } from '@/components/NotAuthenticated'
+import { NotAuthorized } from '@/components/NotAuthorized'
+import Link from 'next/link'
 
 interface ProfileData {
   name: string
@@ -23,7 +26,7 @@ interface ProfileData {
 export default async function Page({ params }: { params: Promise<{ profileNickName: string }> }) {
   const userId = (await auth())?.user.id
   if (!userId) {
-    return <>Please login to continue.</>
+    return <NotAuthenticated />
   }
 
   const profileNickName = (await params).profileNickName
@@ -41,18 +44,14 @@ export default async function Page({ params }: { params: Promise<{ profileNickNa
     UserProfileRole.PROFILE_ADMIN,
     UserProfileRole.PROFILE_OWNER,
   ])
-  if (!hasPermissions) return <>You are not authorized to view this profile.</>
+  if (!hasPermissions) return <NotAuthorized />
 
   return (
     <>
       <div>
-        <div>{profile.name}</div>
-        <div>{profile.nickName}</div>
-        <div>{profile.description}</div>
-        <div>{profile.phone}</div>
-        <div>{profile.website}</div>
-        <div>{profile.owner}</div>
-        <div>{profile.type}</div>
+        <Link href={`/profiles/${profile.nickName}/pets`} className="btn-primary">
+          Питомцы
+        </Link>
       </div>
     </>
   )

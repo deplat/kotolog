@@ -1,6 +1,6 @@
-import { ColorEditor } from '@/app/(admin)/_modules/color-editor'
+import { ColorEditor } from '@/modules/color-editor'
 import { auth } from '@/auth'
-import { NotAuthenticated } from '@/app/(admin)/_components/NotAuthenticated'
+import { NotAuthenticated } from '@/components/NotAuthenticated'
 import { validateUserAppRole } from '@/utils/validateUserAppRole'
 import { UserAppRole } from '@prisma/client'
 

@@ -9,7 +9,7 @@ export type Cats = Prisma.PromiseReturnType<typeof getCats>
 
 const catSelect = Prisma.validator<Prisma.PetSelect>()({
   id: true,
-  slug: true,
+  nickName: true,
   name: true,
   gender: true,
   birthDate: true,

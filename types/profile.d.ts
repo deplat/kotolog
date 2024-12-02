@@ -2,6 +2,7 @@ import { ProfileType, Status } from '@prisma/client'
 
 export interface CreateProfileInput {
   name: string
+  nickName: string
   description: string
   phone: string
   address: string
@@ -12,6 +13,7 @@ export interface CreateProfileInput {
 
 export interface UpdateProfileInput {
   id: string
+  nickName?: string
   name?: string
   description?: string
   phone?: string
