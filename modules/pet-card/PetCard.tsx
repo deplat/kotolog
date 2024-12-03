@@ -8,14 +8,20 @@ interface PetCardProps {
   id: string
   name: string
   nickName: string
+  profileNickName: string
   avatarSrc: string
 }
 
-export const PetCard = async ({ id, name, nickName, avatarSrc }: PetCardProps) => {
+export const PetCard = async ({ id, name, nickName, avatarSrc, profileNickName }: PetCardProps) => {
   return (
     <div className="relative rounded bg-stone-100 shadow-sm dark:bg-gray-700/55 sm:shadow-lg">
       <div className="absolute right-0 top-0">
-        <PetCardControls id={id} name={name} avatarSrc={avatarSrc} />
+        <PetCardControls
+          nickName={nickName}
+          name={name}
+          avatarSrc={avatarSrc}
+          profileNickName={profileNickName}
+        />
       </div>
 
       <Link href={`/koshki/${nickName}`} className="flex flex-1 overflow-hidden">

@@ -1,6 +1,6 @@
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
 import clsx from 'clsx'
-import { IoCheckmark, IoChevronDown } from 'react-icons/io5'
+import { IoChevronDown } from 'react-icons/io5'
 import { Controller, Control, Path, FieldValues, PathValue } from 'react-hook-form'
 
 interface ListBoxProps<T extends FieldValues> {
@@ -10,7 +10,7 @@ interface ListBoxProps<T extends FieldValues> {
   label: string
 }
 
-export const ControlledListBox = <T extends FieldValues>({
+export const ControlledListBoxField = <T extends FieldValues>({
   control,
   fieldKey,
   options,
@@ -34,6 +34,7 @@ export const ControlledListBox = <T extends FieldValues>({
                 <IoChevronDown className="pointer-events-none block size-4" aria-hidden="true" />
               </ListboxButton>
               <ListboxOptions
+                anchor={'bottom'}
                 className={clsx(
                   'w-[var(--button-width)] rounded bg-stone-100 p-2 ring-1 ring-stone-700/60 dark:bg-gray-600 dark:ring-stone-400/50',
                   'shadow-lg transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0'
@@ -43,7 +44,7 @@ export const ControlledListBox = <T extends FieldValues>({
                   <ListboxOption
                     key={option.value}
                     value={option.value}
-                    className="group flex cursor-pointer items-center gap-2 rounded px-3 py-1.5 ring-inset ring-orange-600 data-[focus]:ring-2"
+                    className="group flex cursor-pointer items-center gap-2 rounded px-3 py-1.5 ring-inset ring-orange-600 focus:ring-2"
                   >
                     <div>{option.label}</div>
                   </ListboxOption>

@@ -28,6 +28,7 @@ export const PetList = async ({ profileNickName }: { profileNickName: string }) 
             name={pet.name}
             nickName={pet.nickName}
             avatarSrc={pet.photos[0]?.src || ''}
+            profileNickName={profileNickName}
           />
         </li>
       ))}

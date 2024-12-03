@@ -1,15 +1,17 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useForm, SubmitHandler, FormProvider, useController } from 'react-hook-form'
+import { useForm, SubmitHandler, FormProvider, Path } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import { Button, Fieldset, Legend } from '@headlessui/react'
 import {
   ColorFieldset,
-  PhotosField,
+  ControlledImagesField,
   TextAreaField,
   TextField,
   DateField,
+  ControlledCheckboxField,
+  ControlledListBoxField,
 } from '@/modules/pet-editor/components'
 import { uploadImageFileAndReturnImageData } from '@/utils/s3'
 import Link from 'next/link'
@@ -24,9 +26,31 @@ import {
 import { FurType, PetGender, PetType } from '@prisma/client'
 import { getDefaultValuesFromPetData } from './utils/getDefaultValuesFromPetData'
 import { createPet, updatePet } from '@/data-access'
-import { IoCheckmark } from 'react-icons/io5'
 import { getPetBaseByNickName } from '@/data-access/pet'
-import { ControlledListBox } from '@/modules/pet-editor/components/ListBox'
+
+interface CheckboxFieldOption<T> {
+  key: Path<T>
+  label: string
+}
+
+const controlsFields: CheckboxFieldOption<any>[] = [
+  { key: 'isPublished', label: 'Опубликован' },
+  { key: 'isReadyForAdoption', label: 'Готов к пристрою' },
+  { key: 'isFeatured', label: 'Активный пристрой' },
+  { key: 'isAdopted', label: 'Принят в семью' },
+]
+
+const healthAndBehaviorFields: CheckboxFieldOption<any>[] = [
+  { key: 'petProfile.isVaccinated', label: 'Vaccinated' },
+  { key: 'petProfile.isSterilized', label: 'Sterilized' },
+  { key: 'petProfile.isTreatedForParasites', label: 'Treated for Parasites' },
+  { key: 'petProfile.isLitterBoxTrained', label: 'Litter Box Trained' },
+  { key: 'petProfile.isUsesScratchingPost', label: 'Uses Scratching Post' },
+  { key: 'petProfile.isSocialized', label: 'Socialized' },
+  { key: 'petProfile.isFriendlyWithCats', label: 'Friendly with Cats' },
+  { key: 'petProfile.isFriendlyWithDogs', label: 'Friendly with Dogs' },
+  { key: 'petProfile.isFriendlyWithOtherAnimals', label: 'Friendly with Other Animals' },
+]
 
 const speciesOptions = [
   { value: PetType.CAT, label: 'Кошка' },
@@ -55,7 +79,9 @@ export const PetEditor = ({
   colors: PetColorData[]
   profile: { nickName: string }
 }) => {
-  const methods = useForm<PetCreateInputData>({
+  console.log(pet)
+  type FormData<T> = T extends { pet: any } ? PetUpdateInputData : PetCreateInputData
+  const methods = useForm<FormData<typeof pet>>({
     defaultValues: getDefaultValuesFromPetData(pet, profile),
   })
 
@@ -68,11 +94,6 @@ export const PetEditor = ({
   const redirectToPets = () => router.push(`/profiles/${profile.nickName}/pets`)
 
   const watchNickName = watch('nickName')
-  const watchGender = watch('gender')
-  const [gender, setGender] = useState<string | null>(null)
-
-  const isFemale = gender === 'FEMALE' || pet?.gender === 'FEMALE'
-  const wordEnd = isFemale ? 'а' : ''
 
   useEffect(() => {
     const checkSlug = async (nickName: string, id?: string) => {
@@ -91,36 +112,10 @@ export const PetEditor = ({
       }
     }
     if (watchNickName) checkSlug(watchNickName, pet?.id)
-    setGender(watchGender)
-  }, [watchNickName, watchGender, pet?.id, setError, clearErrors])
-
-  const renderCheckbox = (fieldKey: keyof PetCreateInputData, label: string) => {
-    const { field } = useController({
-      name: fieldKey,
-      control,
-    })
-
-    return (
-      <div className="flex w-full items-center space-x-4" key={fieldKey}>
-        <button
-          type="button"
-          onClick={() => field.onChange(!field.value)}
-          className={`checkbox group ${field.value ? 'checked' : ''}`}
-        >
-          {field.value && <IoCheckmark className="checkbox-icon" />}
-        </button>
-        <label
-          htmlFor={fieldKey}
-          onClick={() => field.onChange(!field.value)}
-          className="cursor-pointer dark:text-stone-300"
-        >
-          {label}
-        </label>
-      </div>
-    )
-  }
+  }, [watchNickName, pet?.id, setError, clearErrors])
 
   const onSubmit: SubmitHandler<PetCreateInputData | PetUpdateInputData> = async (data) => {
+    console.log(data)
     if (formState.errors.nickName) return
 
     const uploadedPetImages: PetImageCreateInputData[] = []
@@ -148,11 +143,11 @@ export const PetEditor = ({
 
     if (pet) {
       await updatePet({ ...data, id: pet.id }).then(({ success, message }) =>
-        success ? redirectToPets() : setError('root', { message: message })
+        success ? redirectToPets() : setError('root', { message })
       )
     } else if (data.name) {
       await createPet(data as PetCreateInputData).then(({ success, message }) =>
-        success ? redirectToPets() : setError('root', { message: message })
+        success ? redirectToPets() : setError('root', { message })
       )
     }
   }
@@ -174,7 +169,7 @@ export const PetEditor = ({
           </div>
           {formState.errors.root && <div className={'p-3'}>{`${formState.errors.root}`}</div>}
 
-          <Fieldset className="fieldset">
+          <Fieldset className="mb-4 flex w-full flex-col rounded bg-stone-100 p-3 shadow dark:bg-gray-700/50 sm:shadow-lg md:p-6">
             <TextField
               label="Имя"
               register={methods.register('name', { required: 'Имя обязательно' })}
@@ -186,19 +181,19 @@ export const PetEditor = ({
               errors={methods.formState.errors.nickName}
             />
             <DateField label="Дата рождения:" fieldKey="birthDate" />
-            <ControlledListBox
+            <ControlledListBoxField
               control={control}
               label="Тип:"
               fieldKey="type"
               options={speciesOptions}
             />
-            <ControlledListBox
+            <ControlledListBoxField
               control={control}
               label="Пол:"
               fieldKey="gender"
               options={genderOptions}
             />
-            <ControlledListBox
+            <ControlledListBoxField
               control={control}
               label="Шерсть:"
               fieldKey="furType"
@@ -206,31 +201,35 @@ export const PetEditor = ({
             />
           </Fieldset>
 
-          <Fieldset className="fieldset gap-y-3">
+          <Fieldset className="mb-4 flex w-full flex-col rounded bg-stone-100 p-3 shadow dark:bg-gray-700/50 sm:shadow-lg md:p-6">
             <Legend className="mb-3 text-2xl">Установки:</Legend>
-            {['isPublished', 'isReadyForAdoption', 'isFeatured', 'isAdopted'].map((fieldKey) =>
-              renderCheckbox(fieldKey as keyof PetCreateInputData, fieldKey)
-            )}
+            <div className="flex w-full flex-col">
+              {controlsFields.map((field) => (
+                <ControlledCheckboxField
+                  key={field.key}
+                  control={control}
+                  fieldKey={field.key as Path<FormData<typeof pet>>}
+                  label={field.label}
+                />
+              ))}
+            </div>
           </Fieldset>
 
-          <Fieldset className="fieldset gap-y-3">
+          <Fieldset className="mb-4 flex w-full flex-col rounded bg-stone-100 p-3 shadow dark:bg-gray-700/50 sm:shadow-lg md:p-6">
             <Legend className="mb-3 text-2xl">Здоровье и поведение:</Legend>
-            {[
-              'isVaccinated',
-              'isSterilized',
-              'isTreatedForParasites',
-              'isLitterBoxTrained',
-              'isUsesScratchingPost',
-              'isSocialized',
-              'isFriendlyWithCats',
-              'isFriendlyWithDogs',
-              'isFriendlyWithOtherAnimals',
-            ].map((fieldKey) =>
-              renderCheckbox(fieldKey as keyof PetCreateInputData, `${fieldKey}${wordEnd}`)
-            )}
+            <div className="flex w-full flex-col">
+              {healthAndBehaviorFields.map((field) => (
+                <ControlledCheckboxField
+                  key={field.key}
+                  control={control}
+                  fieldKey={field.key as Path<FormData<typeof pet>>}
+                  label={field.label}
+                />
+              ))}
+            </div>
           </Fieldset>
 
-          <ColorFieldset fieldKey="colors" label="Окрасы" colors={colors} />
+          <ColorFieldset control={control} fieldKey="colors" label="Окрасы" colors={colors} />
 
           <Fieldset className="fieldset">
             <TextAreaField
@@ -240,7 +239,7 @@ export const PetEditor = ({
             />
           </Fieldset>
 
-          <PhotosField
+          <ControlledImagesField
             name="photos"
             currentImages={pet?.photos || []}
             setImageFilesWithDimensions={setImageFilesWithDimensions}

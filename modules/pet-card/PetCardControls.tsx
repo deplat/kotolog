@@ -8,13 +8,18 @@ import { useState } from 'react'
 import { deletePet } from '@/data-access'
 
 interface PetCardControlsProps {
-  id: string
+  nickName: string
   avatarSrc?: string | StaticImageData
   name: string
   profileNickName: string
 }
 
-export const PetCardControls = ({ id, avatarSrc, name, profileNickName }: PetCardControlsProps) => {
+export const PetCardControls = ({
+  nickName,
+  avatarSrc,
+  name,
+  profileNickName,
+}: PetCardControlsProps) => {
   const [feedback, setFeedback] = useState<string | null>(null)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   async function onDeletePet(id: string) {
@@ -38,7 +43,7 @@ export const PetCardControls = ({ id, avatarSrc, name, profileNickName }: PetCar
             id: '1',
             label: 'Изменить',
             link: true,
-            href: `/profiles/${profileNickName}/pets/${id}`,
+            href: `/profiles/${profileNickName}/pets/${nickName}`,
           },
           {
             id: '2',
@@ -62,7 +67,7 @@ export const PetCardControls = ({ id, avatarSrc, name, profileNickName }: PetCar
             {avatarSrc && <Image src={avatarSrc} alt={name} width={125} height={125} />}
             <span className="text-lg font-semibold">{name}</span>
             <div className="flex gap-x-2">
-              <Button onClick={() => onDeletePet(id)} className="btn-warning">
+              <Button onClick={() => onDeletePet(nickName)} className="btn-warning">
                 Удалить
               </Button>
 

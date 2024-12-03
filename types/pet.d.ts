@@ -85,6 +85,7 @@ export interface PetProfileInputData {
   petId?: string
   isSocialized: boolean
   isFriendlyWithCats: boolean
+  isFriendlyWithDogs: boolean
   isFriendlyWithOtherAnimals: boolean
   isLitterBoxTrained?: boolean
   isUsesScratchingPost?: boolean
@@ -99,6 +100,7 @@ export interface PetProfileUpdateData {
   petId?: string
   isSocialized?: boolean
   isFriendlyWithCats?: boolean
+  isFriendlyWithDogs?: boolean
   isFriendlyWithOtherAnimals?: boolean
   isLitterBoxTrained?: boolean
   isUsesScratchingPost?: boolean

@@ -22,6 +22,13 @@ const prismaPetIncludeBase = Prisma.validator<Prisma.PetInclude>()({
   colors: true,
 })
 
+const prismaPetIncludeFull = Prisma.validator<Prisma.PetInclude>()({
+  photos: true,
+  colors: true,
+  petProfile: true,
+  profile: true,
+})
+
 export const createPet = async ({
   name,
   nickName,
@@ -33,6 +40,7 @@ export const createPet = async ({
   isFeatured,
   isAdopted,
   isPublished,
+  petProfile,
   profile,
   colors,
   photos,
@@ -72,6 +80,23 @@ export const createPet = async ({
     isFeatured,
     isAdopted,
     isPublished,
+    petProfile: petProfile
+      ? {
+          create: {
+            isSocialized: petProfile?.isSocialized,
+            isFriendlyWithCats: petProfile?.isFriendlyWithCats,
+            isFriendlyWithDogs: petProfile?.isFriendlyWithDogs,
+            isFriendlyWithOtherAnimals: petProfile?.isFriendlyWithOtherAnimals,
+            isLitterBoxTrained: petProfile?.isLitterBoxTrained,
+            isUsesScratchingPost: petProfile?.isUsesScratchingPost,
+            isSterilized: petProfile?.isSterilized,
+            isVaccinated: petProfile?.isVaccinated,
+            isTreatedForParasites: petProfile?.isTreatedForParasites,
+            healthStatus: petProfile?.healthStatus,
+            biography: petProfile?.biography,
+          },
+        }
+      : undefined,
     profile: {
       connect: {
         id: profileId,
@@ -171,6 +196,17 @@ export const getPetBaseByNickName = async (nickName: string) => {
   }
 }
 
+export async function getPetFullByNickName(nickName: string) {
+  try {
+    const pet = await prisma.pet.findUnique({ where: { nickName }, include: prismaPetIncludeFull })
+    if (!pet) return errorResponse('Pet not found')
+    return successResponse('Pet found', pet)
+  } catch (error) {
+    const parsedError = prismaErrorHandler(error)
+    return errorResponse(parsedError.message)
+  }
+}
+
 export const getPetsBase = async (profileNickName: string) => {
   try {
     const pets = await prisma.pet.findMany({
@@ -203,6 +239,7 @@ export const updatePet = async ({
   isFeatured,
   isAdopted,
   isPublished,
+  petProfile,
   profile,
   colors,
   photos,
@@ -253,6 +290,21 @@ export const updatePet = async ({
       isFeatured,
       isAdopted,
       isPublished,
+      petProfile: {
+        update: {
+          isSocialized: petProfile?.isSocialized,
+          isFriendlyWithCats: petProfile?.isFriendlyWithCats,
+          isFriendlyWithDogs: petProfile?.isFriendlyWithDogs,
+          isFriendlyWithOtherAnimals: petProfile?.isFriendlyWithOtherAnimals,
+          isLitterBoxTrained: petProfile?.isLitterBoxTrained,
+          isUsesScratchingPost: petProfile?.isUsesScratchingPost,
+          isSterilized: petProfile?.isSterilized,
+          isVaccinated: petProfile?.isVaccinated,
+          isTreatedForParasites: petProfile?.isTreatedForParasites,
+          healthStatus: petProfile?.healthStatus,
+          biography: petProfile?.biography,
+        },
+      },
       profile: {
         connect: {
           id: profileId,

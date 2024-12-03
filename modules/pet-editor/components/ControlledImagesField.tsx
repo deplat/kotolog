@@ -25,7 +25,7 @@ interface PreviewImageData {
   isPrimary: boolean
 }
 
-export const PhotosField = ({
+export const ControlledImagesField = ({
   name,
   currentImages,
   setImageFilesWithDimensions,

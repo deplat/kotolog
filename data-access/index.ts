@@ -9,6 +9,13 @@ export {
   updateColor,
   deleteColor,
 } from './color'
-export { createPet, getCachedPetsBase, getPetBaseById, updatePet, deletePet } from './pet'
+export {
+  createPet,
+  getCachedPetsBase,
+  getPetBaseById,
+  getPetFullByNickName,
+  updatePet,
+  deletePet,
+} from './pet'
 export { createProfile, updateProfile } from './profile'
 export { type Cats, getCachedCats } from './cat'

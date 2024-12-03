@@ -1,20 +1,22 @@
 import { PetColorData } from '@/types/pet'
 
-import { Controller, useFormContext } from 'react-hook-form'
+import { Control, Controller, FieldValues, Path } from 'react-hook-form'
 import { IoCheckmark } from 'react-icons/io5'
 import { Fieldset, Legend, Field, Checkbox, Label } from '@headlessui/react'
 
-export const ColorFieldset = ({
+interface ControlledColorsFieldsetProps<T extends FieldValues> {
+  control: Control<T>
+  fieldKey: Path<T>
+  label: string
+  colors: PetColorData[]
+}
+
+export const ColorFieldset = <T extends FieldValues>({
+  control,
   fieldKey,
   label,
   colors,
-}: {
-  fieldKey: string
-  label: string
-  colors: PetColorData[]
-}) => {
-  const { control, getValues } = useFormContext() // Access control and field values from react-hook-form
-
+}: ControlledColorsFieldsetProps<T>) => {
   return (
     <Fieldset className="fieldset">
       <Legend className="mb-3 text-2xl">{label}</Legend>
@@ -22,7 +24,6 @@ export const ColorFieldset = ({
         <Controller
           name={fieldKey}
           control={control}
-          defaultValue={getValues(fieldKey) || []} // Use current field value or initialize with an empty array
           render={({ field }) => (
             <>
               {colors.map(({ id, name }) => {

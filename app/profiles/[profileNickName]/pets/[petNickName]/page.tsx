@@ -1,4 +1,4 @@
-import { getCachedColors, Colors, getPetBaseById } from '@/data-access'
+import { getCachedColors, Colors, getPetFullByNickName } from '@/data-access'
 import { PetEditor } from '@/modules/pet-editor'
 import { auth } from '@/auth'
 import { NotAuthenticated } from '@/components/NotAuthenticated'
@@ -6,7 +6,7 @@ import { validateUserAppRole } from '@/utils/validateUserAppRole'
 import { UserAppRole } from '@prisma/client'
 
 export default async function Page(props: {
-  params: Promise<{ id: string; profileNickName: string }>
+  params: Promise<{ petNickName: string; profileNickName: string }>
 }) {
   const userId = (await auth())?.user.id
   if (!userId) return <NotAuthenticated />
@@ -20,10 +20,10 @@ export default async function Page(props: {
     UserAppRole.SUPER_ADMIN,
   ])
   if (!hasPermissions) return null
-  const id = (await props.params).id
+  const petNickName = (await props.params).petNickName
   try {
-    const { success, message, data } = await getPetBaseById(id)
-    if (!data) return <div>There's no pet with id: {id}</div>
+    const { success, message, data } = await getPetFullByNickName(petNickName)
+    if (!data) return <div>There's no pet with nickName: {petNickName}</div>
     const colors: Colors = await getCachedColors()
     if (!colors) console.log('Error fetching colors.')
     return (
