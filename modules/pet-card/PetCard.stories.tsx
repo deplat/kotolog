@@ -1,6 +1,5 @@
 import { PetCard } from './PetCard'
 import { Meta, StoryObj } from '@storybook/react'
-import cat from '@/public/cat.jpeg'
 
 const meta: Meta<typeof PetCard> = {
   component: PetCard,
@@ -18,7 +17,6 @@ type Story = StoryObj<typeof PetCard>
 
 export const Default: Story = {
   args: {
-    id: 's',
     name: 'Daniel',
     nickName: 'Daniel',
     avatarSrc: 'cat',
@@ -27,7 +25,6 @@ export const Default: Story = {
 
 export const WithoutAvatar: Story = {
   args: {
-    id: 's',
     name: 'Daniel',
     nickName: 'Daniel',
   },
