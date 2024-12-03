@@ -30,6 +30,8 @@ import {
   healthAndBehaviorFields,
   speciesOptions,
 } from '@/modules/pet-editor/petEditorFields'
+import clsx from 'clsx'
+import { useRouter } from 'next/navigation'
 
 export const PetEditor = ({
   pet,
@@ -40,15 +42,19 @@ export const PetEditor = ({
   colors: PetColorData[]
   profile: { nickName: string }
 }) => {
-  type FormData<T> = T extends { pet: any } ? PetUpdateInputData : PetCreateInputData
-  const methods = useForm<FormData<typeof pet>>({
-    defaultValues: getDefaultValuesFromPetData(pet, profile),
-  })
-
-  const { control, watch, handleSubmit, formState, register, setError, clearErrors } = methods
   const [imageFilesWithDimensions, setImageFilesWithDimensions] = useState<
     PetImageFileWithDimensions[]
   >([])
+  const [feedback, setFeedback] = useState<string | null>(null)
+
+  const router = useRouter()
+
+  type FormData<T> = T extends { pet: any } ? PetUpdateInputData : PetCreateInputData
+
+  const methods = useForm<FormData<typeof pet>>({
+    defaultValues: getDefaultValuesFromPetData(pet, profile),
+  })
+  const { control, watch, handleSubmit, formState, register, setError, clearErrors } = methods
 
   const watchNickName = watch('nickName')
 
@@ -57,14 +63,14 @@ export const PetEditor = ({
       try {
         const { data } = await getPetBaseByNickName(nickName)
         if (data && data.id !== id) {
-          setError('nickName', { type: 'custom', message: 'Ссылка уже используется' })
+          setError('nickName', { type: 'custom', message: 'Такой ник-нэйм уже используется' })
         } else {
           clearErrors('nickName')
         }
       } catch {
         setError('nickName', {
           type: 'custom',
-          message: 'Не удалось проверить слаг, попробуйте позднее',
+          message: 'Не удалось проверить ник-нэйм, попробуйте позднее',
         })
       }
     }
@@ -100,13 +106,21 @@ export const PetEditor = ({
     data.profile = profile
 
     if (pet) {
-      await updatePet({ ...data, id: pet.id }).then(({ success, message }) =>
-        success ? setError('root', { message: 'success' }) : setError('root', { message })
-      )
-    } else if (data.name) {
-      await createPet(data as PetCreateInputData).then(({ success, message }) =>
-        success ? setError('root', { message: 'success' }) : setError('root', { message })
-      )
+      await updatePet({ ...data, id: pet.id }).then(({ success, message }) => {
+        if (success) {
+          setFeedback('Питомец обновлен успешно')
+          setTimeout(() => setFeedback(null), 3000)
+          router.push('/profiles/' + profile.nickName + '/pets/' + data.nickName)
+        } else setFeedback('Не удалось обновить питомца')
+      })
+    } else {
+      await createPet(data as PetCreateInputData).then(({ success, message }) => {
+        if (success) {
+          setFeedback('Питомец добавлен успешно')
+        } else {
+          setFeedback('Не удалось добавить питомца')
+        }
+      })
     }
   }
 
@@ -115,6 +129,11 @@ export const PetEditor = ({
       onSubmit={handleSubmit(onSubmit)}
       className="mt-12 flex w-full max-w-2xl flex-col items-center justify-center sm:mt-20"
     >
+      <div
+        className={clsx('bottom-10 rounded bg-black p-4 text-white', feedback ? 'fixed' : 'hidden')}
+      >
+        {feedback}
+      </div>
       <div className="fixed top-2 z-90 flex justify-center rounded bg-stone-100 shadow-lg ring-1 ring-stone-700/60 dark:bg-gray-700 dark:ring-stone-400/50 sm:top-6">
         <Button type="submit" className="btn-primary">
           Сохранить
@@ -123,7 +142,6 @@ export const PetEditor = ({
           Закрыть
         </Link>
       </div>
-      {formState.errors.root && <div className={'p-3'}>{`${formState.errors.root.message}`}</div>}
 
       <Fieldset className="fieldset">
         <TextField

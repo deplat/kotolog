@@ -230,6 +230,7 @@ export const getCachedPetsBase = unstable_cache(getPetsBase, ['pets'], { tags: [
 
 export const updatePet = async ({
   id,
+  name,
   nickName,
   birthDate,
   type,
@@ -281,6 +282,7 @@ export const updatePet = async ({
     }
 
     const prismaPetUpdateInput = Prisma.validator<Prisma.PetUpdateInput>()({
+      name,
       nickName,
       birthDate,
       type,

@@ -1,8 +1,9 @@
 import { Control, Path, useController, FieldValues } from 'react-hook-form'
-import { Field, Input, Label } from '@headlessui/react'
+import { Button, Field, Input, Label } from '@headlessui/react'
 import { Dispatch, SetStateAction, useState } from 'react'
 import NextImage from 'next/image'
 import { PetImageFileWithDimensions } from '@/types/pet'
+import clsx from 'clsx'
 
 interface PetImageData {
   id?: string
@@ -44,12 +45,10 @@ export const ControlledImagesField = <T extends FieldValues>({
     control,
   })
 
-  // Filter current images based on the createdAt property
   const currentImages = field.value
     ? (field.value as PetImageData[]).filter((img) => img.createdAt)
     : []
 
-  // Handle file selection, extract metadata, and create previews
   const handleFiles = (files: FileList) => {
     setLoading(true)
     const newImages = Array.from(files).map((file) => {
@@ -151,9 +150,9 @@ export const ControlledImagesField = <T extends FieldValues>({
         <Label className="mb-3 text-2xl">Альбом:</Label>
 
         {currentImages.length > 0 && (
-          <div className="mb-6 grid grid-cols-2">
+          <div className="mb-6 flex flex-wrap gap-3">
             {currentImages.map((image, index) => (
-              <div key={image.id || index} className="relative">
+              <div key={image.id || index} className="flex flex-col items-center">
                 <NextImage
                   src={image.src}
                   width={150}
@@ -161,12 +160,20 @@ export const ControlledImagesField = <T extends FieldValues>({
                   alt={image.altText || `Image ${index + 1}`}
                 />
                 <div className="mt-2 flex justify-center space-x-2">
-                  <button type="button" onClick={() => toggleIsAvatar(index, false)}>
-                    {image.isAvatar ? 'Unset Avatar' : 'Set Avatar'}
-                  </button>
-                  <button type="button" onClick={() => toggleIsPrimary(index, false)}>
-                    {image.isPrimary ? 'Unset Primary' : 'Set Primary'}
-                  </button>
+                  <Button
+                    className={clsx('rounded p-2', image.isAvatar ? 'bg-rose-300' : '')}
+                    type="button"
+                    onClick={() => toggleIsAvatar(index, false)}
+                  >
+                    Аватар
+                  </Button>
+                  <Button
+                    className={clsx('rounded p-2', image.isPrimary ? 'bg-rose-500 text-white' : '')}
+                    type="button"
+                    onClick={() => toggleIsPrimary(index, false)}
+                  >
+                    Основное
+                  </Button>
                 </div>
               </div>
             ))}

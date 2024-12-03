@@ -14,15 +14,15 @@ export const controlsFields: CheckboxFieldOption<any>[] = [
 ]
 
 export const healthAndBehaviorFields: CheckboxFieldOption<any>[] = [
-  { key: 'petProfile.isVaccinated', label: 'Vaccinated' },
-  { key: 'petProfile.isSterilized', label: 'Sterilized' },
-  { key: 'petProfile.isTreatedForParasites', label: 'Treated for Parasites' },
-  { key: 'petProfile.isLitterBoxTrained', label: 'Litter Box Trained' },
-  { key: 'petProfile.isUsesScratchingPost', label: 'Uses Scratching Post' },
-  { key: 'petProfile.isSocialized', label: 'Socialized' },
-  { key: 'petProfile.isFriendlyWithCats', label: 'Friendly with Cats' },
-  { key: 'petProfile.isFriendlyWithDogs', label: 'Friendly with Dogs' },
-  { key: 'petProfile.isFriendlyWithOtherAnimals', label: 'Friendly with Other Animals' },
+  { key: 'petProfile.isVaccinated', label: 'Вакцинирован' },
+  { key: 'petProfile.isSterilized', label: 'Стерилизован' },
+  { key: 'petProfile.isTreatedForParasites', label: 'Обработан от паразитов' },
+  { key: 'petProfile.isLitterBoxTrained', label: 'Прошел обучение в литтер-боксе' },
+  { key: 'petProfile.isUsesScratchingPost', label: 'Пользуется когтеточкой' },
+  { key: 'petProfile.isSocialized', label: 'Социализирован' },
+  { key: 'petProfile.isFriendlyWithCats', label: 'Ладит с кошками' },
+  { key: 'petProfile.isFriendlyWithDogs', label: 'Ладит с собаками' },
+  { key: 'petProfile.isFriendlyWithOtherAnimals', label: 'Ладит с другими животными' },
 ]
 
 export const speciesOptions = [

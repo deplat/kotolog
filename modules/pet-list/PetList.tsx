@@ -24,7 +24,6 @@ export const PetList = async ({ profileNickName }: { profileNickName: string }) 
       {pets.map((pet, index) => (
         <li key={index} className="overflow-hidden">
           <PetCard
-            id={pet.id}
             name={pet.name}
             nickName={pet.nickName}
             avatarSrc={pet.photos[0]?.src || ''}

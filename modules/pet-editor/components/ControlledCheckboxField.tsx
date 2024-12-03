@@ -23,9 +23,9 @@ export const ControlledCheckboxField = <T extends FieldValues>({
             <Checkbox
               checked={field.value as boolean}
               onChange={field.onChange}
-              className="group size-6 rounded p-0.5 ring-1 ring-inset ring-stone-950 transition duration-75 data-[checked]:bg-orange-500 data-[checked]:text-white data-[checked]:ring-orange-500 dark:ring-stone-400/50 dark:data-[checked]:bg-orange-600"
+              className="checkbox group"
             >
-              <IoCheckmark className="hidden size-5 group-data-[checked]:block group-data-[hover]:block" />
+              <IoCheckmark className="checkbox-icon" />
             </Checkbox>
             <Label className="cursor-pointer dark:text-stone-300">{label}</Label>
           </Field>

@@ -5,14 +5,13 @@ import Image from 'next/image'
 import { PetCardControls } from '@/modules/pet-card/PetCardControls'
 
 interface PetCardProps {
-  id: string
   name: string
   nickName: string
   profileNickName: string
   avatarSrc: string
 }
 
-export const PetCard = async ({ id, name, nickName, avatarSrc, profileNickName }: PetCardProps) => {
+export const PetCard = async ({ name, nickName, avatarSrc, profileNickName }: PetCardProps) => {
   return (
     <div className="relative rounded bg-stone-100 shadow-sm dark:bg-gray-700/55 sm:shadow-lg">
       <div className="absolute right-0 top-0">
@@ -39,7 +38,6 @@ export const PetCard = async ({ id, name, nickName, avatarSrc, profileNickName }
 
         {/* Text Content */}
         <div className="flex flex-1 flex-col justify-between gap-y-3 truncate p-3 sm:justify-evenly">
-          <div className="truncate text-stone-600 dark:text-stone-300">#{id}</div>
           <div className="truncate text-xl text-orange-600 dark:text-orange-500">{name}</div>
           <div className="truncate text-stone-600 dark:text-stone-300">{nickName}</div>
         </div>
