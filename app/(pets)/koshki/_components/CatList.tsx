@@ -18,7 +18,7 @@ export const CatList = ({ cats }: CatsListProps) => {
           )}
         >
           <div className="aspect-h-1 aspect-w-1 relative w-full overflow-hidden rounded-t-lg sm:shadow-md">
-            <Image src={cat.photos[0].src || ''} alt={cat.name} fill />
+            <Image src={cat.photos[0]?.src || ''} alt={cat.name} fill />
           </div>
           <div className="my-4 text-center">
             <h3 className="truncate text-wrap text-xl font-semibold lg:text-2xl">
