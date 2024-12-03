@@ -13,6 +13,7 @@ export {
   createPet,
   getCachedPetsBase,
   getPetBaseById,
+  getPetBaseByNickName,
   getPetFullByNickName,
   updatePet,
   deletePet,

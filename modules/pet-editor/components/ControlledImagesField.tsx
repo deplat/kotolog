@@ -1,10 +1,10 @@
-import { useFormContext } from 'react-hook-form'
+import { Control, Path, useController, FieldValues } from 'react-hook-form'
 import { Field, Input, Label } from '@headlessui/react'
 import { Dispatch, SetStateAction, useState } from 'react'
 import NextImage from 'next/image'
 import { PetImageFileWithDimensions } from '@/types/pet'
 
-interface CurrentPhoto {
+interface PetImageData {
   id?: string
   petId?: string
   s3Key?: string
@@ -14,6 +14,8 @@ interface CurrentPhoto {
   altText?: string
   isAvatar?: boolean
   isPrimary?: boolean
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 interface PreviewImageData {
@@ -25,23 +27,29 @@ interface PreviewImageData {
   isPrimary: boolean
 }
 
-export const ControlledImagesField = ({
-  name,
-  currentImages,
+export const ControlledImagesField = <T extends FieldValues>({
+  control,
+  fieldKey,
   setImageFilesWithDimensions,
 }: {
-  name: string
-  currentImages: CurrentPhoto[]
+  control: Control<T>
+  fieldKey: Path<T>
   setImageFilesWithDimensions: Dispatch<SetStateAction<PetImageFileWithDimensions[]>>
 }) => {
   const [imagePreviews, setImagePreviews] = useState<PreviewImageData[]>([])
   const [loading, setLoading] = useState<boolean>(false)
 
-  const {
-    setValue,
-    formState: { errors },
-  } = useFormContext()
+  const { field, fieldState } = useController({
+    name: fieldKey,
+    control,
+  })
 
+  // Filter current images based on the createdAt property
+  const currentImages = field.value
+    ? (field.value as PetImageData[]).filter((img) => img.createdAt)
+    : []
+
+  // Handle file selection, extract metadata, and create previews
   const handleFiles = (files: FileList) => {
     setLoading(true)
     const newImages = Array.from(files).map((file) => {
@@ -76,7 +84,17 @@ export const ControlledImagesField = ({
 
     Promise.all(newImages).then((resolvedImages) => {
       setImagePreviews((prev) => [...prev, ...resolvedImages])
-      setImageFilesWithDimensions((prev) => [...prev, ...resolvedImages])
+      setImageFilesWithDimensions((prev) => [
+        ...prev,
+        ...resolvedImages.map((img) => ({
+          file: img.file,
+          src: img.src,
+          width: img.width,
+          height: img.height,
+          isAvatar: img.isAvatar,
+          isPrimary: img.isPrimary,
+        })),
+      ])
       setLoading(false)
     })
   }
@@ -89,12 +107,18 @@ export const ControlledImagesField = ({
           isAvatar: i === index ? !img.isAvatar : img.isAvatar,
         }))
       )
+      setImageFilesWithDimensions((prev) =>
+        prev.map((img, i) => ({
+          ...img,
+          isAvatar: i === index ? !img.isAvatar : img.isAvatar,
+        }))
+      )
     } else {
       const updatedImages = currentImages.map((img, i) => ({
         ...img,
         isAvatar: i === index ? !img.isAvatar : img.isAvatar,
       }))
-      setValue(name, updatedImages)
+      field.onChange(updatedImages)
     }
   }
 
@@ -103,15 +127,21 @@ export const ControlledImagesField = ({
       setImagePreviews((prev) =>
         prev.map((img, i) => ({
           ...img,
-          isPrimary: i === index ? !img.isPrimary : img.isPrimary,
+          isPrimary: i === index ? !img.isPrimary : false, // Ensure only one primary
+        }))
+      )
+      setImageFilesWithDimensions((prev) =>
+        prev.map((img, i) => ({
+          ...img,
+          isPrimary: i === index ? !img.isPrimary : false,
         }))
       )
     } else {
       const updatedImages = currentImages.map((img, i) => ({
         ...img,
-        isPrimary: i === index ? !img.isPrimary : false,
+        isPrimary: i === index ? !img.isPrimary : false, // Ensure only one primary
       }))
-      setValue(name, updatedImages)
+      field.onChange(updatedImages)
     }
   }
 
@@ -120,8 +150,8 @@ export const ControlledImagesField = ({
       <Field className="flex flex-col">
         <Label className="mb-3 text-2xl">Альбом:</Label>
 
-        {currentImages && currentImages.length > 0 && (
-          <div className="flex flex-wrap gap-3">
+        {currentImages.length > 0 && (
+          <div className="mb-6 grid grid-cols-2">
             {currentImages.map((image, index) => (
               <div key={image.id || index} className="relative">
                 <NextImage
@@ -150,9 +180,9 @@ export const ControlledImagesField = ({
           multiple
           onChange={(e) => handleFiles(e.target.files!)}
         />
-        {errors[name] && (
+        {fieldState.error && (
           <div className="text-red-600">
-            <p>{errors[name].message as string}</p>
+            <p>{fieldState.error.message}</p>
           </div>
         )}
       </Field>
@@ -160,7 +190,7 @@ export const ControlledImagesField = ({
       {loading ? (
         <p>Processing photos...</p>
       ) : (
-        <ul className="mt-4 grid grid-cols-3 gap-4">
+        <ul className="mt-4 grid grid-cols-2 gap-4">
           {imagePreviews.map((img, index) => (
             <li key={index}>
               <NextImage src={img.src} width={150} height={150} alt={`Preview ${index + 1}`} />

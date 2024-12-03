@@ -305,11 +305,6 @@ export const updatePet = async ({
           biography: petProfile?.biography,
         },
       },
-      profile: {
-        connect: {
-          id: profileId,
-        },
-      },
       colors: colors.length
         ? {
             create: colors.map((color) => ({
@@ -321,13 +316,27 @@ export const updatePet = async ({
             })),
           }
         : undefined,
-      photos: photos.length
-        ? {
-            createMany: {
-              data: photos,
-            },
-          }
-        : undefined,
+      photos: {
+        upsert: photos.map((photo) => ({
+          where: {
+            s3Key: photo.s3Key,
+          },
+          update: {
+            altText: photo.altText,
+            isAvatar: photo.isAvatar,
+            isPrimary: photo.isPrimary,
+          },
+          create: {
+            s3Key: photo.s3Key,
+            src: photo.src,
+            width: photo.width,
+            height: photo.height,
+            altText: photo.altText,
+            isAvatar: photo.isAvatar,
+            isPrimary: photo.isPrimary,
+          },
+        })),
+      },
     })
     const updatedPet = await prisma.pet.update({
       where: { id },
