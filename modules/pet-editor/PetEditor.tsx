@@ -14,7 +14,6 @@ import {
 import { uploadImageFileAndReturnImageData } from '@/utils/s3'
 import Link from 'next/link'
 import {
-  PetColorData,
   PetCreateInputData,
   PetData,
   PetImageCreateInputData,
@@ -29,17 +28,17 @@ import {
   genderOptions,
   healthAndBehaviorFields,
   speciesOptions,
-} from '@/modules/pet-editor/petEditorFields'
+} from '@/modules/pet-editor/data'
 import clsx from 'clsx'
 import { useRouter } from 'next/navigation'
 
 export const PetEditor = ({
   pet,
-  colors,
+  colorOptions,
   profile,
 }: {
   pet: PetData | null
-  colors: PetColorData[]
+  colorOptions: { value: string; label: string }[]
   profile: { nickName: string }
 }) => {
   const [deletedPhotosIds, setDeletedPhotosIds] = useState<string[]>([])
@@ -60,7 +59,7 @@ export const PetEditor = ({
   const watchNickName = watch('nickName')
 
   useEffect(() => {
-    const checkSlug = async (nickName: string, id?: string) => {
+    const checkNickName = async (nickName: string, id?: string) => {
       try {
         const { data } = await getPetBaseByNickName(nickName)
         if (data && data.id !== id) {
@@ -75,7 +74,7 @@ export const PetEditor = ({
         })
       }
     }
-    if (watchNickName) checkSlug(watchNickName, pet?.id)
+    if (watchNickName) checkNickName(watchNickName, pet?.id)
   }, [watchNickName, pet?.id, setError, clearErrors])
 
   const onSubmit: SubmitHandler<PetCreateInputData | PetUpdateInputData> = async (data) => {
@@ -115,7 +114,7 @@ export const PetEditor = ({
             setTimeout(() => setFeedback(null), 2000)
             router.push('/profiles/' + profile.nickName + '/pets/' + data.nickName)
           } else {
-            setFeedback('Не удалось обновить питомца')
+            setFeedback('Не удалось обновить питомца:' + message)
             setTimeout(() => setFeedback(null), 2000)
           }
         }
@@ -127,7 +126,7 @@ export const PetEditor = ({
           setTimeout(() => setFeedback(null), 2000)
           router.push('/profiles/' + profile.nickName + '/pets')
         } else {
-          setFeedback('Не удалось добавить питомца')
+          setFeedback('Не удалось добавить питомца:' + message)
           setTimeout(() => setFeedback(null), 2000)
         }
       })
@@ -182,6 +181,13 @@ export const PetEditor = ({
           label="Шерсть:"
           fieldKey="furType"
           options={furTypeOptions}
+        />
+        <ControlledListBoxField
+          control={control}
+          fieldKey="colors"
+          multiple
+          options={colorOptions}
+          label="Окрасы"
         />
       </Fieldset>
 

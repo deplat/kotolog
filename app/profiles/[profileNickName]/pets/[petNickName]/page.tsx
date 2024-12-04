@@ -1,4 +1,4 @@
-import { getCachedColors, Colors, getPetFullByNickName } from '@/data-access'
+import { getCachedColors, getPetFullByNickName } from '@/data-access'
 import { PetEditor } from '@/modules/pet-editor'
 import { auth } from '@/auth'
 import { NotAuthenticated } from '@/components/NotAuthenticated'
@@ -24,11 +24,13 @@ export default async function Page(props: {
   try {
     const { success, message, data } = await getPetFullByNickName(petNickName)
     if (!data) return <div>There's no pet with nickName: {petNickName}</div>
-    const colors: Colors = await getCachedColors()
-    if (!colors) console.log('Error fetching colors.')
+    const colorOptions = await getCachedColors().then((colors) =>
+      colors.map((color) => ({ value: color.id, label: color.name }))
+    )
+    if (!colorOptions) console.log('Error fetching colors.')
     return (
       <main className="flex w-full justify-center px-3">
-        <PetEditor pet={data} colors={colors} profile={{ nickName: profileNickName }} />
+        <PetEditor pet={data} colorOptions={colorOptions} profile={{ nickName: profileNickName }} />
       </main>
     )
   } catch (error) {

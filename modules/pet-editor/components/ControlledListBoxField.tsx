@@ -6,6 +6,7 @@ import { Controller, Control, Path, FieldValues, PathValue } from 'react-hook-fo
 interface ListBoxProps<T extends FieldValues> {
   control: Control<T>
   fieldKey: Path<T>
+  multiple?: boolean
   options: { value: PathValue<T, Path<T>>; label: string }[]
   label: string
 }
@@ -13,6 +14,7 @@ interface ListBoxProps<T extends FieldValues> {
 export const ControlledListBoxField = <T extends FieldValues>({
   control,
   fieldKey,
+  multiple,
   options,
   label,
 }: ListBoxProps<T>) => {
@@ -28,7 +30,7 @@ export const ControlledListBoxField = <T extends FieldValues>({
           <div className="mb-3 flex w-full items-center">
             <label className="w-1/4">{label}</label>
 
-            <Listbox value={value} onChange={onChange}>
+            <Listbox value={value} onChange={onChange} multiple={multiple}>
               <ListboxButton className="relative flex w-3/4 items-center justify-between rounded p-2.5 text-left ring-1 ring-inset ring-stone-700/60 dark:ring-stone-400/50">
                 <div>{currentLabel}</div>
                 <IoChevronDown className="pointer-events-none block size-4" aria-hidden="true" />
@@ -44,7 +46,7 @@ export const ControlledListBoxField = <T extends FieldValues>({
                   <ListboxOption
                     key={option.value}
                     value={option.value}
-                    className="group flex cursor-pointer items-center gap-2 rounded px-3 py-1.5 ring-inset ring-orange-600 focus:ring-2"
+                    className="group flex cursor-pointer items-center gap-2 rounded px-3 py-1.5 ring-inset ring-orange-600 focus:ring-2 data-[selected]:text-orange-500"
                   >
                     <div>{option.label}</div>
                   </ListboxOption>

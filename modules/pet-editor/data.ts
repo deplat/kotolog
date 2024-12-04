@@ -36,9 +36,9 @@ export const genderOptions = [
 ]
 
 export const furTypeOptions = [
-  { value: FurType.SHORT, label: 'Короткий' },
-  { value: FurType.LONG, label: 'Длинный' },
-  { value: FurType.MEDIUM, label: 'Средний' },
+  { value: FurType.SHORT, label: 'Короткая' },
+  { value: FurType.MEDIUM, label: 'Средня' },
+  { value: FurType.LONG, label: 'Длинная' },
   { value: FurType.HAIRLESS, label: 'Без шерсти' },
   { value: FurType.NONE, label: 'Не указано' },
 ]
