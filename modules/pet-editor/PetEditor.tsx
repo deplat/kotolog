@@ -42,6 +42,7 @@ export const PetEditor = ({
   colors: PetColorData[]
   profile: { nickName: string }
 }) => {
+  const [deletedPhotosIds, setDeletedPhotosIds] = useState<string[]>([])
   const [imageFilesWithDimensions, setImageFilesWithDimensions] = useState<
     PetImageFileWithDimensions[]
   >([])
@@ -106,19 +107,28 @@ export const PetEditor = ({
     data.profile = profile
 
     if (pet) {
-      await updatePet({ ...data, id: pet.id }).then(({ success, message }) => {
-        if (success) {
-          setFeedback('Питомец обновлен успешно')
-          setTimeout(() => setFeedback(null), 3000)
-          router.push('/profiles/' + profile.nickName + '/pets/' + data.nickName)
-        } else setFeedback('Не удалось обновить питомца')
-      })
+      ;(data as PetUpdateInputData).deletedPhotosIds = deletedPhotosIds
+      await updatePet({ ...(data as PetUpdateInputData), id: pet.id }).then(
+        ({ success, message }) => {
+          if (success) {
+            setFeedback('Питомец обновлен успешно')
+            setTimeout(() => setFeedback(null), 2000)
+            router.push('/profiles/' + profile.nickName + '/pets/' + data.nickName)
+          } else {
+            setFeedback('Не удалось обновить питомца')
+            setTimeout(() => setFeedback(null), 2000)
+          }
+        }
+      )
     } else {
       await createPet(data as PetCreateInputData).then(({ success, message }) => {
         if (success) {
           setFeedback('Питомец добавлен успешно')
+          setTimeout(() => setFeedback(null), 2000)
+          router.push('/profiles/' + profile.nickName + '/pets')
         } else {
           setFeedback('Не удалось добавить питомца')
+          setTimeout(() => setFeedback(null), 2000)
         }
       })
     }
@@ -214,6 +224,7 @@ export const PetEditor = ({
       <ControlledImagesField
         control={control}
         fieldKey="photos"
+        setDeletedPhotosIds={setDeletedPhotosIds}
         setImageFilesWithDimensions={setImageFilesWithDimensions}
       />
     </form>

@@ -151,4 +151,5 @@ export interface PetUpdateInputData {
   petProfile: PetProfileUpdateData
   colors: PetColorData[]
   photos: PetImageCreateInputData[]
+  deletedPhotosIds: string[]
 }

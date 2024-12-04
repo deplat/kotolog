@@ -244,6 +244,7 @@ export const updatePet = async ({
   profile,
   colors,
   photos,
+  deletedPhotosIds,
 }: PetUpdateInputData) => {
   const user = (await auth())?.user
   const userId = user?.id
@@ -319,6 +320,7 @@ export const updatePet = async ({
           }
         : undefined,
       photos: {
+        deleteMany: deletedPhotosIds.length ? { id: { in: deletedPhotosIds } } : undefined,
         upsert: photos.map((photo) => ({
           where: {
             s3Key: photo.s3Key,

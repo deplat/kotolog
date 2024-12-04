@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import NextImage from 'next/image'
 import { PetImageFileWithDimensions } from '@/types/pet'
 import clsx from 'clsx'
+import { Trash } from 'lucide-react'
 
 interface PetImageData {
   id?: string
@@ -32,9 +33,11 @@ export const ControlledImagesField = <T extends FieldValues>({
   control,
   fieldKey,
   setImageFilesWithDimensions,
+  setDeletedPhotosIds,
 }: {
   control: Control<T>
   fieldKey: Path<T>
+  setDeletedPhotosIds: Dispatch<SetStateAction<string[]>>
   setImageFilesWithDimensions: Dispatch<SetStateAction<PetImageFileWithDimensions[]>>
 }) => {
   const [imagePreviews, setImagePreviews] = useState<PreviewImageData[]>([])
@@ -126,7 +129,7 @@ export const ControlledImagesField = <T extends FieldValues>({
       setImagePreviews((prev) =>
         prev.map((img, i) => ({
           ...img,
-          isPrimary: i === index ? !img.isPrimary : false, // Ensure only one primary
+          isPrimary: i === index ? !img.isPrimary : false,
         }))
       )
       setImageFilesWithDimensions((prev) =>
@@ -135,11 +138,42 @@ export const ControlledImagesField = <T extends FieldValues>({
           isPrimary: i === index ? !img.isPrimary : false,
         }))
       )
+      const updatedCurrentImages = currentImages.map((img) => ({
+        ...img,
+        isPrimary: false,
+      }))
+      field.onChange(updatedCurrentImages)
     } else {
       const updatedImages = currentImages.map((img, i) => ({
         ...img,
-        isPrimary: i === index ? !img.isPrimary : false, // Ensure only one primary
+        isPrimary: i === index ? !img.isPrimary : false,
       }))
+      field.onChange(updatedImages)
+      setImagePreviews((prev) =>
+        prev.map((img) => ({
+          ...img,
+          isPrimary: false,
+        }))
+      )
+      setImageFilesWithDimensions((prev) =>
+        prev.map((img) => ({
+          ...img,
+          isPrimary: false,
+        }))
+      )
+    }
+  }
+
+  const toggleDelete = (index: number, isPreview: boolean) => {
+    if (isPreview) {
+      setImagePreviews((prev) => prev.filter((_, i) => i !== index))
+      setImageFilesWithDimensions((prev) => prev.filter((_, i) => i !== index))
+    } else {
+      const photoToDelete = currentImages[index]
+      if (photoToDelete.id) {
+        setDeletedPhotosIds((prev) => [...prev, photoToDelete.id as string])
+      }
+      const updatedImages = currentImages.filter((_, i) => i !== index)
       field.onChange(updatedImages)
     }
   }
@@ -150,9 +184,9 @@ export const ControlledImagesField = <T extends FieldValues>({
         <Label className="mb-3 text-2xl">Альбом:</Label>
 
         {currentImages.length > 0 && (
-          <div className="mb-6 flex flex-wrap gap-3">
+          <ul className="mb-6 flex flex-wrap gap-3">
             {currentImages.map((image, index) => (
-              <div key={image.id || index} className="flex flex-col items-center">
+              <li key={image.id || index} className="flex flex-col items-center">
                 <NextImage
                   src={image.src}
                   width={150}
@@ -174,10 +208,13 @@ export const ControlledImagesField = <T extends FieldValues>({
                   >
                     Основное
                   </Button>
+                  <Button onClick={() => toggleDelete(index, false)}>
+                    <Trash size={30} absoluteStrokeWidth />
+                  </Button>
                 </div>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
 
         <div className="my-3 text-xl">Добавить фотографии:</div>
@@ -197,17 +234,28 @@ export const ControlledImagesField = <T extends FieldValues>({
       {loading ? (
         <p>Processing photos...</p>
       ) : (
-        <ul className="mt-4 grid grid-cols-2 gap-4">
+        <ul className="mb-6 mt-4 flex flex-wrap gap-3">
           {imagePreviews.map((img, index) => (
-            <li key={index}>
+            <li key={index} className="flex flex-col items-center">
               <NextImage src={img.src} width={150} height={150} alt={`Preview ${index + 1}`} />
               <div className="mt-2 flex justify-center space-x-2">
-                <button type="button" onClick={() => toggleIsAvatar(index, true)}>
-                  {img.isAvatar ? 'Unset Avatar' : 'Set Avatar'}
-                </button>
-                <button type="button" onClick={() => toggleIsPrimary(index, true)}>
-                  {img.isPrimary ? 'Unset Primary' : 'Set Primary'}
-                </button>
+                <Button
+                  className={clsx('rounded p-2', img.isAvatar ? 'bg-rose-300' : '')}
+                  type="button"
+                  onClick={() => toggleIsAvatar(index, true)}
+                >
+                  Аватар
+                </Button>
+                <Button
+                  className={clsx('rounded p-2', img.isPrimary ? 'bg-rose-500 text-white' : '')}
+                  type="button"
+                  onClick={() => toggleIsPrimary(index, true)}
+                >
+                  Основное
+                </Button>
+                <Button onClick={() => toggleDelete(index, true)}>
+                  <Trash size={30} absoluteStrokeWidth />
+                </Button>
               </div>
             </li>
           ))}
