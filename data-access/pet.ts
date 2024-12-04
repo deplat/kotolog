@@ -386,7 +386,7 @@ export const updatePet = async ({
   }
 }
 
-export const deletePet = async (id: string) => {
+export const deletePet = async (nickName: string) => {
   const user = (await auth())?.user
   const userId = user?.id
   if (!user || !userId) {
@@ -394,7 +394,7 @@ export const deletePet = async (id: string) => {
   }
   try {
     const petToDelete = await prisma.pet.findUnique({
-      where: { id },
+      where: { nickName },
       select: {
         id: true,
         profileId: true,
@@ -412,7 +412,7 @@ export const deletePet = async (id: string) => {
       await logAction({
         userId,
         profileId: petToDelete.profileId,
-        petId: id,
+        petId: petToDelete.id,
         action: 'CREATE_PET_ERROR',
         metadata: {
           error: 'User does not have permission to update pet for selected profiles',
@@ -421,7 +421,7 @@ export const deletePet = async (id: string) => {
       return errorResponse('You do not have permission to create pet for selected profiles')
     }
     const deletedPet = await prisma.pet.delete({
-      where: { id },
+      where: { nickName },
       select: {
         id: true,
         profileId: true,
@@ -430,7 +430,7 @@ export const deletePet = async (id: string) => {
     if (!deletedPet) {
       await logAction({
         userId,
-        petId: id,
+        petId: petToDelete.id,
         profileId: petToDelete.profileId,
         action: 'DELETE_PET_ERROR',
         metadata: {
@@ -441,7 +441,7 @@ export const deletePet = async (id: string) => {
     }
     await logAction({
       userId,
-      petId: id,
+      petId: petToDelete.id,
       profileId: petToDelete.profileId,
       action: 'DELETE_PET',
       metadata: {
@@ -456,7 +456,6 @@ export const deletePet = async (id: string) => {
     const parsedError = prismaErrorHandler(error)
     await logAction({
       userId,
-      petId: id,
       action: 'DELETE_PET_ERROR',
       metadata: {
         error: parsedError.message,
