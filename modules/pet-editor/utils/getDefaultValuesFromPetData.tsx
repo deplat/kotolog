@@ -15,6 +15,7 @@ export const getDefaultValuesFromPetData = (
         isFeatured: false,
         isAdopted: false,
         isPublished: false,
+        photos: [],
         profile: profile,
         petProfile: {
           isSocialized: true,
