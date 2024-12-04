@@ -26,6 +26,7 @@ export const PetCardControls = ({
     setFeedback('Удаление питомца...')
     try {
       const response = await deletePet(id)
+      setIsDeleteDialogOpen(false)
       response.success ? setFeedback('Питомец удален успешно.') : setFeedback(response.message)
     } catch (error) {
       if (error instanceof Error) {
