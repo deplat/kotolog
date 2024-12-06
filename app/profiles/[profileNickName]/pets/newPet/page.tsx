@@ -20,9 +20,10 @@ export default async function Page({ params }: { params: Promise<{ profileNickNa
   try {
     const colors = await getCachedColors()
     if (!colors) console.log('Error fetching colors.')
+    const colorOptions = colors.map((color) => ({ value: color.id, label: color.name }))
     return (
       <main className="flex w-full justify-center px-3">
-        <PetEditor pet={null} colors={colors} profile={{ nickName: profileNickName }} />
+        <PetEditor pet={null} colorOptions={colorOptions} profile={{ nickName: profileNickName }} />
       </main>
     )
   } catch (error) {

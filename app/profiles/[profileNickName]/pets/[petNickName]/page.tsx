@@ -24,10 +24,8 @@ export default async function Page(props: {
   try {
     const { success, message, data } = await getPetFullByNickName(petNickName)
     if (!data) return <div>There's no pet with nickName: {petNickName}</div>
-    const colorOptions = await getCachedColors().then((colors) =>
-      colors.map((color) => ({ value: color.id, label: color.name }))
-    )
-    if (!colorOptions) console.log('Error fetching colors.')
+    const colors = await getCachedColors()
+    const colorOptions = colors.map((color) => ({ value: color.id, label: color.name }))
     return (
       <main className="flex w-full justify-center px-3">
         <PetEditor pet={data} colorOptions={colorOptions} profile={{ nickName: profileNickName }} />

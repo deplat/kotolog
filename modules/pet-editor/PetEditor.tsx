@@ -105,7 +105,7 @@ export const PetEditor = ({
     data.photos = [...data.photos, ...uploadedPetImages]
     data.profile = profile
 
-    if (pet) {
+    if (pet?.id) {
       ;(data as PetUpdateInputData).deletedPhotosIds = deletedPhotosIds
       await updatePet({ ...(data as PetUpdateInputData), id: pet.id }).then(
         ({ success, message }) => {
@@ -114,7 +114,8 @@ export const PetEditor = ({
             setTimeout(() => setFeedback(null), 2000)
             router.push('/profiles/' + profile.nickName + '/pets/' + data.nickName)
           } else {
-            setFeedback('Не удалось обновить питомца:' + message)
+            setFeedback('Не удалось обновить питомца')
+            console.log(message)
             setTimeout(() => setFeedback(null), 2000)
           }
         }
@@ -126,7 +127,8 @@ export const PetEditor = ({
           setTimeout(() => setFeedback(null), 2000)
           router.push('/profiles/' + profile.nickName + '/pets')
         } else {
-          setFeedback('Не удалось добавить питомца:' + message)
+          setFeedback('Не удалось добавить питомца')
+          console.log(message)
           setTimeout(() => setFeedback(null), 2000)
         }
       })

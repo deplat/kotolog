@@ -48,11 +48,12 @@ export default async function Page({ params }: { params: Promise<{ profileNickNa
 
   return (
     <>
-      <div>
-        <Link href={`/profiles/${profile.nickName}/pets`} className="btn-primary">
-          Питомцы
-        </Link>
-      </div>
+      <Link
+        href={`/profiles/${profile.nickName}/pets`}
+        className="h-36 w-full max-w-4xl bg-blue-100"
+      >
+        <div className="text-4xl">Питомцы</div>
+      </Link>
     </>
   )
 }

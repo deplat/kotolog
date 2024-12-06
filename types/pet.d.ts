@@ -21,7 +21,7 @@ export interface PetData {
     nickName: string
   }
   petProfile?: PetProfileData
-  colors?: PetColorData[]
+  colors?: string[]
   photos?: PetImageData[]
 }
 
@@ -127,12 +127,12 @@ export interface PetCreateInputData {
     nickName: string
   }
   petProfile: PetProfileInputData
-  colors: PetColorData[]
+  colors: string[]
   photos: PetImageCreateInputData[]
 }
 
 export interface PetUpdateInputData {
-  id?: string
+  id: string
   name?: string
   nickName?: string
   birthDate?: Date
@@ -149,7 +149,7 @@ export interface PetUpdateInputData {
     nickName: string
   }
   petProfile: PetProfileUpdateData
-  colors: PetColorData[]
+  colors: string[]
   photos: PetImageCreateInputData[]
   deletedPhotosIds: string[]
 }

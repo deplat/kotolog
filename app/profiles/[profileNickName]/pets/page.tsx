@@ -23,9 +23,23 @@ export default async function Pets({ params }: { params: Promise<{ profileNickNa
   if (!hasPermissions) return null
   return (
     <div className="w-full max-w-7xl">
-      <div className="flex items-center justify-between py-3">
-        <h3 className="text-2xl">Питомцы</h3>
-        <Link className="btn-primary" href={`/profiles/${profileNickName}/pets/newPet`}>
+      <div className="flex items-center justify-between gap-x-4 py-3">
+        <Link
+          href={`/profiles/${profileNickName}/pets`}
+          className="text-2xl hover:text-orange-600 focus:text-orange-600"
+        >
+          Питомцы
+        </Link>
+        <Link
+          href={`/profiles/${profileNickName}/cats`}
+          className="text-2xl hover:text-orange-600 focus:text-orange-600"
+        >
+          Кошки
+        </Link>
+        <Link
+          className="ms-auto hover:text-orange-600 focus:text-orange-600"
+          href={`/profiles/${profileNickName}/pets/newPet`}
+        >
           <Plus size={36} absoluteStrokeWidth />
         </Link>
         <AvatarToggleLink />

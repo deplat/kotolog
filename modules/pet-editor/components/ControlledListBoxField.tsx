@@ -25,7 +25,7 @@ export const ControlledListBoxField = <T extends FieldValues>({
       render={({ field: { value, onChange } }) => {
         const currentLabel =
           options.find((option) => option.value === value)?.label || 'Указать ...'
-
+        console.log(currentLabel)
         return (
           <div className="mb-3 flex w-full items-center">
             <label className="w-1/4">{label}</label>

@@ -104,12 +104,9 @@ export const createPet = async ({
     },
     colors: {
       createMany: {
-        data:
-          colors.length > 0
-            ? colors.map((color) => ({
-                colorId: color.id,
-              }))
-            : [],
+        data: colors.map((color) => ({
+          colorId: color,
+        })),
       },
     },
     photos: {
@@ -308,17 +305,14 @@ export const updatePet = async ({
           biography: petProfile?.biography,
         },
       },
-      colors: colors.length
-        ? {
-            create: colors.map((color) => ({
-              color: {
-                connect: {
-                  id: color.id,
-                },
-              },
-            })),
-          }
-        : undefined,
+      colors: {
+        connectOrCreate: colors.map((color) => ({
+          where: { petId_colorId: { petId: id, colorId: color } },
+          create: {
+            colorId: color,
+          },
+        })),
+      },
       photos: {
         deleteMany: deletedPhotosIds.length ? { id: { in: deletedPhotosIds } } : undefined,
         upsert: photos.map((photo) => ({

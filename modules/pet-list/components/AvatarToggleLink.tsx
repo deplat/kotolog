@@ -15,9 +15,17 @@ export default function AvatarToggleLink() {
   return (
     <Link href={`${pathname}?${newSearchParams.toString()}`}>
       {withAvatar ? (
-        <ImageOn size={32} absoluteStrokeWidth />
+        <ImageOn
+          size={32}
+          absoluteStrokeWidth
+          className="drop-shadow hover:text-orange-600 focus:text-orange-600"
+        />
       ) : (
-        <ImageOff size={32} absoluteStrokeWidth />
+        <ImageOff
+          size={32}
+          absoluteStrokeWidth
+          className="drop-shadow hover:text-orange-600 focus:text-orange-600"
+        />
       )}
     </Link>
   )
