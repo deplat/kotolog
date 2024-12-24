@@ -1,7 +1,7 @@
 import { prisma } from '@/prisma/prisma'
 
 export interface LogActionInput {
-  userId: string
+  userId?: string
   profileId?: string
   petId?: string
   action: string

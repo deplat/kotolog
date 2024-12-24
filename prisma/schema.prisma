@@ -96,10 +96,22 @@ enum PetType {
   DOG
 }
 
-enum Status {
+enum PetStatus {
   ACTIVE
   ARCHIVED
-  FREEZED
+  SUSPENDED
+}
+
+enum ProfileStatus {
+  ACTIVE
+  ARCHIVED
+  SUSPENDED
+}
+
+enum WishStatus {
+  ACTIVE
+  ARCHIVED
+  SUSPENDED
 }
 
 model User {
@@ -111,7 +123,6 @@ model User {
   image         String
   role          UserAppRole   @default(BASIC_USER)
   profileRoles  ProfileRole[]
-  logs          Log[]
   sessions      Session[]
   accounts      Account[]
   createdAt     DateTime      @default(now())
@@ -120,22 +131,26 @@ model User {
 }
 
 model Profile {
-  id             String        @id @default(cuid())
-  name           String
-  nickName       String        @unique
-  description    String
-  phone          String
-  address        String
-  website        String?
-  owner          String
-  type           ProfileType
-  status         Status        @default(ACTIVE)
-  pets           Pet[]
-  roles          ProfileRole[]
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  archivedAt     DateTime?
-  archivedReason String?
+  id              String        @id @default(cuid())
+  name            String
+  nickName        String        @unique
+  description     String
+  phone           String
+  address         String
+  website         String?
+  owner           String
+  type            ProfileType
+  status          ProfileStatus @default(ACTIVE)
+  pets            Pet[]
+  roles           ProfileRole[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  archivedAt      DateTime?
+  archivedReason  String?
+  suspendedAt     DateTime?
+  suspendedReason String?
+
+  wishes Wish[]
 }
 
 model ProfileRole {
@@ -159,12 +174,14 @@ model Pet {
   isFeatured         Boolean     @default(false)
   isAdopted          Boolean     @default(false)
   isPublished        Boolean     @default(false)
-  status             Status      @default(ACTIVE)
+  status             PetStatus   @default(ACTIVE)
   profileId          String
   createdAt          DateTime    @default(now())
   updatedAt          DateTime    @updatedAt
   archivedAt         DateTime?
   archivedReason     String?
+  suspendedAt        DateTime?
+  suspendedReason    String?
   profile            Profile     @relation(fields: [profileId], references: [id])
   petProfile         PetProfile?
   colors             PetColor[]
@@ -228,13 +245,45 @@ model PetImage {
   @@index([petId, isAvatar])
 }
 
+model Wish {
+  id              String      @id @default(cuid())
+  name            String
+  description     String
+  links           String[]
+  images          WishImage[]
+  profileId       String
+  status          WishStatus  @default(ACTIVE)
+  completedAt     DateTime?
+  archivedAt      DateTime?
+  suspendedAt     DateTime?
+  suspendedReason String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  profile         Profile     @relation(fields: [profileId], references: [id])
+
+  @@index([profileId])
+}
+
+model WishImage {
+  id        String   @id @default(cuid())
+  wishId    String
+  s3Key     String
+  src       String
+  width     Int
+  height    Int
+  altText   String?
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  wish      Wish     @relation(fields: [wishId], references: [id], onDelete: Cascade)
+}
+
 model Log {
   id        String   @id @default(cuid())
-  userId    String
+  userId    String?
   profileId String?
   petId     String?
   action    String
   metadata  Json?
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

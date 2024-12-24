@@ -1,5 +1,3 @@
-import { any } from 'prop-types'
-
 export const successResponse = (message: string, data: any) => ({
   success: true,
   message,

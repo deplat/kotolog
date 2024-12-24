@@ -262,7 +262,7 @@ export const updatePet = async ({
     if (!petToUpdate) {
       return errorResponse('Pet not found')
     }
-    const hasPermissions = await validateUserProfileRole(userId, petToUpdate.profileId, [
+    const hasPermissions = await validateUserProfileRole(petToUpdate.profileId, [
       UserProfileRole.PROFILE_OWNER,
       UserProfileRole.PROFILE_ADMIN,
       UserProfileRole.PROFILE_MANAGER,
