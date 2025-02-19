@@ -21,7 +21,6 @@ import { useTheme } from 'next-themes'
 export const NavbarControls = () => {
   const pathname = usePathname()
   const { theme, setTheme } = useTheme()
-  console.log(pathname)
   return (
     <>
       <>

@@ -103,6 +103,11 @@ export async function createProfile({
   }
 }
 
+export async function getProfiles() {
+  const profiles = await prisma.profile.findMany()
+  return profiles
+}
+
 export async function updateProfile({
   id,
   name,
@@ -121,9 +126,9 @@ export async function updateProfile({
   if (!user || !userId) {
     return errorResponse('You must be logged in to update an profiles')
   }
-  const hasPermissions = await validateUserProfileRole(userId, id, [
-    UserProfileRole.PROFILE_OWNER,
+  const hasPermissions = await validateUserProfileRole(id, [
     UserProfileRole.PROFILE_ADMIN,
+    UserProfileRole.PROFILE_OWNER,
   ])
   if (!hasPermissions) {
     await logAction({

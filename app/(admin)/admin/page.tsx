@@ -6,6 +6,8 @@ import { NotAuthorized } from '@/components/NotAuthorized'
 import { redirect } from 'next/navigation'
 import { validateUserAppRole } from '@/utils/validateUserAppRole'
 import { UserAppRole } from '@prisma/client'
+import { getProfiles } from '@/data-access'
+import { PetList } from '@/modules/pet-list'
 
 export default async function Page() {
   const user = (await auth())?.user
@@ -16,5 +18,20 @@ export default async function Page() {
     UserAppRole.SUPER_ADMIN,
   ])
   if (!hasPermissions) return <NotAuthorized />
-  redirect('/admin/pets')
+  const profiles = await getProfiles()
+  return (
+    <div className="grid grid-cols-3">
+      <div>
+        <h2 className="text-2xl">Profiles</h2>
+        <ol>{profiles?.map(({ id, name }) => <li key={id}>{name}</li>)}</ol>
+      </div>
+      <div>
+        <h2 className="text-2xl">Pets</h2>
+        <PetList profileNickName={'kotolife'} />
+      </div>
+      <div>
+        <h2 className="text-2xl">Users</h2>
+      </div>
+    </div>
+  )
 }

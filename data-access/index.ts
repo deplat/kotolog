@@ -18,5 +18,5 @@ export {
   updatePet,
   deletePet,
 } from './pet'
-export { createProfile, updateProfile } from './profile'
+export { createProfile, getProfiles, updateProfile } from './profile'
 export { type Cats, getCachedCats } from './cat'
