@@ -18,7 +18,7 @@ import clsx from 'clsx'
 import { Button, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { useTheme } from 'next-themes'
 
-export const NavbarControls = () => {
+export const BottomNavbarControls = () => {
   const pathname = usePathname()
   const { theme, setTheme } = useTheme()
   return (

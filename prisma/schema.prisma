@@ -205,7 +205,7 @@ model PetProfile {
   isVaccinated               Boolean      @default(true)
   isTreatedForParasites      Boolean      @default(true)
   healthStatus               HealthStatus @default(UNKNOWN)
-  biography                  String       @default("")
+  bio                        String       @default("")
   createdAt                  DateTime     @default(now())
   updatedAt                  DateTime     @updatedAt
   pet                        Pet          @relation(fields: [petId], references: [id], onDelete: Cascade)

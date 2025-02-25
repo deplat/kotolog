@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useForm, SubmitHandler, Path } from 'react-hook-form'
-import { Button, Fieldset, Legend } from '@headlessui/react'
+import { useForm } from 'react-hook-form'
+import { Button, Field, Fieldset, Input, Legend } from '@headlessui/react'
 import {
   ControlledImagesField,
   TextAreaField,
@@ -14,32 +14,30 @@ import {
 import { uploadImageFileAndReturnImageData } from '@/utils/s3'
 import Link from 'next/link'
 import {
-  PetCreateInputData,
   PetData,
   PetImageCreateInputData,
   PetImageFileWithDimensions,
   PetUpdateInputData,
 } from '@/types/pet'
-import { getDefaultValuesFromPetData } from './utils/getDefaultValuesFromPetData'
 import { createPet, updatePet, getPetBaseByNickName } from '@/data-access'
-import {
-  controlsFields,
-  furTypeOptions,
-  genderOptions,
-  healthAndBehaviorFields,
-  speciesOptions,
-} from '@/modules/pet-editor/data'
+import { furTypeOptions, genderOptions, speciesOptions } from '@/modules/pet-editor/data'
 import clsx from 'clsx'
 import { useRouter } from 'next/navigation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { CreatePetData, createPetSchema, UpdatePetData, updatePetSchema } from '@/schemas/pet'
 
 export const PetEditor = ({
   pet,
   colorOptions,
   profile,
 }: {
-  pet: PetData | null
+  pet?: UpdatePetData
   colorOptions: { value: string; label: string }[]
-  profile: { nickName: string }
+  profile: {
+    id: string
+    name: string
+    nickName: string
+  }
 }) => {
   const [deletedPhotosIds, setDeletedPhotosIds] = useState<string[]>([])
   const [imageFilesWithDimensions, setImageFilesWithDimensions] = useState<
@@ -49,10 +47,8 @@ export const PetEditor = ({
 
   const router = useRouter()
 
-  type FormData<T> = T extends { pet: any } ? PetUpdateInputData : PetCreateInputData
-
-  const methods = useForm<FormData<typeof pet>>({
-    defaultValues: getDefaultValuesFromPetData(pet, profile),
+  const methods = useForm({
+    resolver: zodResolver(pet ? updatePetSchema : createPetSchema),
   })
   const { control, watch, handleSubmit, formState, register, setError, clearErrors } = methods
 
@@ -77,7 +73,7 @@ export const PetEditor = ({
     if (watchNickName) checkNickName(watchNickName, pet?.id)
   }, [watchNickName, pet?.id, setError, clearErrors])
 
-  const onSubmit: SubmitHandler<PetCreateInputData | PetUpdateInputData> = async (data) => {
+  const onSubmit = async (data: CreatePetData | UpdatePetData) => {
     console.log(imageFilesWithDimensions)
     console.log(data)
     if (formState.errors.nickName) return
@@ -103,10 +99,10 @@ export const PetEditor = ({
     }
 
     data.photos = [...data.photos, ...uploadedPetImages]
-    data.profile = profile
+    data.profileId = profile.id
 
     if (pet?.id) {
-      ;(data as PetUpdateInputData).deletedPhotosIds = deletedPhotosIds
+      ;(data as UpdatePetData).deletedPhotosIds = deletedPhotosIds
       await updatePet({ ...(data as PetUpdateInputData), id: pet.id }).then(
         ({ success, message }) => {
           if (success) {
@@ -121,7 +117,7 @@ export const PetEditor = ({
         }
       )
     } else {
-      await createPet(data as PetCreateInputData).then(({ success, message }) => {
+      await createPet(data as CreatePetData).then(({ success, message }) => {
         if (success) {
           setFeedback('Питомец добавлен успешно')
           setTimeout(() => setFeedback(null), 2000)
@@ -155,6 +151,11 @@ export const PetEditor = ({
       </div>
 
       <Fieldset className="fieldset">
+        {pet && (
+          <Field>
+            <Input type="hidden" defaultValue={pet.id} {...methods.register('id')} />
+          </Field>
+        )}
         <TextField
           label="Имя"
           register={methods.register('name', { required: 'Имя обязательно' })}
@@ -196,28 +197,29 @@ export const PetEditor = ({
       <Fieldset className="fieldset">
         <Legend className="mb-3 text-2xl">Установки:</Legend>
         <div className="flex w-full flex-col">
-          {controlsFields.map((field) => (
-            <ControlledCheckboxField
-              key={field.key}
-              control={control}
-              fieldKey={field.key as Path<FormData<typeof pet>>}
-              label={field.label}
-            />
-          ))}
+          <ControlledCheckboxField control={control} fieldKey="isPublished" label="Опубликован" />
+          <ControlledCheckboxField
+            control={control}
+            fieldKey="isReadyForAdoption"
+            label="Готов к пристрою"
+          />
+          <ControlledCheckboxField
+            control={control}
+            fieldKey="isFeatured"
+            label="Активный пристрой"
+          />
+          <ControlledCheckboxField control={control} fieldKey="isAdopted" label="Пристроен" />
         </div>
       </Fieldset>
 
       <Fieldset className="fieldset">
         <Legend className="mb-3 text-2xl">Здоровье и поведение:</Legend>
         <div className="flex w-full flex-col">
-          {healthAndBehaviorFields.map((field) => (
-            <ControlledCheckboxField
-              key={field.key}
-              control={control}
-              fieldKey={field.key as Path<FormData<typeof pet>>}
-              label={field.label}
-            />
-          ))}
+          <ControlledCheckboxField
+            control={control}
+            fieldKey="isVaccinated"
+            label="Вакциниррован"
+          />
         </div>
       </Fieldset>
 
@@ -225,7 +227,7 @@ export const PetEditor = ({
         <TextAreaField
           label="Биография"
           placeholder="Информация о питомце в свободном стиле"
-          register={register('petProfile.biography')}
+          register={register('bio')}
         />
       </Fieldset>
 

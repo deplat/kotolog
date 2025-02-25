@@ -10,6 +10,16 @@ import { errorResponse, successResponse } from '@/utils/response'
 import { prisma } from '@/prisma/prisma'
 import { revalidateTag } from 'next/cache'
 
+export async function getProfileByNickName(nickName: string) {
+  const profile = await prisma.profile.findUnique({
+    where: { nickName },
+    select: { id: true, name: true, nickName: true },
+  })
+  if (!profile) {
+    // TODO
+  } else return profile
+}
+
 export async function createProfile({
   name,
   nickName,

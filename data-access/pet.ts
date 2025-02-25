@@ -9,6 +9,7 @@ import { auth } from '@/auth'
 import { errorResponse, successResponse } from '@/utils/response'
 import { logAction } from '@/utils/logging'
 import { validateUserProfileRole } from '@/utils/validateUserProfileRole'
+import { CreatePetData } from '@/schemas/pet'
 
 const prismaPetIncludeBase = Prisma.validator<Prisma.PetInclude>()({
   photos: {
@@ -40,19 +41,25 @@ export const createPet = async ({
   isFeatured,
   isAdopted,
   isPublished,
-  petProfile,
-  profile,
+  isVaccinated,
+  isSterilized,
+  isTreatedForParasites,
+  isLitterBoxTrained,
+  isUsesScratchingPost,
+  isSocialized,
+  isFriendlyWithCats,
+  isFriendlyWithDogs,
+  isFriendlyWithOtherAnimals,
+  profileId,
   colors,
   photos,
-}: PetCreateInputData) => {
+}: CreatePetData) => {
   const user = (await auth())?.user
   const userId = user?.id
   if (!user || !userId) {
     return errorResponse('You must be logged in to create an pet')
   }
-  const profileId = (await prisma.profile.findUnique({ where: { nickName: profile.nickName } }))?.id
-  if (!profileId) return errorResponse('No profile found with this nickName')
-  const hasPermissions = await validateUserProfileRole(userId, profileId, [
+  const hasPermissions = await validateUserProfileRole(profileId, [
     UserProfileRole.PROFILE_OWNER,
     UserProfileRole.PROFILE_ADMIN,
     UserProfileRole.PROFILE_MANAGER,

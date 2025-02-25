@@ -1,3 +1,2 @@
-export { BottomNavbar } from './BottomNavbar'
-export { TopNavbar } from './TopNavbar'
-export { NavbarControls } from './NavbarControls'
+export { Navbar } from './Navbar'
+export { BottomNavbarControls } from './BottomNavbarControls'

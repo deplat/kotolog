@@ -4,6 +4,7 @@ import { auth } from '@/auth'
 import { NotAuthenticated } from '@/components/NotAuthenticated'
 import { validateUserAppRole } from '@/utils/validateUserAppRole'
 import { UserAppRole } from '@prisma/client'
+import { getProfileByNickName } from '@/data-access/profile'
 
 export default async function Page({ params }: { params: Promise<{ profileNickName: string }> }) {
   const userId = (await auth())?.user.id
@@ -18,12 +19,14 @@ export default async function Page({ params }: { params: Promise<{ profileNickNa
   if (!hasPermissions) return null
 
   try {
+    const profile = await getProfileByNickName(profileNickName)
+    if (!profile) return <>Такого профиля не существует.</>
     const colors = await getCachedColors()
     if (!colors) console.log('Error fetching colors.')
     const colorOptions = colors.map((color) => ({ value: color.id, label: color.name }))
     return (
       <main className="flex w-full justify-center px-3">
-        <PetEditor pet={null} colorOptions={colorOptions} profile={{ nickName: profileNickName }} />
+        <PetEditor pet={null} colorOptions={colorOptions} profile={profile} />
       </main>
     )
   } catch (error) {
