@@ -1,10 +1,10 @@
 import { getCachedColors } from '@/data-access'
-import { PetEditor } from '@/modules/pet-editor'
 import { auth } from '@/auth'
 import { NotAuthenticated } from '@/components/NotAuthenticated'
 import { validateUserAppRole } from '@/utils/validateUserAppRole'
 import { UserAppRole } from '@prisma/client'
 import { getProfileByNickName } from '@/data-access/profile'
+import { CreatePetForm } from '../../../../../modules/pet-form'
 
 export default async function Page({ params }: { params: Promise<{ profileNickName: string }> }) {
   const userId = (await auth())?.user.id
@@ -26,7 +26,7 @@ export default async function Page({ params }: { params: Promise<{ profileNickNa
     const colorOptions = colors.map((color) => ({ value: color.id, label: color.name }))
     return (
       <main className="flex w-full justify-center px-3">
-        <PetEditor pet={null} colorOptions={colorOptions} profile={profile} />
+        <CreatePetForm colorOptions={colorOptions} profile={profile} />
       </main>
     )
   } catch (error) {

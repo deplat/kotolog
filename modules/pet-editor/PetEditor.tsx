@@ -10,21 +10,16 @@ import {
   DateField,
   ControlledCheckboxField,
   ControlledListBoxField,
-} from '@/modules/pet-editor/components'
+} from '@/components/form'
 import { uploadImageFileAndReturnImageData } from '@/utils/s3'
 import Link from 'next/link'
-import {
-  PetData,
-  PetImageCreateInputData,
-  PetImageFileWithDimensions,
-  PetUpdateInputData,
-} from '@/types/pet'
+import { PetImageCreateInputData, PetImageFileWithDimensions } from '@/types/pet'
 import { createPet, updatePet, getPetBaseByNickName } from '@/data-access'
-import { furTypeOptions, genderOptions, speciesOptions } from '@/modules/pet-editor/data'
+import { furTypeOptions, genderOptions, speciesOptions } from '@/modules/pet-form/fieldsOptions'
 import clsx from 'clsx'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CreatePetData, createPetSchema, UpdatePetData, updatePetSchema } from '@/schemas/pet'
+import { CreatePetData, createPetSchema, UpdatePetData, updatePetSchema } from '@/schema/pet'
 
 export const PetEditor = ({
   pet,
@@ -47,9 +42,10 @@ export const PetEditor = ({
 
   const router = useRouter()
 
-  const methods = useForm({
-    resolver: zodResolver(pet ? updatePetSchema : createPetSchema),
-  })
+  const schema = pet ? updatePetSchema : createPetSchema
+
+  const methods = useForm({ resolver: zodResolver(schema), defaultValues: pet })
+
   const { control, watch, handleSubmit, formState, register, setError, clearErrors } = methods
 
   const watchNickName = watch('nickName')
@@ -103,19 +99,17 @@ export const PetEditor = ({
 
     if (pet?.id) {
       ;(data as UpdatePetData).deletedPhotosIds = deletedPhotosIds
-      await updatePet({ ...(data as PetUpdateInputData), id: pet.id }).then(
-        ({ success, message }) => {
-          if (success) {
-            setFeedback('Питомец обновлен успешно')
-            setTimeout(() => setFeedback(null), 2000)
-            router.push('/profiles/' + profile.nickName + '/pets/' + data.nickName)
-          } else {
-            setFeedback('Не удалось обновить питомца')
-            console.log(message)
-            setTimeout(() => setFeedback(null), 2000)
-          }
+      await updatePet({ ...(data as UpdatePetData), id: pet.id }).then(({ success, message }) => {
+        if (success) {
+          setFeedback('Питомец обновлен успешно')
+          setTimeout(() => setFeedback(null), 2000)
+          router.push('/profiles/' + profile.nickName + '/pets/' + data.nickName)
+        } else {
+          setFeedback('Не удалось обновить питомца')
+          console.log(message)
+          setTimeout(() => setFeedback(null), 2000)
         }
-      )
+      })
     } else {
       await createPet(data as CreatePetData).then(({ success, message }) => {
         if (success) {

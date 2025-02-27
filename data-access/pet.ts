@@ -9,7 +9,7 @@ import { auth } from '@/auth'
 import { errorResponse, successResponse } from '@/utils/response'
 import { logAction } from '@/utils/logging'
 import { validateUserProfileRole } from '@/utils/validateUserProfileRole'
-import { CreatePetData } from '@/schemas/pet'
+import { CreatePetData } from '@/schema/pet'
 
 const prismaPetIncludeBase = Prisma.validator<Prisma.PetInclude>()({
   photos: {
@@ -185,16 +185,12 @@ export const getPetBaseById = async (id: string) => {
   }
 }
 
-export const getPetBaseByNickName = async (nickName: string) => {
+export const getPetIdByNickName = async (nickName: string) => {
   try {
-    const pet = await prisma.pet.findUnique({
+    return await prisma.pet.findUnique({
       where: { nickName },
-      include: prismaPetIncludeBase,
+      select: { id: true },
     })
-    if (!pet) {
-      return errorResponse('Pet not found')
-    }
-    return successResponse('Pet found', pet)
   } catch (error) {
     throw prismaErrorHandler(error)
   }

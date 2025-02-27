@@ -1,6 +1,6 @@
 'use client'
 
-import { IDropdownMenu } from '@/components/menus/IDropdownMenu'
+import { IDropdownMenu } from '@/components/menu/IDropdownMenu'
 import { icons } from '@/components/icons'
 import { Button, Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import Image, { StaticImageData } from 'next/image'
